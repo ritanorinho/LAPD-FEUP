@@ -1,10 +1,10 @@
 import React from 'react';
 import { AppLoading } from 'expo';
-import { Container, Text } from 'native-base';
+import { Container, Content } from 'native-base';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
-import  NavBar  from './app/components/NavBar';
-
+import  HeaderBar  from './app/components/HeaderBar';
+import  FooterBar  from './app/components/FooterBar';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -29,7 +29,9 @@ export default class App extends React.Component {
 
     return (
       <Container>
-        <NavBar />
+        <HeaderBar />
+        <Content />
+        <FooterBar />
       </Container>
     );
   }

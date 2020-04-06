@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Container, Header, Title, Button, Left, Right, Body, Icon, Subtitle } from 'native-base';
 
-export default class NavBar extends Component {
+export default class HeaderBar extends Component {
   render() {
     return (
-      <Container>
+    
         <Header style={{ backgroundColor: '#faecfa' }}>
           <Left style={{flex:1}}>
             <Button transparent>
@@ -20,7 +20,6 @@ export default class NavBar extends Component {
             </Button>
         </Right>
         </Header>
-      </Container>
     );
   }
 }
