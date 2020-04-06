@@ -12,7 +12,7 @@ import {
   Button
 } from 'native-base'
 
-export default class StackedLabelExample extends Component {
+export default class Login extends Component {
   render () {
     return (
       <Container>
@@ -44,40 +44,42 @@ export default class StackedLabelExample extends Component {
 }
 
 const styles = StyleSheet.create({
-  item: {
-    paddingLeft: 20,
-    paddingRight: 20,
-    justifyContent: 'center',
-    flex: 1
-  },
-  image: {
-    marginBottom: 20,
-    alignSelf: 'center'
-  },
-  textItem: {
-    alignSelf: 'center',
-    justifyContent: 'center',
-    borderColor: 'transparent',
-    marginTop: 5,
-  },
-  button: {
-    backgroundColor: '#8b4da9',
-    marginTop: 10,
-    justifyContent: 'center'
-  },
-  purpleText: {
-    color: '#8b4da9',
-    fontWeight: 'bold',
-  },
-  label: {
-    color: '#8b4da9',
-    fontWeight: 'bold',
-    marginBottom: 10,
-
-  },
-  grayText: {
-    color: 'gray',
-    fontWeight: 'bold'
-  },
+    item: {
+      paddingLeft: 20,
+      paddingRight: 20,
+      justifyContent: 'center',
+      flex: 1
+    },
+    image: {
+      marginBottom: 20,
+      alignSelf: 'center'
+    },
+    textItem: {
+      alignSelf: 'center',
+      justifyContent: 'center',
+      borderColor: 'transparent',
+      marginTop: 5,
+    },
+    button: {
+      backgroundColor: '#8b4da9',
+      marginTop: 10,
+      justifyContent: 'center'
+    },
+    purpleText: {
+      color: '#8b4da9',
+      fontWeight: 'bold',
+    },
+    label: {
+      color: '#8b4da9',
+      fontWeight: 'bold',
+      marginBottom: 5,
+      marginTop: 5,
   
-})
+    },
+    grayText: {
+      color: 'gray',
+      fontWeight: 'bold'
+    },
+    
+  })
+  

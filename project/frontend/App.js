@@ -1,11 +1,9 @@
 import React from 'react';
 import { AppLoading } from 'expo';
-import { Container, Content } from 'native-base';
+import { Container } from 'native-base';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
-import  HeaderBar  from './app/components/HeaderBar';
-import  FooterBar  from './app/components/FooterBar';
-import Login from './app/screens/LoginScreen';
+import Register from './app/screens/RegisterScreen';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -31,7 +29,7 @@ export default class App extends React.Component {
     return (
       <Container>
        
-        <Login />
+        <Register />
   
       </Container>
     );
