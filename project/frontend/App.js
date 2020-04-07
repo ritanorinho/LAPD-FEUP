@@ -3,7 +3,7 @@ import { AppLoading } from 'expo';
 import { Container } from 'native-base';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
-import Profile from './app/screens/ProfileScreen';
+import Events from './app/screens/EventsScreen';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -30,7 +30,7 @@ export default class App extends React.Component {
    
 
        
-        <Profile />
+        <Events />
   
     );
   }
