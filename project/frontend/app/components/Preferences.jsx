@@ -4,12 +4,13 @@ import { StyleSheet } from 'react-native'
 import {
   Content
 } from 'native-base'
+import PreferencesForm from './PreferencesForm'
 
-export default class Prefences extends Component {
+export default class Preferences extends Component {
     render () {
       return (
-
-
-        <Content></Content>
+        <Content>
+          <PreferencesForm />
+        </Content>
       )}
     }
