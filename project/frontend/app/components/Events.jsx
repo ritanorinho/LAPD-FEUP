@@ -1,5 +1,5 @@
 import EventCard from './EventCard'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Image } from 'react-native'
 import React from 'react'
 import { Container, Content, Text, Icon, Button} from 'native-base'
 export default class Events extends React.Component {
@@ -11,9 +11,7 @@ export default class Events extends React.Component {
             <Text style={styles.text}>EVENTS</Text>
           </View>
           <View style={styles.rowItem}>
-            <Button style={styles.button} transparent>
-              <Icon name='happy' style={{ color: '#8b4da9' }} />
-            </Button>
+            <Image source={require('../assets/happy.png')} style={styles.emotion} ></Image>
           </View>
         </View>
         <EventCard />
@@ -27,17 +25,24 @@ const styles = StyleSheet.create({
   text: {
     color: '#464646',
     fontWeight: 'bold', 
-    paddingTop: 15, 
-    paddingLeft: 15,
+    paddingLeft: 15, 
   },
-  button: {
-    alignSelf: 'flex-end'
-  },
+
+ 
   rowContainer: {
     flex: 1,
     flexDirection: 'row'
   },
   rowItem: {
-    flex: 1
-  }
+    flex: 1, 
+    paddingTop: 15, 
+  },
+  emotion: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain', 
+    paddingTop: 15,
+    marginRight: 100, 
+
+}
 })
