@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Header, Title, Button, Left, Right, Body, Icon, Subtitle } from 'native-base';
+import { Header, Title, Button, Left, Right, Body, Icon, Subtitle } from 'native-base';
 
 export default class HeaderBar extends Component {
   render() {
