@@ -3,9 +3,8 @@ import { AppLoading } from 'expo';
 import { Container } from 'native-base';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
-import ProfileScreen from './app/screens/ProfileScreen';
 
-import EmotionEvaluate from './app/components/EmotionEvaluate';
+import ResultScreen from './app/screens/ResultScreen';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -31,7 +30,7 @@ export default class App extends React.Component {
     return (
   
        
-        <EmotionEvaluate />
+        <ResultScreen />
   
     );
   }
