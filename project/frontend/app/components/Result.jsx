@@ -55,9 +55,9 @@ export default class Result extends Component {
           <Image source={emotion.path} style={styles.icon} />
           <Content contentContainerStyle={styles.container}>
             <Text
-              style={{ color: emotion.color, fontWeight: 'bold', fontSize: 18 }}
+              style={{ color: emotion.color, fontWeight: 'bold', fontSize: 16}}
             >
-              {emotion.name}
+              {emotion.name.toUpperCase()}
             </Text>
           </Content>
         </Left>

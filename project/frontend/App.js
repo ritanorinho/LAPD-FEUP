@@ -4,7 +4,7 @@ import { Container } from 'native-base';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 
-import ResultScreen from './app/screens/ResultScreen';
+import Event from './app/screens/EventScreen';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -30,7 +30,7 @@ export default class App extends React.Component {
     return (
   
        
-        <ResultScreen />
+        <Event />
   
     );
   }
