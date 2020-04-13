@@ -3,7 +3,9 @@ import HeaderBar from '../components/HeaderBar'
 import FooterBar from '../components/FooterBar'
 import React from 'react'
 import { Container } from 'native-base'
-export default class ProfileScreen extends React.Component {
+
+
+ export default class ProfileScreen extends React.Component {
   render () {
     return (
       <Container>
@@ -12,5 +14,5 @@ export default class ProfileScreen extends React.Component {
         <FooterBar />
       </Container>
     )
+    }
   }
-}

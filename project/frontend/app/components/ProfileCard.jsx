@@ -9,8 +9,15 @@ import {
   Icon,
   Thumbnail
 } from 'native-base'
-import ProfileTabs from './ProfileTabs'
-export default class ProfileCard extends Component {
+import ProfileTabs from './ProfileTabs';
+import { withNavigation } from 'react-navigation';
+ class ProfileCard extends Component {
+   static navigationOptions={
+     title: 'Profile'
+   }
+   constructor(props){
+     super(props)
+   }
   render () {
     return (
       <Content>
@@ -42,3 +49,5 @@ const styles = StyleSheet.create({
 
 
 })
+
+export default withNavigation(ProfileCard);

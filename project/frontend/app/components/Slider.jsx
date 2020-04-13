@@ -4,8 +4,9 @@ import {
   StyleSheet,
   View,
   Text } from 'react-native';
- 
-export default class SliderBar extends Component {
+import { withNavigation } from 'react-navigation';
+
+  class SliderBar extends Component {
 
     constructor(props){
         super(props);
@@ -58,3 +59,5 @@ var styles = StyleSheet.create({
     
   },
 });
+
+export default withNavigation(Slider);

@@ -16,6 +16,7 @@ import {
   StackedBarChart
 } from 'react-native-chart-kit'
 import SliderBar from './Slider'
+import { withNavigation } from 'react-navigation'
 
 const styles = StyleSheet.create({
   container: {
@@ -27,7 +28,7 @@ const styles = StyleSheet.create({
     margin: 10
   }
 })
-export default class Statistics extends Component {
+class Statistics extends Component {
   render () {
     const chart_wh = 250
     const series = [123, 321, 123, 789, 537]
@@ -104,3 +105,5 @@ export default class Statistics extends Component {
     )
   }
 }
+
+export default withNavigation(Statistics);

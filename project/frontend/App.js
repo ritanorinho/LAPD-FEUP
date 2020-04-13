@@ -1,37 +1,94 @@
-import React from 'react';
-import { AppLoading } from 'expo';
-import { Container } from 'native-base';
-import * as Font from 'expo-font';
-import { Ionicons } from '@expo/vector-icons';
+import React from 'react'
+import { AppLoading } from 'expo'
+import { Container } from 'native-base'
+import * as Font from 'expo-font'
+import { Ionicons } from '@expo/vector-icons'
 
-import Event from './app/screens/EventScreen';
+import ProfileScreen from './app/screens/ProfileScreen'
+import EventScreen from './app/screens/EventScreen'
+import SettingsScreen from './app/screens/SettingsScreen'
+import RegisterScreen from './app/screens/RegisterScreen'
+import LoginScreen from './app/screens/LoginScreen'
+import EventsScreen from './app/screens/EventsScreen'
+import ResultScreen from './app/screens/ResultScreen'
+import { createStackNavigator } from 'react-navigation-stack'
+import { createAppContainer } from 'react-navigation'
+
+const RootStack = createAppContainer(
+  createStackNavigator(
+    {
+      Profile: {
+        screen: ProfileScreen,
+
+        navigationOptions: {
+          headerShown: false
+        }
+      },
+      Event: {
+        screen: EventScreen,
+        navigationOptions: {
+          headerShown: false
+        },
+      },
+        Settings: {
+          screen: SettingsScreen,
+          navigationOptions: {
+            headerShown: false
+          }
+      },
+      Login: {
+        screen: LoginScreen,
+        navigationOptions: {
+          headerShown: false
+        }
+    },
+    Register: {
+      screen: RegisterScreen,
+      navigationOptions: {
+        headerShown: false
+      }
+  },
+  Events: {
+    screen: EventsScreen,
+    navigationOptions: {
+      headerShown: false
+    }
+},
+Result: {
+  screen: ResultScreen,
+  navigationOptions: {
+    headerShown: false
+  }
+}
+    }, 
+    {
+      initialRouteName: 'Register'
+    }
+  )
+)
+
 export default class App extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
-      isReady: false,
-    };
+      isReady: false
+    }
   }
 
-  async componentDidMount() {
+  async componentDidMount () {
     await Font.loadAsync({
       Roboto: require('native-base/Fonts/Roboto.ttf'),
       Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
-      ...Ionicons.font,
-    });
-    this.setState({ isReady: true });
+      ...Ionicons.font
+    })
+    this.setState({ isReady: true })
   }
 
-  render() {
+  render () {
     if (!this.state.isReady) {
-      return <AppLoading />;
+      return <AppLoading />
     }
 
-    return (
-  
-       
-        <Event />
-  
-    );
+    return <RootStack />
   }
 }

@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Content, Text, Button, Icon } from 'native-base'
 import PreferencesCard from './PreferencesCard'
+import { withNavigation } from 'react-navigation'
 
-export default class PreferencesForm extends Component {
+class PreferencesForm extends Component {
   render () {
     return (
       <Content>
@@ -40,3 +41,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 })
+
+export default withNavigation(PreferencesForm);

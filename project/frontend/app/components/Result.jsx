@@ -16,7 +16,13 @@ import {
   ListItem,
   List
 } from 'native-base'
-export default class Result extends Component {
+import { withNavigation } from 'react-navigation'
+
+class Result extends Component {
+
+  static navigationOptions={
+    title: 'Result'
+  }
   constructor (props) {
     super(props)
     this.state = {
@@ -91,7 +97,7 @@ export default class Result extends Component {
         </Card>
         <List>{listItems}</List>
         <Content>
-          <Button rounded style={styles.button}>
+          <Button rounded style={styles.button} onPress={() =>this.props.navigation.navigate('Events')}>
             <Text style={styles.textButton}>CHECK EVENTS</Text>
           </Button>
         </Content>
@@ -150,3 +156,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   }
 })
+
+export default withNavigation(Result);

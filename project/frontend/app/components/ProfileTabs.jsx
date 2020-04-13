@@ -3,7 +3,8 @@ import { Tab, Tabs, Container, Header } from 'native-base'
 import { Image, StyleSheet } from 'react-native'
 import Preferences from './Preferences'
 import Statistics from './Statistics'
-export default class ProfileTabs extends Component {
+import { withNavigation } from 'react-navigation'
+class ProfileTabs extends Component {
   render () {
     return (
       <Tabs
@@ -47,3 +48,5 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   }
 })
+
+export default withNavigation(ProfileTabs);

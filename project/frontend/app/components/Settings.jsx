@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Image, StyleSheet } from 'react-native'
 import {
   Container,
-  Content,
   Form,
   Item,
   Input,
@@ -13,12 +12,13 @@ import {
 } from 'native-base'
 import { withNavigation } from 'react-navigation'
 
-class Register extends Component {
-  static navigationOptions={
-    title: 'Register'
-  }
+class Settings extends Component {
+
   constructor(props){
-    super(props)
+    super(props);
+  }
+  static navigationOptions={
+    title: 'Settings'
   }
   render () {
     return (
@@ -45,10 +45,10 @@ class Register extends Component {
             <Item style={styles.textItem}>
               <Text style={styles.grayText}>Already have an account? </Text>
             </Item>
-            <Item style={styles.textItem} onPress={() =>this.props.navigation.navigate('Login')}>
+            <Item style={styles.textItem}>
               <Text style={styles.purpleText}>Login</Text>
             </Item>
-            <Button style={styles.button} rounded onPress={() =>this.props.navigation.navigate('Profile')}>
+            <Button style={styles.button} rounded>
               <Text>CREATE ACCOUNT</Text>
             </Button>
           </Form>
@@ -98,4 +98,4 @@ const styles = StyleSheet.create({
   
 })
 
-export default withNavigation(Register);
+export default withNavigation(Settings);

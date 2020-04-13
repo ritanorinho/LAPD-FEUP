@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { Header, Title, Button, Left, Right, Body, Icon, Subtitle } from 'native-base';
+import { withNavigation } from 'react-navigation';
 
-export default class HeaderBar extends Component {
+ class HeaderBar extends Component {
   render() {
     return (
     
         <Header style={{ backgroundColor: '#faecfa' }}>
           <Left style={{flex:1}}>
-            <Button transparent>
+            <Button transparent onPress={() =>this.props.navigation.navigate('Settings')}>
               <Icon name='settings' style={{ color: '#38adff' }}/>
             </Button>
           </Left>
@@ -23,3 +24,5 @@ export default class HeaderBar extends Component {
     );
   }
 }
+
+export default withNavigation(HeaderBar);

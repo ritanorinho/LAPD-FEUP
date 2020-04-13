@@ -2,7 +2,15 @@ import EventCard from './EventCard'
 import { StyleSheet, View, Image } from 'react-native'
 import React from 'react'
 import { Container, Content, Text, Icon, Button} from 'native-base'
-export default class Events extends React.Component {
+import { withNavigation } from 'react-navigation'
+class Events extends React.Component {
+   
+  static navigationOptions={
+    title: 'Events'
+  }
+  constructor(props){
+    super(props);
+  }
   render () {
     return (
       <Content>
@@ -46,3 +54,5 @@ const styles = StyleSheet.create({
 
 }
 })
+
+export default withNavigation(Events);

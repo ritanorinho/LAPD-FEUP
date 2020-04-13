@@ -11,8 +11,16 @@ import {
   Text,
   Button
 } from 'native-base'
+import { withNavigation } from 'react-navigation'
 
-export default class Login extends Component {
+class Login extends Component {
+  
+  static navigationOptions={
+    title: 'Login'
+  }
+  constructor(props){
+    super(props);
+  }
   render () {
     return (
       <Container>
@@ -31,9 +39,9 @@ export default class Login extends Component {
               <Text style={styles.grayText}> Don't have an account? </Text>
             </Item>
             <Item style={styles.textItem}>
-              <Text style={styles.purpleText}>Create one!</Text>
+              <Text style={styles.purpleText} onPress={() =>this.props.navigation.navigate('Register')}>Create one!</Text>
             </Item>
-            <Button style={styles.button} rounded>
+            <Button style={styles.button} rounded onPress={() =>this.props.navigation.navigate('Profile')}>
               <Text>LOGIN</Text>
             </Button>
           </Form>
@@ -82,4 +90,6 @@ const styles = StyleSheet.create({
     },
     
   })
+
+  export default withNavigation(Login);
   

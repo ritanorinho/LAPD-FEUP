@@ -1,20 +1,14 @@
 import React, { Component } from 'react'
 import { Image, StyleSheet, View } from 'react-native'
 import {
-  Container,
-  Header,
-  Content,
   Card,
   CardItem,
-  Thumbnail,
   Text,
   Button,
   Icon,
-  Left,
-  Body,
-  Right
 } from 'native-base'
-export default class EventCard extends Component {
+import { withNavigation } from 'react-navigation'
+ class EventCard extends Component {
   render () {
     return (
       <Card style = {styles.card}>
@@ -43,7 +37,7 @@ export default class EventCard extends Component {
               </View>
             </View>
             <View style={styles.rowItem}>
-              <Button style={styles.button} transparent>
+              <Button style={styles.button} transparent onPress={() =>this.props.navigation.navigate('Event')}>
                 <Icon name='arrow-forward' style={{ color: '#8b4da9' }} />
               </Button>
             </View>
@@ -82,3 +76,5 @@ const styles = StyleSheet.create({
    marginTop: 10, 
   }
 })
+
+export default withNavigation(EventCard);

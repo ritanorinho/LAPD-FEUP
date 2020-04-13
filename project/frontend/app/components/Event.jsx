@@ -1,22 +1,20 @@
 import React, { Component } from 'react'
 import { Image, StyleSheet } from 'react-native'
 import {
-  Container,
-  Header,
   Content,
   Card,
   CardItem,
-  Thumbnail,
   Text,
-  Button,
-  Icon,
-  Left,
-  Body,
   List,
-  ListItem,
-  Right
+  ListItem
 } from 'native-base'
-export default class Event extends Component {
+import { withNavigation } from 'react-navigation'
+
+
+class Event extends Component {
+  static navigationOptions={
+    title: 'Event'
+  }
   constructor (props) {
     super(props)
     this.state = {
@@ -141,3 +139,4 @@ const styles = StyleSheet.create({
 
   }
 })
+export default withNavigation(Event);

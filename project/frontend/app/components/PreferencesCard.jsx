@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { List, ListItem, Radio, Text, Card, CardItem } from 'native-base'
 import { StyleSheet } from 'react-native'
+import { withNavigation } from 'react-navigation'
 
-export default class PrefencesCard extends Component {
+class PrefencesCard extends Component {
   render () {
     return (
       <Card style={styles.card}>
@@ -61,3 +62,6 @@ const styles = StyleSheet.create({
     }
 
 })
+
+
+export default withNavigation(PrefencesCard);

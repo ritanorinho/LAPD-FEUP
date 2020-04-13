@@ -3,7 +3,11 @@ import HeaderBar from '../components/HeaderBar'
 import FooterBar from '../components/FooterBar'
 import React from 'react'
 import { Container, Content } from 'native-base'
-export default class ProfileScreen extends React.Component {
+import { withNavigation } from 'react-navigation'
+class EventScreen extends React.Component {
+  constructor(props){
+    super(props);
+  }
   render () {
     return (
       <Container>
@@ -16,3 +20,5 @@ export default class ProfileScreen extends React.Component {
     )
   }
 }
+
+export default withNavigation(EventScreen);

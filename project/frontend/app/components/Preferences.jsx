@@ -5,8 +5,9 @@ import {
   Content
 } from 'native-base'
 import PreferencesForm from './PreferencesForm'
+import { withNavigation } from 'react-navigation'
 
-export default class Preferences extends Component {
+class Preferences extends Component {
     render () {
       return (
         <Content>
@@ -14,3 +15,6 @@ export default class Preferences extends Component {
         </Content>
       )}
     }
+
+
+    export default withNavigation(Preferences);
