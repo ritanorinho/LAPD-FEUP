@@ -10,6 +10,11 @@ const userSchema = new Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     photo: { type: String, required: false, default: '' },
+    settings: {
+        type: String,
+        enum: ['Camera', 'Image', 'Quiz'],
+        required: true 
+      },
   },
 );
 
