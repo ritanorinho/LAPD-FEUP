@@ -6,6 +6,6 @@ const controller = require('../../controllers/genre');
 
 router.get('/', controller.getAll);
 
-router.get('/:categoryId', controller.getAllFromCategory);
+router.get('/:categoryId', controller.getAllByCategory);
 
 module.exports = router;

@@ -8,6 +8,10 @@ const userRouter = require('./api/routes/user');
 const categoryRouter = require('./api/routes/category');
 const emotionRouter = require('./api/routes/emotion');
 const genreRouter = require('./api/routes/genre');
+const uegRouter = require('./api/routes/userEmotionGenre');
+
+
+
 const seed = require('./seed/seeder');
 
 
@@ -25,6 +29,7 @@ app.use('/api/user', userRouter);
 app.use('/api/category', categoryRouter);
 app.use('/api/emotion', emotionRouter);
 app.use('/api/genre', genreRouter);
+app.use('/api/userEmotionGenre', uegRouter);
 
 
 app.listen(3000, () => console.log('server started'))

@@ -1,6 +1,6 @@
 "use strict";
 
-const User = require('../models/user');
+const User = require("../models/user");
 
 function mockData() {
   return [
@@ -8,13 +8,13 @@ function mockData() {
       name: "Jane Doe",
       email: "janeDoe@gmail.com",
       password: "12345678",
-      settings: "Quiz"
+      settings: "Quiz",
     }),
     new User({
       name: "John Doe",
       email: "johnDoe@gmail.com",
       password: "12345678",
-      settings: "Camera"
+      settings: "Camera",
     }),
   ];
 }
@@ -30,6 +30,7 @@ function seedUser() {
         }
       });
     });
+  return {users};
 }
 
 module.exports = { seedUser };

@@ -9,7 +9,7 @@ function getAll(req, res) {
 }
 
 
-function getAllFromCategory(req, res) {
+function getAllByCategory(req, res) {
     const query = { categoryId: req.params.categoryId };
     Genre.find(query)
      .then((genres) => res.json({ genres }))
@@ -19,5 +19,5 @@ function getAllFromCategory(req, res) {
 
 module.exports = {
   getAll,
-  getAllFromCategory
+  getAllByCategory
 };

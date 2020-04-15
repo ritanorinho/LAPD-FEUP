@@ -33,6 +33,7 @@ function seedEmotion() {
         }
       });
     });
+  return {emotions};
 }
 
 module.exports = { seedEmotion };
