@@ -4,13 +4,14 @@ const router = express.Router()
 
 // Get all subscribers
 router.get('/', async(req, res) => {
-    try {
+  res.send({express: 'Hello from Express'});
+    /*try {
         const subscribers = await Subscriber.find()
         res.json(subscribers)
       } catch (err) {
         res.status(500).json({ message: err.message })
     
-      }
+      }*/
 })
 
 // Get one subscriber

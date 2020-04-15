@@ -28,39 +28,39 @@ const RootStack = createAppContainer(
         screen: EventScreen,
         navigationOptions: {
           headerShown: false
-        },
+        }
       },
-        Settings: {
-          screen: SettingsScreen,
-          navigationOptions: {
-            headerShown: false
-          }
+      Settings: {
+        screen: SettingsScreen,
+        navigationOptions: {
+          headerShown: false
+        }
       },
       Login: {
         screen: LoginScreen,
         navigationOptions: {
           headerShown: false
         }
-    },
-    Register: {
-      screen: RegisterScreen,
-      navigationOptions: {
-        headerShown: false
+      },
+      Register: {
+        screen: RegisterScreen,
+        navigationOptions: {
+          headerShown: false
+        }
+      },
+      Events: {
+        screen: EventsScreen,
+        navigationOptions: {
+          headerShown: false
+        }
+      },
+      Result: {
+        screen: ResultScreen,
+        navigationOptions: {
+          headerShown: false
+        }
       }
-  },
-  Events: {
-    screen: EventsScreen,
-    navigationOptions: {
-      headerShown: false
-    }
-},
-Result: {
-  screen: ResultScreen,
-  navigationOptions: {
-    headerShown: false
-  }
-}
-    }, 
+    },
     {
       initialRouteName: 'Register'
     }
@@ -71,8 +71,12 @@ export default class App extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      isReady: false
+      isReady: false,
+      
     }
+  }
+  state = {
+    response: ''
   }
 
   async componentDidMount () {
@@ -81,10 +85,11 @@ export default class App extends React.Component {
       Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
       ...Ionicons.font
     })
-    this.setState({ isReady: true })
+    this.setState({isReady: true});
   }
-
+  
   render () {
+
     if (!this.state.isReady) {
       return <AppLoading />
     }
