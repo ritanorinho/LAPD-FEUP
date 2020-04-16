@@ -1,9 +1,7 @@
 import React from 'react'
 import { AppLoading } from 'expo'
-import { Container } from 'native-base'
 import * as Font from 'expo-font'
 import { Ionicons } from '@expo/vector-icons'
-
 import ProfileScreen from './app/screens/ProfileScreen'
 import EventScreen from './app/screens/EventScreen'
 import SettingsScreen from './app/screens/SettingsScreen'
@@ -28,39 +26,39 @@ const RootStack = createAppContainer(
         screen: EventScreen,
         navigationOptions: {
           headerShown: false
-        },
+        }
       },
-        Settings: {
-          screen: SettingsScreen,
-          navigationOptions: {
-            headerShown: false
-          }
+      Settings: {
+        screen: SettingsScreen,
+        navigationOptions: {
+          headerShown: false
+        }
       },
       Login: {
         screen: LoginScreen,
         navigationOptions: {
           headerShown: false
         }
-    },
-    Register: {
-      screen: RegisterScreen,
-      navigationOptions: {
-        headerShown: false
+      },
+      Register: {
+        screen: RegisterScreen,
+        navigationOptions: {
+          headerShown: false
+        }
+      },
+      Events: {
+        screen: EventsScreen,
+        navigationOptions: {
+          headerShown: false
+        }
+      },
+      Result: {
+        screen: ResultScreen,
+        navigationOptions: {
+          headerShown: false
+        }
       }
-  },
-  Events: {
-    screen: EventsScreen,
-    navigationOptions: {
-      headerShown: false
-    }
-},
-Result: {
-  screen: ResultScreen,
-  navigationOptions: {
-    headerShown: false
-  }
-}
-    }, 
+    },
     {
       initialRouteName: 'Register'
     }
@@ -73,6 +71,9 @@ export default class App extends React.Component {
     this.state = {
       isReady: false
     }
+  }
+  state = {
+    response: ''
   }
 
   async componentDidMount () {

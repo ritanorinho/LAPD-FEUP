@@ -1,0 +1,13 @@
+{
+  "name": "node-react",
+  "version": "1.0.0",
+  "scripts": {
+    "frontend": "cd frontend && expo start",
+    "backend": "cd backend && node server.js",
+    "dev": "concurrently --kill-others-on-fail \"npm run backend\" \"npm run frontend\""
+  },
+  "dependencies": {
+    "concurrently": "^5.1.0",
+    "express": "^4.17.1"
+  }
+}
