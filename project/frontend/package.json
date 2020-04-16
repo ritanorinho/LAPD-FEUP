@@ -18,7 +18,7 @@
     "react-minimal-pie-chart": "^7.1.0",
     "react-native": "~0.61.5",
     "react-native-chart-kit": "^5.3.0",
-    "react-native-dotenv": "^0.2.0",
+    "react-native-config": "^1.0.0",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-pie-chart": "^1.0.13",
     "react-native-reanimated": "~1.7.0",
@@ -36,6 +36,7 @@
     "@babel/core": "~7.9.0",
     "babel-jest": "~25.2.6",
     "jest": "~25.2.6",
+    "react-native-dotenv": "^0.2.0",
     "react-test-renderer": "~16.9.0"
   },
   "jest": {

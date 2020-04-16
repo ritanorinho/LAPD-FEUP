@@ -1,9 +1,7 @@
 import React from 'react'
 import { AppLoading } from 'expo'
-import { Container } from 'native-base'
 import * as Font from 'expo-font'
 import { Ionicons } from '@expo/vector-icons'
-
 import ProfileScreen from './app/screens/ProfileScreen'
 import EventScreen from './app/screens/EventScreen'
 import SettingsScreen from './app/screens/SettingsScreen'
@@ -71,8 +69,7 @@ export default class App extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      isReady: false,
-      
+      isReady: false
     }
   }
   state = {
@@ -85,11 +82,10 @@ export default class App extends React.Component {
       Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
       ...Ionicons.font
     })
-    this.setState({isReady: true});
+    this.setState({ isReady: true })
   }
-  
-  render () {
 
+  render () {
     if (!this.state.isReady) {
       return <AppLoading />
     }
