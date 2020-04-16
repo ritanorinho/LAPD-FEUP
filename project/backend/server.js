@@ -32,5 +32,6 @@ app.use('/api/genre', genreRouter);
 app.use('/api/userEmotionGenre', uegRouter);
 
 
-app.listen(3000, () => console.log('server started'))
+app.use('/subscribers', subscribersRouter)
+app.listen(4000, () => console.log('server started'))
 
