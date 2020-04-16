@@ -1,38 +1,94 @@
-import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import React from 'react'
+import { AppLoading } from 'expo'
+import { Container } from 'native-base'
+import * as Font from 'expo-font'
+import { Ionicons } from '@expo/vector-icons'
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' + 'Shake or press menu button for dev menu',
-});
+import ProfileScreen from './app/screens/ProfileScreen'
+import EventScreen from './app/screens/EventScreen'
+import SettingsScreen from './app/screens/SettingsScreen'
+import RegisterScreen from './app/screens/RegisterScreen'
+import LoginScreen from './app/screens/LoginScreen'
+import EventsScreen from './app/screens/EventsScreen'
+import ResultScreen from './app/screens/ResultScreen'
+import { createStackNavigator } from 'react-navigation-stack'
+import { createAppContainer } from 'react-navigation'
 
-export default class App extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-      </View>
-    );
+const RootStack = createAppContainer(
+  createStackNavigator(
+    {
+      Profile: {
+        screen: ProfileScreen,
+
+        navigationOptions: {
+          headerShown: false
+        }
+      },
+      Event: {
+        screen: EventScreen,
+        navigationOptions: {
+          headerShown: false
+        },
+      },
+        Settings: {
+          screen: SettingsScreen,
+          navigationOptions: {
+            headerShown: false
+          }
+      },
+      Login: {
+        screen: LoginScreen,
+        navigationOptions: {
+          headerShown: false
+        }
+    },
+    Register: {
+      screen: RegisterScreen,
+      navigationOptions: {
+        headerShown: false
+      }
+  },
+  Events: {
+    screen: EventsScreen,
+    navigationOptions: {
+      headerShown: false
+    }
+},
+Result: {
+  screen: ResultScreen,
+  navigationOptions: {
+    headerShown: false
   }
 }
+    }, 
+    {
+      initialRouteName: 'Register'
+    }
+  )
+)
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+export default class App extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      isReady: false
+    }
+  }
+
+  async componentDidMount () {
+    await Font.loadAsync({
+      Roboto: require('native-base/Fonts/Roboto.ttf'),
+      Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
+      ...Ionicons.font
+    })
+    this.setState({ isReady: true })
+  }
+
+  render () {
+    if (!this.state.isReady) {
+      return <AppLoading />
+    }
+
+    return <RootStack />
+  }
+}
