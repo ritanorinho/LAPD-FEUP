@@ -1,4 +1,3 @@
-//import makeRequest, { endPoints } from './constants';
 const constants = require('./constants');
 
 const getEvents = ({ categoryId, genreId}) => constants.makeRequest({

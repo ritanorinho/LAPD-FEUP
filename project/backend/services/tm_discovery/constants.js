@@ -3,7 +3,7 @@ const axios = require('axios');
 
 const constants = {
   url: "https://app.ticketmaster.com",
-  apiKey: "CVPGAXrc0kY9yNeXYAE2eDhAqCzGkFGn",
+  apikey: "CVPGAXrc0kY9yNeXYAE2eDhAqCzGkFGn",
 };
 
 const endPoints = {
@@ -11,15 +11,14 @@ const endPoints = {
 };
 
 const makeUrl = (endPoint, query) => {
-  let url = `${constants.url}/discovery/v2/${endPoint}?apikey=${constants.apiKey}&`;
-  console.log("URL "+url);
+  let url = `${constants.url}/discovery/v2/${endPoint}?apikey=${constants.apikey}&`;
 
   if (query) {
     Object.keys(query).forEach((key) => {
       if (query[key]) url += `${key}=${query[key]}&`;
     });
   }
-
+  console.log("URL "+url);
   return url;
 };
 
