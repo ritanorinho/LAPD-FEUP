@@ -1,10 +1,21 @@
-import makeRequest, { endPoints } from './constants';
+//import makeRequest, { endPoints } from './constants';
+const constants = require('./constants');
 
-export const getEvents = ({ categoryId, genreId}) => makeRequest({
+const getEvents = ({ categoryId, genreId}) => constants.makeRequest({
   method: 'GET',
-  endPoint: endPoints.events,
+  endPoint: constants.endPoints.events,
   query: {
-    categoryId,
+    segmentId: categoryId,
     genreId
   },
 });
+
+const getEvent = ({ eventId }) => constants.makeRequest({
+  method: 'GET',
+  endPoint: constants.endPoints.events + "/" + eventId,
+});
+
+module.exports = {
+  getEvents,
+  getEvent
+};

@@ -1,17 +1,18 @@
-import axios from "axios";
+const axios = require('axios');
 
-export const constants = {
+
+const constants = {
   url: "https://app.ticketmaster.com",
   apiKey: "CVPGAXrc0kY9yNeXYAE2eDhAqCzGkFGn",
 };
 
-export const endPoints = {
+const endPoints = {
   events: "events",
 };
 
 const makeUrl = (endPoint, query) => {
-  let url = `${constants.url}/discovery/v2/${endPoint}?apiKey=${constants.apiKey}&`;
-  //console.log("URL "+url);
+  let url = `${constants.url}/discovery/v2/${endPoint}?apikey=${constants.apiKey}&`;
+  console.log("URL "+url);
 
   if (query) {
     Object.keys(query).forEach((key) => {
@@ -29,7 +30,12 @@ const makeRequest = async ({ endPoint, method, data, query }) => {
     url,
     data,
   });
-  return res;
+
+  return res.data;
 };
 
-export default makeRequest;
+module.exports = {
+  constants,
+  endPoints,
+  makeRequest
+}
