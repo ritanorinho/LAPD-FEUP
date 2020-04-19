@@ -1,6 +1,7 @@
 "use strict";
 
 const mongoose = require("mongoose");
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 
@@ -27,8 +28,7 @@ function jwtSecret() {
 
 userSchema.methods = {
   checkPassword(inputPassword) {
-    //return bcrypt.compareSync(inputPassword, this.password);
-    return inputPassword == this.password;
+    return bcrypt.compareSync(inputPassword, this.password);
   },
 
   generateJWT() {

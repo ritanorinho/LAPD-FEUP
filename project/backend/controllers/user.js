@@ -1,6 +1,7 @@
 "use strict";
 
-const passport = require('passport');
+const passport = require("passport");
+const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 
 function getAll(req, res) {
@@ -10,32 +11,34 @@ function getAll(req, res) {
 }
 
 function add(req, res) {
-  User.find({ email: req.body.email }).then((user) => {
-    if (user.length !== 0) res.status(406).json({ error: "Invalid email" });
-    else {
-      const newUser = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.email,
-      });
-      newUser
-        .save()
-        .then((item) => res.json({ item }))
-        .catch((error) => res.status(400).json({ error }));
-    }
+  const saltRounds = 10;
+
+  bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+    User.find({ email: req.body.email }).then((user) => {
+      if (user.length !== 0) res.status(406).json({ error: "Invalid email" });
+      else {
+        const newUser = new User({
+          name: req.body.name,
+          email: req.body.email,
+          password: hash,
+        });
+        newUser
+          .save()
+          .then((item) => res.json({ item }))
+          .catch((error) => res.status(400).json({ error }));
+      }
+    });
   });
 }
 
 function login(req, res, next) {
-  console.log(req.body)
   return passport.authenticate(
-    'login-user',
+    "login-user",
     { session: false },
     (err, passportUser, info) => {
       if (err) {
         return next(err);
       }
-      console.log(info)
       if (passportUser) {
         const reqUser = {
           _id: passportUser._id,
@@ -46,7 +49,7 @@ function login(req, res, next) {
           photo: passportUser.photo,
         };
 
-        req.login(reqUser, error => {
+        req.login(reqUser, (error) => {
           if (error) {
             return res.send({ error });
           }
@@ -57,13 +60,17 @@ function login(req, res, next) {
       } else {
         return res.status(400).json(info);
       }
-    },
+    }
   )(req, res, next);
+}
+
+function hashPassword(password) {
+  return bcrypt.hashSync(password, 10);
 }
 
 function logout(req, res) {
   req.logout();
-  return res.status(200).json('Logged out');
+  return res.status(200).json("Logged out");
 }
 
 function getCurrent(req, res) {
@@ -71,11 +78,11 @@ function getCurrent(req, res) {
   return res.status(200).json({ payload });
 }
 
-
 module.exports = {
   getAll,
   add,
   login,
   logout,
-  getCurrent
+  getCurrent,
+  hashPassword,
 };
