@@ -15,12 +15,12 @@ const uegRouter = require('./api/routes/userEmotionGenre');
 const seed = require('./seed/seeder');
 
 
-mongoose.connect("mongodb+srv://LAPD:LAPD2020@cluster0-gi0qi.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true })
+mongoose.connect("mongodb+srv://ADMIN:ADMIN@cluster0-gi0qi.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true })
 const db = mongoose.connection
 db.on('error', (error) => console.error(error))
 db.once('open', () => {
     console.log('connected to database')
-    seed.seedDB();
+    //seed.seedDB();
 })
 
 app.use(express.json())
