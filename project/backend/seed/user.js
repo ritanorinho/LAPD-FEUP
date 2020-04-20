@@ -1,19 +1,20 @@
 "use strict";
 
 const User = require("../models/user");
+const { hashPassword } = require('../controllers/user');
 
 function mockData() {
   return [
     new User({
       name: "Jane Doe",
       email: "janeDoe@gmail.com",
-      password: "12345678",
+      password: hashPassword("12345678"),
       settings: "Quiz",
     }),
     new User({
       name: "John Doe",
       email: "johnDoe@gmail.com",
-      password: "12345678",
+      password: hashPassword("12345678"),
       settings: "Camera",
     }),
   ];
