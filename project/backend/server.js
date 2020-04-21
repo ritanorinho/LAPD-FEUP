@@ -56,7 +56,7 @@ app.use("/api/emotion", emotionRouter);
 app.use("/api/genre", genreRouter);
 app.use("/api/userEmotionGenre", uegRouter);
 app.use("/api/event", eventRouter);
-app.use("/api/detect", eventRouter);
+app.use("/api/detect", detectRouter);
 
 
 app.listen(4000, () => console.log("server started"));

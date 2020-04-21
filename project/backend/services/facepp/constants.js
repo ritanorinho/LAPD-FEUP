@@ -12,13 +12,14 @@ const endPoints = {
 };
 
 const makeUrl = (endPoint, query) => {
-  let url = `${constants.url}/facepp/v3/${endPoint}?api_key=${constants.apikey}&api_secret=${constants.apisecret}`;
+  let url = `${constants.url}/facepp/v3/${endPoint}?api_key=${constants.apikey}&api_secret=${constants.apisecret}&`;
 
   if (query) {
     Object.keys(query).forEach((key) => {
       if (query[key]) url += `${key}=${query[key]}&`;
     });
   }
+  console.log(url)
   return url;
 };
 
