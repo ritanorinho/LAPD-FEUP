@@ -18,6 +18,7 @@ const makeUrl = (endPoint, query) => {
       if (query[key]) url += `${key}=${query[key]}&`;
     });
   }
+  console.log("url "+url);
   return url;
 };
 
