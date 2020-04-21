@@ -4,6 +4,7 @@ const service = require("../services/tm_discovery/getEvents");
 const UEG = require("../models/userEmotionGenre");
 const Genre = require("../models/genre");
 const Category = require("../models/category");
+const Emotion = require("../controllers/emotion")
 
 async function getSuggestions(req, res) {
   const { userId, emotionId } = req.params;
