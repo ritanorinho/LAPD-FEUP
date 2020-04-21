@@ -6,8 +6,11 @@ const Genre = require("../models/genre");
 const Category = require("../models/category");
 const Emotion = require("../controllers/emotion")
 
+
 async function getSuggestions(req, res) {
-  const { userId, emotionId } = req.params;
+  
+  const { userId } = req.params;
+  const {emotionId} = Emotion.getCurrentEmotion(userId);
   const query = { userId, emotionId };
   let suggestions = [];
   await UEG.find(query)

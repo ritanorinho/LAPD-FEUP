@@ -9,16 +9,15 @@ function getAll (req, res) {
     .catch(error => res.status(400).json({ error }))
 }
 
-async function getCurrentEmotion (req, res) {
-
-  let query = { userId: '5e9c2f80611a7140e2d61f22' }
+async function getCurrentEmotion (userId) {
+  let query = { userId: userId } 
   await Record.find(query)
     .sort({ date: -1 })
     .then(async records => {
       let id = records[0].id
       let query = { recordId: id }
       await RecordEmotion.find(query).then(async emotion => {
-        res.json({ emotion })
+        return emotion[0].emotionId;
       })
     })
 }
