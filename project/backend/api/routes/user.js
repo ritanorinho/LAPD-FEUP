@@ -9,6 +9,8 @@ const auth = require('../middleware/validator/auth');
 
 router.get('/', controller.getAll);
 
+router.get('/:id', controller.get);
+
 router.post('/', controller.add);
 
 router.post('/login', controller.login);

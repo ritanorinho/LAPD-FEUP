@@ -12,5 +12,5 @@ const recordEmotionSchema = new Schema(
   },
 );
 
-const RecordEmotion = mongoose.model("record", recordEmotionSchema);
+const RecordEmotion = mongoose.model("recordEmotion", recordEmotionSchema);
 module.exports = RecordEmotion;
