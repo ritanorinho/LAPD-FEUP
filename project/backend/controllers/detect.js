@@ -2,10 +2,9 @@
 
 const service = require("../services/facepp/postDetect");
 
-
 async function postUrlRecognition(req, res) {
-  let body = {req}
-  let { imageUrl } = body.req.body; //TODO CHECK THIS 
+  let body = { req };
+  let { imageUrl } = body.req.body; //TODO CHECK THIS
   const details = await service.postDetectUrl({ imageUrl });
   res.json({ details });
 }
@@ -24,9 +23,8 @@ async function postImageBase64Recognition(req, res) {
   res.json({ details });
 }
 
-
 module.exports = {
   postUrlRecognition,
   postImageFileRecognition,
-  postImageBase64Recognition
+  postImageBase64Recognition,
 };

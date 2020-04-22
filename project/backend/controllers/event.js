@@ -24,7 +24,7 @@ async function getSuggestions (req, res) {
     })
     const query2 = { userId, emotionId }
   let suggestions = []
-  await UEG.find(query)
+  await UEG.find(query2)
     .then(async uegs => {
       console.log('UEGS ' + uegs)
       for (const ueg of uegs) {
