@@ -12,6 +12,7 @@ import {
 import ProfileTabs from './ProfileTabs'
 import { withNavigation } from 'react-navigation'
 import { URL } from '../../utils/config'
+
 class ProfileCard extends Component {
   static navigationOptions = {
     title: 'Profile'
@@ -30,20 +31,19 @@ class ProfileCard extends Component {
   
     let user = await this.getUser()
    
-
     this.setState({ user: {
-      name: user[0].name,
-      photo: user[0].photo,
-      email: user[0].email,
-
-
+      name: user.name,
+      photo: user.photo,
+      email: user.email,
     }})
    
 
   }
 
+  //89.155.135.181/32
+  //89.155.135.181
   async getUser () {
-    let route = 'http://192.168.1.104:4000/api/user/5e9c2f80611a7140e2d61f22'
+    let route = 'http://192.168.1.8:4000/api/user/5e9c2f81611a7140e2d61f23'
     return fetch(route, {
       method: 'GET',
       headers: {
@@ -51,9 +51,9 @@ class ProfileCard extends Component {
         'content-type': 'multipart/form-data'
       }
     })
-      .then(response =>  response.json())
+      .then((response) =>  response.json())
       .then(json => {
-        return json
+        return json.user[0]
       })
       .catch(error => {
         console.error(error)

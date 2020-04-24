@@ -32,6 +32,8 @@ function add (req, res) {
 }
 
 function login (req, res, next) {
+  console.log("got to route controller")
+  console.log(req.body)
   return passport.authenticate(
     'login-user',
     { session: false },
