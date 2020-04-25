@@ -30,9 +30,16 @@ class Login extends Component {
 
   onSubmit(event) {
     event.preventDefault();
-    this.UserService.login(this.state, res => {
-      console.log("login callback")
-      console.log(res)
+    this.UserService.login(this.state, async (res) => {
+      if (res.status === 200) {
+        try {
+          await AsyncStorage.setItem('token', res.data.user.token);
+          this.props.navigation.navigate("Profile")
+        } catch (error) {
+          console.log(error.message);
+        }
+      } else 
+        console.log(res.response.data)
     });
   }
 
