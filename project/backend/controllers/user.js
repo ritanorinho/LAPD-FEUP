@@ -32,49 +32,41 @@ function add (req, res) {
   })
 }
 
-function login (req, res, next) {
-  console.log("got to route controller")
+function login(req, res, next) {
   console.log(req.body)
-  console.log("end to route controller")
   return passport.authenticate(
     'login-user',
     { session: false },
     (err, passportUser, info) => {
       if (err) {
-        console.log("deu erro")
-        console.log(err)
-        return next(err)
+        return next(err);
       }
-      console.log("here1")
+      console.log(info)
       if (passportUser) {
-        console.log("passportUser")
-        console.log(passportUser)
         const reqUser = {
           _id: passportUser._id,
           name: passportUser.name,
           email: passportUser.email,
           username: passportUser.username,
           settings: passportUser.settings,
-          photo: passportUser.photo
-        }
+          photo: passportUser.photo,
+        };
+
         req.login(reqUser, error => {
           if (error) {
-            console.log("mrdoud")
-            console.log("error")
-            return res.send({ error })
+            return res.send({ error });
           }
-          console.log("no error")
           return res.json({
-            user: passportUser.toAuthJSON()
-          })
-        })
+            user: passportUser.toAuthJSON(),
+          });
+        });
       } else {
-        console.log("sent info")
-        return res.status(400).json(info)
+        return res.status(400).json(info);
       }
-    }
-  )
+    },
+  )(req, res, next);
 }
+
 
 function get (req, res) {
   User.find({ _id: req.params.id })

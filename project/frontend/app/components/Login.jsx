@@ -28,43 +28,6 @@ class Login extends Component {
     this.UserService = new UserService();
   }
 
-  login() {
-    let route = `http://192.168.1.8:4000/api/user/login`;
-    let body = JSON.stringify({
-      username: "janeDoe@gmail.com",
-      password: "12345678",
-    });
-    console.log("body")
-    console.log(body)
-    fetch(route, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body,
-    })
-    .then((response) => response.json())
-    //If response is in json then in success
-    .then((responseJson) => {
-        alert(JSON.stringify(responseJson));
-        console.log(responseJson);
-    })
-    //If response is not in json then in error
-    .catch((error) => {
-      alert(JSON.stringify(error));
-      console.error(error);
-    });
-  }
-
-  // onSubmit(event) {
-  //   console.log("olaa");
-  //   event.preventDefault();
-  //   let response = this.login();
-  //   console.log(response);
-  //   console.log("end")
-  // }
-
-
   onSubmit(event) {
     event.preventDefault();
     this.UserService.login(this.state, res => {
