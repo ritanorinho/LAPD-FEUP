@@ -20,7 +20,8 @@ function add (req, res) {
         const newUser = new User({
           name: req.body.name,
           email: req.body.email,
-          password: hash
+          password: hash,
+          settings: "Camera"
         })
         newUser
           .save()
@@ -34,14 +35,20 @@ function add (req, res) {
 function login (req, res, next) {
   console.log("got to route controller")
   console.log(req.body)
+  console.log("end to route controller")
   return passport.authenticate(
     'login-user',
     { session: false },
     (err, passportUser, info) => {
       if (err) {
+        console.log("deu erro")
+        console.log(err)
         return next(err)
       }
+      console.log("here1")
       if (passportUser) {
+        console.log("passportUser")
+        console.log(passportUser)
         const reqUser = {
           _id: passportUser._id,
           name: passportUser.name,
@@ -52,13 +59,17 @@ function login (req, res, next) {
         }
         req.login(reqUser, error => {
           if (error) {
+            console.log("mrdoud")
+            console.log("error")
             return res.send({ error })
           }
+          console.log("no error")
           return res.json({
             user: passportUser.toAuthJSON()
           })
         })
       } else {
+        console.log("sent info")
         return res.status(400).json(info)
       }
     }

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image, StyleSheet } from "react-native";
+import { Image, StyleSheet, AsyncStorage } from "react-native";
 import {
   Container,
   Content,
@@ -12,6 +12,8 @@ import {
   Button,
 } from "native-base";
 import { withNavigation } from "react-navigation";
+import UserService from '../services/UserService';
+
 
 class Login extends Component {
   static navigationOptions = {
@@ -20,12 +22,13 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: null,
-      password: null,
+      username: "janeDoe@gmail.com",
+      password: "12345678",
     };
+    this.UserService = new UserService();
   }
 
-  async login() {
+  login() {
     let route = `http://192.168.1.8:4000/api/user/login`;
     let body = JSON.stringify({
       username: "janeDoe@gmail.com",
@@ -33,29 +36,41 @@ class Login extends Component {
     });
     console.log("body")
     console.log(body)
-    return fetch(route, {
+    fetch(route, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
       },
       body,
     })
-      .then((response) => response.json())
-      .then((json) => {
-        //console.log(json);
-        return json;
-      })
-      .catch((error) => {
-        console.log("got error")
-        //console.error(error);
-      });
+    .then((response) => response.json())
+    //If response is in json then in success
+    .then((responseJson) => {
+        alert(JSON.stringify(responseJson));
+        console.log(responseJson);
+    })
+    //If response is not in json then in error
+    .catch((error) => {
+      alert(JSON.stringify(error));
+      console.error(error);
+    });
   }
 
-  async onSubmit(event) {
-    console.log("olaa");
+  // onSubmit(event) {
+  //   console.log("olaa");
+  //   event.preventDefault();
+  //   let response = this.login();
+  //   console.log(response);
+  //   console.log("end")
+  // }
+
+
+  onSubmit(event) {
     event.preventDefault();
-    let response = await this.login();
-    console.log(response);
+    this.UserService.login(this.state, res => {
+      console.log("login callback")
+      console.log(res)
+    });
   }
 
   render() {
