@@ -12,6 +12,8 @@ import {
 import ProfileTabs from "./ProfileTabs";
 import { withNavigation } from "react-navigation";
 import { URL } from "../../utils/config";
+import UserService from "../services/UserService";
+
 
 class ProfileCard extends Component {
   static navigationOptions = {
@@ -25,44 +27,25 @@ class ProfileCard extends Component {
         photo: "",
       },
     };
+    this.UserService = new UserService();
   }
 
   async componentDidMount() {
-    let user = await this.getUser();
-
-    this.setState({
-      user: {
-        name: user.name,
-        photo: user.photo,
-        email: user.email,
-      },
+    await this.UserService.getUser((res) => {
+      if (res.status === 200){
+        const {payload} = res.data;
+        console.log(payload)
+        this.setState({
+          user: {
+            name: payload.name,
+            photo: payload.photo,
+            email: payload.email,
+          },
+        });
+      }
     });
   }
 
-
-  async getUser() {
-    let token = "";
-    try {
-      token = (await AsyncStorage.getItem("token")) || "";
-    } catch (error) {
-      console.log(error.message);
-    }
-    let route = "http://192.168.1.8:4000/api/user/5e9c2f81611a7140e2d61f23";
-    return fetch(route, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "content-type": "multipart/form-data",
-      },
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        return json.user[0];
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
   render() {
     return (
       <Content>
