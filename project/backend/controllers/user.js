@@ -20,7 +20,8 @@ function add (req, res) {
         const newUser = new User({
           name: req.body.name,
           email: req.body.email,
-          password: hash
+          password: hash,
+          settings: "Camera"
         })
         newUser
           .save()
@@ -31,14 +32,16 @@ function add (req, res) {
   })
 }
 
-function login (req, res, next) {
+function login(req, res, next) {
+  console.log(req.body)
   return passport.authenticate(
     'login-user',
     { session: false },
     (err, passportUser, info) => {
       if (err) {
-        return next(err)
+        return next(err);
       }
+      console.log(info)
       if (passportUser) {
         const reqUser = {
           _id: passportUser._id,
@@ -46,22 +49,24 @@ function login (req, res, next) {
           email: passportUser.email,
           username: passportUser.username,
           settings: passportUser.settings,
-          photo: passportUser.photo
-        }
+          photo: passportUser.photo,
+        };
+
         req.login(reqUser, error => {
           if (error) {
-            return res.send({ error })
+            return res.send({ error });
           }
           return res.json({
-            user: passportUser.toAuthJSON()
-          })
-        })
+            user: passportUser.toAuthJSON(),
+          });
+        });
       } else {
-        return res.status(400).json(info)
+        return res.status(400).json(info);
       }
-    }
-  )
+    },
+  )(req, res, next);
 }
+
 
 function get (req, res) {
   User.find({ _id: req.params.id })
