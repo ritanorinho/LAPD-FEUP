@@ -34,7 +34,6 @@ class ProfileCard extends Component {
     await this.UserService.getUser((res) => {
       if (res.status === 200){
         const {payload} = res.data;
-        console.log(payload)
         this.setState({
           user: {
             name: payload.name,

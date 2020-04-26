@@ -30,8 +30,15 @@ class Register extends Component {
 
   onSubmit(event) {
     event.preventDefault();
-    this.UserService.add(this.state, (res) => {
-      console.log("STATUS: " + res.status); //TODO
+    this.UserService.add(this.state, async (res) => {
+      if(res.status === 200) {
+        const {email, password} = this.state;
+        await this.UserService.login({username: email, password}, (response) => {
+          if (res.status === 200) {
+            this.props.navigation.navigate("Profile")
+          }
+        })
+      }
     });
   }
 

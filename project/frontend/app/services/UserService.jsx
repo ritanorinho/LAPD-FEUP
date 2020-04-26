@@ -1,6 +1,6 @@
 import axios from "axios";
-import {AsyncStorage } from "react-native";
- 
+import { AsyncStorage } from "react-native";
+
 export default class UserService {
   constructor() {
     this.baseURL = `http://192.168.1.8:4000/api/user`;
@@ -10,17 +10,13 @@ export default class UserService {
     let token = "";
     try {
       token = (await AsyncStorage.getItem("token")) || "";
-      console.log(token)
     } catch (error) {
       console.log(error.message);
     }
     axios
-      .get(
-        `${this.baseURL}/current`,
-        {
-          headers: { Authorization: `Token ${token}` },
-        },
-      )
+      .get(`${this.baseURL}/current`, {
+        headers: { Authorization: `Token ${token}` },
+      })
       .then((response) => {
         callback(response);
       })
@@ -31,26 +27,9 @@ export default class UserService {
 
   add(data, callback) {
     axios
-      .post(
-        this.baseURL,
-        {
-          name: data.name,
-          email: data.email,
-          password: data.password,
-        }
-      )
-      .then((response) => {
-        callback(response);
-      })
-      .catch((error) => {
-        callback(error);
-      });
-  }
-
-  login(data, callback) {
-    axios
-      .post(`${this.baseURL}/login`, {
-        username: data.username,
+      .post(this.baseURL, {
+        name: data.name,
+        email: data.email,
         password: data.password,
       })
       .then((response) => {
@@ -61,13 +40,33 @@ export default class UserService {
       });
   }
 
-  logout(callback) {
-     let token = "";
-    // try {
-    //   token = (await AsyncStorage.getItem("token")) || "";
-    // } catch (error) {
-    //   console.log(error.message);
-    // }
+  async login(data, callback) {
+    axios
+      .post(`${this.baseURL}/login`, {
+        username: data.username,
+        password: data.password,
+      })
+      .then(async (response) => {
+        try {
+          if(response.status === 200)
+            await AsyncStorage.setItem('token', response.data.user.token);
+        } catch (error) {
+          console.log(error.message);
+        }
+        callback(response);
+      })
+      .catch((error) => {
+        callback(error);
+      });
+  }
+
+  async logout(callback) {
+    let token = "";
+    try {
+      token = (await AsyncStorage.getItem("token")) || "";
+    } catch (error) {
+      console.log(error.message);
+    }
     axios
       .post(
         `${this.baseURL}/logout`,
@@ -76,8 +75,12 @@ export default class UserService {
           headers: { Authorization: `Token ${token}` },
         }
       )
-      .then((response) => {
-        localStorage.setItem("token", "");
+      .then(async (response) => {
+        try {
+          await AsyncStorage.setItem('token', "");
+        } catch (error) {
+          console.log(error.message);
+        }
         callback(response);
       })
       .catch((error) => {
