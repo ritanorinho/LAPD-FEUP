@@ -15,7 +15,7 @@ class Event extends Component {
       event: {
         title: "",
         date: "",
-        location: "Empire Polo Field, Indio, CA",
+        location: "",
         status: "",
         style: "",
         category: "",
@@ -23,36 +23,41 @@ class Event extends Component {
           "The Coachella Valley Music and Arts Festival is an annual music and arts festival held at the Empire Polo Club in Indio, California, in the Coachella Valley in the Colorado Desert.",
         tickets:
           "https://www.ticketexchangebyticketmaster.com/coachella-music-festival-tickets-indio-ca/tickets/2709497?PID=2709497",
-        path: require("../assets/coachella-festival.jpg"),
+        path: "https://s1.ticketm.net/dam/a/c63/98b72144-ea0b-4727-a4b1-4da7329b0c63_1252111_EVENT_DETAIL_PAGE_16_9.jpg",
       },
     };
   }
 
   async componentDidMount() {
     const eventId = "Z7r9jZ1Aeja39"; //TODO CHANGE TO RECEIVE IN PROPS
-    await this.EventService.getDetails({ eventId }, (res) => {
-      if (res.status === 200) {
+    await this.EventService.getDetails({ eventId }, async (res) => {
+      if (res.status == 200) {
         const {data} = res;
         const {details} = data;
-        const {name, images, dates, status, classifications, _embedded} = details;
+        const {name, images, dates, classifications, _embedded, uri} = details;
+        const {venues} = _embedded;
+        const venue = venues[0];
+
         // const {classifications, dates} = data;
         genre = classifications[0].genre;
         segment = classifications[0].segment;
         date = dates.start.localDate;
+        const {code} = dates.status;
+        const location = venue.name + ", " + venue.city.name + ", " + venue.country.countryCode
+        //const {code} = status;
         this.setState({
           event: {
             title: name,
             date,
-            location: "Empire Polo Field, Indio, CA",
-            status: status.code,
-            style: genre.name,
-            category: segment.name,
+            location,
+            status: code,
+            style: segment.name,
+            category: genre.name,
             info:
               "The Coachella Valley Music and Arts Festival is an annual music and arts festival held at the Empire Polo Club in Indio, California, in the Coachella Valley in the Colorado Desert.",
-            tickets:
-              "https://www.ticketexchangebyticketmaster.com/coachella-music-festival-tickets-indio-ca/tickets/2709497?PID=2709497",
+            tickets: uri,
             path: images[0].url,
-          },
+            },
         });
       }
     });
@@ -64,7 +69,9 @@ class Event extends Component {
         <Card transparent>
           <CardItem cardBody>
             <Image
-              source={this.state.event.path}
+              source={{
+                uri: this.state.event.path,
+              }}
               style={{ height: 150, width: null, flex: 1 }}
             />
           </CardItem>
