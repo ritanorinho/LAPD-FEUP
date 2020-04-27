@@ -30,52 +30,56 @@ class Event extends Component {
     };
   }
 
-  async componentDidMount() {
-    const eventId = "G5dIZpkRF_fgb"; //TODO CHANGE TO RECEIVE IN PROPS
-    await this.EventService.getDetails({ eventId }, async (res) => {
-      if (res.status == 200) {
-        const { data } = res;
-        const { details } = data;
-        let {
-          name,
-          images,
-          dates,
-          classifications,
-          _embedded,
-          uri,
-          info,
-        } = details;
-        if (info == undefined) info = "No additional information available...";
-        const { venues } = _embedded;
-        const venue = venues[0];
-        genre = classifications[0].genre;
-        segment = classifications[0].segment;
-        date = dates.start.localDate;
-        const { code } = dates.status;
-        const location =
-          venue.name +
-          ", " +
-          venue.city.name +
-          ", " +
-          venue.country.countryCode;
-        this.setState({
-          event: {
-            title: name,
-            date,
-            location,
-            status: code,
-            style: segment.name,
-            category: genre.name,
+
+    async componentDidMount() {
+      const { params } = this.props.navigation.state;
+      const eventId = params ? params.eventId : null;
+      console.log(eventId)
+      await this.EventService.getDetails({ eventId }, async (res) => {
+        if (res.status == 200) {
+          const { data } = res;
+          const { details } = data;
+          let {
+            name,
+            images,
+            dates,
+            classifications,
+            _embedded,
+            uri,
             info,
-            tickets: uri,
-            path: images[0].url,
-          },
-        });
-      }
-    });
-  }
+          } = details;
+          if (info == undefined) info = "No additional information available...";
+          const { venues } = _embedded;
+          const venue = venues[0];
+          genre = classifications[0].genre;
+          segment = classifications[0].segment;
+          date = dates.start.localDate;
+          const { code } = dates.status;
+          const location =
+            venue.name +
+            ", " +
+            venue.city.name +
+            ", " +
+            venue.country.countryCode;
+          this.setState({
+            event: {
+              title: name,
+              date,
+              location,
+              status: code,
+              style: segment.name,
+              category: genre.name,
+              info,
+              tickets: uri,
+              path: images[0].url,
+            },
+          });
+        }
+      });
+    }
 
   render() {
+    console.log(this.state)
     const info =  this.state.event.date + "\n" +
     this.state.event.location + "\n" +
     this.state.event.info;
@@ -133,7 +137,7 @@ class Event extends Component {
               <CardItem style={styles.paddingTitle}>
                 <Text
                   style={styles.cardText}
-                  onPress={() => Linking.openURL(this.state.event.style)}
+                  onPress={() => Linking.openURL(this.state.event.tickets)}
                 >
                   To get a ticket for this event, click here!
                 </Text>

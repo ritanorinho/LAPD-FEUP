@@ -10,6 +10,7 @@ class Events extends React.Component {
   static navigationOptions = {
     title: "Events",
   };
+
   constructor(props) {
     super(props);
     this.EventService = new EventService();
@@ -29,7 +30,7 @@ class Events extends React.Component {
 
   mapEvents(event) {
     return (
-      <EventCard />
+      <EventCard event={event} />
     )
   }
 
