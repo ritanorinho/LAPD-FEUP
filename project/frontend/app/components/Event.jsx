@@ -13,12 +13,12 @@ class Event extends Component {
     this.EventService = new EventService();
     this.state = {
       event: {
-        title: "Coachella Music Festival",
-        date: "09/10",
+        title: "",
+        date: "",
         location: "Empire Polo Field, Indio, CA",
-        status: "rescheduled",
-        style: "miscellaneous",
-        category: "fairs & festivals",
+        status: "",
+        style: "",
+        category: "",
         info:
           "The Coachella Valley Music and Arts Festival is an annual music and arts festival held at the Empire Polo Club in Indio, California, in the Coachella Valley in the Colorado Desert.",
         tickets:
@@ -28,20 +28,35 @@ class Event extends Component {
     };
   }
 
-  // async componentDidMount() {
-  //   await this.EventService.getDetails((res) => {
-  //     if (res.status === 200) {
-  //       const { payload } = res.data;
-  //       this.setState({
-  //         user: {
-  //           name: payload.name,
-  //           photo: payload.photo,
-  //           email: payload.email,
-  //         },
-  //       });
-  //     }
-  //   });
-  // }
+  async componentDidMount() {
+    const eventId = "Z7r9jZ1Aeja39"; //TODO CHANGE TO RECEIVE IN PROPS
+    await this.EventService.getDetails({ eventId }, (res) => {
+      if (res.status === 200) {
+        const {data} = res;
+        const {details} = data;
+        const {name, images, dates, status, classifications, _embedded} = details;
+        // const {classifications, dates} = data;
+        genre = classifications[0].genre;
+        segment = classifications[0].segment;
+        date = dates.start.localDate;
+        this.setState({
+          event: {
+            title: name,
+            date,
+            location: "Empire Polo Field, Indio, CA",
+            status: status.code,
+            style: genre.name,
+            category: segment.name,
+            info:
+              "The Coachella Valley Music and Arts Festival is an annual music and arts festival held at the Empire Polo Club in Indio, California, in the Coachella Valley in the Colorado Desert.",
+            tickets:
+              "https://www.ticketexchangebyticketmaster.com/coachella-music-festival-tickets-indio-ca/tickets/2709497?PID=2709497",
+            path: images[0].url,
+          },
+        });
+      }
+    });
+  }
 
   render() {
     return (
