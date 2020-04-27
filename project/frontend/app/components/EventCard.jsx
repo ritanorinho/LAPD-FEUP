@@ -8,6 +8,7 @@ import {
   Icon,
 } from 'native-base'
 import { withNavigation } from 'react-navigation'
+
  class EventCard extends Component {
   render () {
     return (

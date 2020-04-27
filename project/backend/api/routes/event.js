@@ -4,8 +4,10 @@ const router = require('express').Router();
 
 const controller = require('../../controllers/event.js');
 
-router.get('/:eventId', controller.getDetails);
+const auth = require('../middleware/validator/auth');
 
-router.get('/', controller.getSuggestions);
+router.get('/:eventId', auth.check.required, controller.getDetails);
+
+router.get('/', auth.check.required, controller.getSuggestions);
 
 module.exports = router;

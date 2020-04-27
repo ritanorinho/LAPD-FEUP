@@ -33,7 +33,6 @@ export default class EventService {
     } catch (error) {
       console.log(error.message);
     }
-    const { eventId } = data;
     axios
       .get(`${this.baseURL}`, {
         headers: { Authorization: `Token ${token}` },

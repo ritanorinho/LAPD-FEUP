@@ -8,6 +8,7 @@ class Event extends Component {
   static navigationOptions = {
     title: "Event",
   };
+  
   constructor(props) {
     super(props);
     this.EventService = new EventService();
