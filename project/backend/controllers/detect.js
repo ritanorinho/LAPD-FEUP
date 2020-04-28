@@ -10,16 +10,17 @@ async function postUrlRecognition(req, res) {
 }
 
 async function postImageFileRecognition(req, res) {
-  let body = req.post();
+  let body = req.body.photo;
   let { imageFile } = body.data;
   const details = await service.postDetectUrl({ imageFile });
   res.json({ details });
 }
 
 async function postImageBase64Recognition(req, res) {
-  let body = req.post();
-  let { imageBase64 } = body.data;
-  const details = await service.postDetectUrl({ imageBase64 });
+  console.log("base 64");
+  let imageBase64 = req.body.photo.base64;
+  const details = await service.postDetectImageBase64({ imageBase64 });
+  console.log("DETAILS "+details);
   res.json({ details });
 }
 

@@ -15,15 +15,23 @@ import {
 } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker'
 import { withNavigation } from 'react-navigation'
+import DetectService from "../services/DetectService";
 
 class EmotionEvaluate extends Component {
+  
 
   static navigationOptions = {
     title: 'EmotionEvaluate'
   }
   state = {
     hasPermission: null,
-    cameraType: Camera.Constants.Type.back
+    cameraType: Camera.Constants.Type.back,
+    photo: '',
+  }
+  constructor(props){
+    super(props);
+    this.DetectService = new DetectService();
+ 
   }
 
   async componentDidMount () {
@@ -56,19 +64,26 @@ class EmotionEvaluate extends Component {
 
   takePicture = async () => {
     if (this.camera) {
-      let photo = await this.camera.takePictureAsync()
-      console.log("photo");
-      console.log(photo);
+      let photo = await this.camera.takePictureAsync({ base64: true })
+      this.setState({photo: photo});
+      this.DetectService.sendPhoto(this.state.photo, async (res) => {
+        console.log("RES "+res);
+      })
     
     }
   }
 
   pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images
+    console.log("pick image");
+    let photo = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      base64: true, 
     })
-    console.log("load ");
-      console.log(result);
+    this.setState({photo: photo});
+    this.DetectService.sendPhoto(this.state.photo, async (res) => {
+      console.log("RES "+res);
+    })
+    
   }
 
   render () {
