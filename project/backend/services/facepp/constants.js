@@ -11,7 +11,7 @@ const endPoints = {
   detect: "detect",
 };
 
-const makeUrl = (endPoint, query) => {
+const makeUrl = async (endPoint, query) => {
   let url = `${constants.url}/facepp/v3/${endPoint}?api_key=${constants.apikey}&api_secret=${constants.apisecret}&`;
 
   if (query) {
@@ -19,18 +19,17 @@ const makeUrl = (endPoint, query) => {
       if (query[key]) url += `${key}=${query[key]}&`;
     });
   }
-  console.log(url)
+  console.log(url);
   return url;
 };
 
 const makeRequest = async ({ endPoint, method, data, query }) => {
-  const url = makeUrl(endPoint, query);
+  const url = await makeUrl(endPoint, query);
   const res = await axios({
     method,
     url,
     data,
   });
-
   return res.data;
 };
 
