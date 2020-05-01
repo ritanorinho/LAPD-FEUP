@@ -4,6 +4,7 @@ import React from "react";
 import { Container, Content, Text, Icon, Button } from "native-base";
 import { withNavigation } from "react-navigation";
 import EventService from "../services/EventService";
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 class Events extends React.Component {
@@ -15,6 +16,7 @@ class Events extends React.Component {
     super(props);
     this.EventService = new EventService();
     this.state = {
+      spinner: true,
       events: []
     }
   }
@@ -23,7 +25,7 @@ class Events extends React.Component {
     await this.EventService.getSuggestions(async (res) => {
       if (res.status == 200) {
         const {data} = res;
-        this.setState({ events: data.suggestions });
+        this.setState({ events: data.suggestions, spinner: false });
       }
     });
   }
@@ -41,6 +43,11 @@ class Events extends React.Component {
     );
     return (
       <Content>
+        <Spinner
+          visible={this.state.spinner}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+        />
         <View style={styles.rowContainer}>
           <View style={styles.rowItem}>
             <Text style={styles.text}>EVENTS</Text>
@@ -79,6 +86,9 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     paddingTop: 15,
     marginRight: 100,
+  },
+  spinnerTextStyle: {
+    color: '#FFF'
   },
 });
 
