@@ -78,6 +78,7 @@ class EmotionEvaluate extends Component {
     let photo = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       base64: true, 
+      quality: 0.01,
     })
     this.setState({photo: photo});
     this.DetectService.sendPhoto(this.state.photo, async (res) => {

@@ -30,8 +30,8 @@ db.once('open', () => {
     console.log('connected to database')
     //seed.seedDB();
 })
-app.use(bodyParser.json({ limit: "50mb" }))
-app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }))
+app.use(bodyParser.json({ limit: "2mb" }))
+app.use(bodyParser.urlencoded({ limit: "2mb", extended: true, parameterLimit: 2000 }))
 
 app.use(cookieParser());
 
@@ -57,6 +57,8 @@ app.use("/api/genre", genreRouter);
 app.use("/api/userEmotionGenre", uegRouter);
 app.use("/api/event", eventRouter);
 app.use("/api/detect", detectRouter);
+
+
 
 
 app.listen(4000, () => console.log("server started"));
