@@ -3,15 +3,17 @@ import { Image, StyleSheet } from "react-native";
 import { Content, Card, CardItem, Text, List, ListItem } from "native-base";
 import { withNavigation } from "react-navigation";
 import EventService from "../services/EventService";
+import Utils from "../Utils";
 
 class Event extends Component {
   static navigationOptions = {
     title: "Event",
   };
-  
+
   constructor(props) {
     super(props);
     this.EventService = new EventService();
+    this.Utils = new Utils();
     this.state = {
       event: {
         title: "",
@@ -20,8 +22,8 @@ class Event extends Component {
         status: "",
         style: "",
         category: "",
-        info:
-          "No additional information available...",
+        categoryApiId: "",
+        info: "No additional information available...",
         tickets:
           "https://www.ticketexchangebyticketmaster.com/coachella-music-festival-tickets-indio-ca/tickets/2709497?PID=2709497",
         path:
@@ -30,59 +32,69 @@ class Event extends Component {
     };
   }
 
-
-    async componentDidMount() {
-      const { params } = this.props.navigation.state;
-      const eventId = params ? params.eventId : null;
-      console.log(eventId)
-      await this.EventService.getDetails({ eventId }, async (res) => {
-        if (res.status == 200) {
-          const { data } = res;
-          const { details } = data;
-          let {
-            name,
-            images,
-            dates,
-            classifications,
-            _embedded,
-            uri,
+  async componentDidMount() {
+    const { params } = this.props.navigation.state;
+    const eventId = params ? params.eventId : null;
+    await this.EventService.getDetails({ eventId }, async (res) => {
+      if (res.status == 200) {
+        const { data } = res;
+        const { details } = data;
+        let {
+          name,
+          images,
+          dates,
+          classifications,
+          _embedded,
+          uri,
+          info,
+        } = details;
+        if (info == undefined) info = "No additional information available...";
+        const { venues } = _embedded;
+        const venue = venues[0];
+        genre = classifications[0].genre;
+        segment = classifications[0].segment;
+        date = dates.start.localDate;
+        const { code } = dates.status;
+        const location =
+          venue.name +
+          ", " +
+          venue.city.name +
+          ", " +
+          venue.country.countryCode;
+        this.setState({
+          event: {
+            title: name,
+            date,
+            location,
+            status: code,
+            style: segment.name,
+            categoryApiId: segment.id,
+            category: genre.name,
             info,
-          } = details;
-          if (info == undefined) info = "No additional information available...";
-          const { venues } = _embedded;
-          const venue = venues[0];
-          genre = classifications[0].genre;
-          segment = classifications[0].segment;
-          date = dates.start.localDate;
-          const { code } = dates.status;
-          const location =
-            venue.name +
-            ", " +
-            venue.city.name +
-            ", " +
-            venue.country.countryCode;
-          this.setState({
-            event: {
-              title: name,
-              date,
-              location,
-              status: code,
-              style: segment.name,
-              category: genre.name,
-              info,
-              tickets: uri,
-              path: images[0].url,
-            },
-          });
-        }
-      });
+            tickets: uri,
+            path: images[0].url,
+          },
+        });
+      }
+    });
+  }
+
+  typeStyles = function() {
+    const {categoryApiId} = this.state.event;
+    const color = this.Utils.getColor(categoryApiId);
+    return {
+      paddingRight: 10,
+      color,
     }
+  }
 
   render() {
-    console.log(this.state)
-    const info =  this.state.event.date + "\n" +
-    this.state.event.location + "\n" +
-    this.state.event.info;
+    const info =
+      this.state.event.date +
+      "\n" +
+      this.state.event.location +
+      "\n" +
+      this.state.event.info;
     return (
       <Content>
         <Card transparent>
@@ -108,7 +120,7 @@ class Event extends Component {
                 </Text>
               </ListItem>
               <ListItem style={styles.listItem}>
-                <Text style={styles.type}>
+                <Text style={this.typeStyles()}>
                   {this.state.event.style.toUpperCase()}
                 </Text>
                 <Text style={styles.category}>
@@ -123,9 +135,7 @@ class Event extends Component {
                 <Text style={styles.cardTitle}>INFO</Text>
               </CardItem>
               <CardItem style={styles.paddingTitle}>
-                <Text style={styles.cardText}>
-                  {info}
-                </Text>
+                <Text style={styles.cardText}>{info}</Text>
               </CardItem>
             </Card>
           </CardItem>
@@ -153,7 +163,7 @@ class Event extends Component {
 const styles = StyleSheet.create({
   title: {
     fontWeight: "bold",
-    color: "#FF9C9C",
+    color: "#464646",
     fontSize: 18,
   },
   listItem: {
