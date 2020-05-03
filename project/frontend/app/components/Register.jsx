@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Image, StyleSheet } from "react-native";
 import {
   Container,
-  Content,
   Form,
   Item,
   Input,
@@ -12,6 +11,7 @@ import {
   Button,
 } from "native-base";
 import { withNavigation } from "react-navigation";
+import Spinner from "react-native-loading-spinner-overlay";
 import UserService from "../services/UserService";
 
 class Register extends Component {
@@ -21,6 +21,7 @@ class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      spinner: false,
       name: "",
       email: "",
       password: "",
@@ -30,21 +31,31 @@ class Register extends Component {
 
   onSubmit(event) {
     event.preventDefault();
+    this.setState({ spinner: true });
     this.UserService.add(this.state, async (res) => {
-      if(res.status === 200) {
-        const {email, password} = this.state;
-        await this.UserService.login({username: email, password}, (response) => {
-          if (res.status === 200) {
-            this.props.navigation.navigate("Profile")
+      if (res.status === 200) {
+        const { email, password } = this.state;
+        await this.UserService.login(
+          { username: email, password },
+          (response) => {
+            if (res.status === 200) {
+              this.props.navigation.navigate("Profile");
+            }
           }
-        })
+        );
       }
+      this.setState({ spinner: false });
     });
   }
 
   render() {
     return (
       <Container>
+        <Spinner
+          visible={this.state.spinner}
+          textContent={"Loading..."}
+          textStyle={styles.spinnerTextStyle}
+        />
         <Card transparent style={styles.item}>
           <Image style={styles.image} source={require("../assets/logo.png")} />
           <Form>
@@ -66,7 +77,7 @@ class Register extends Component {
             </Item>
             <Label style={styles.label}>CONFIRM PASSWORD</Label>
             <Item rounded>
-              <Input style={styles.input} />
+              <Input secureTextEntry={true} style={styles.input} />
             </Item>
             <Item style={styles.textItem}>
               <Text style={styles.grayText}>Already have an account? </Text>
@@ -127,6 +138,9 @@ const styles = StyleSheet.create({
   grayText: {
     color: "gray",
     fontWeight: "bold",
+  },
+  spinnerTextStyle: {
+    color: "#FFF",
   },
 });
 
