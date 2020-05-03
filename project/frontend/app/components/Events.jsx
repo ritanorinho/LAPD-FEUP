@@ -1,7 +1,7 @@
 import EventCard from "./EventCard";
 import { StyleSheet, View, Image } from "react-native";
 import React from "react";
-import { Container, Content, Text, Icon, Button } from "native-base";
+import { Content, Text} from "native-base";
 import { withNavigation } from "react-navigation";
 import EventService from "../services/EventService";
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -37,7 +37,7 @@ class Events extends React.Component {
 
   mapEvents(event) {
     return (
-      <EventCard event={event} />
+      <EventCard event={event} key={event._id} />
     )
   }
 
