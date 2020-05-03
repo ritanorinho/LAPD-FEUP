@@ -5,6 +5,7 @@ import { Container, Content, Text, Icon, Button } from "native-base";
 import { withNavigation } from "react-navigation";
 import EventService from "../services/EventService";
 import Spinner from 'react-native-loading-spinner-overlay';
+import Utils from "../Utils";
 
 
 class Events extends React.Component {
@@ -14,10 +15,12 @@ class Events extends React.Component {
 
   constructor(props) {
     super(props);
+    this.Utils = new Utils();
     this.EventService = new EventService();
     this.state = {
       spinner: true,
-      events: []
+      events: [],
+      source: require("../assets/confused.png")
     }
   }
 
@@ -25,7 +28,9 @@ class Events extends React.Component {
     await this.EventService.getSuggestions(async (res) => {
       if (res.status == 200) {
         const {data} = res;
-        this.setState({ events: data.suggestions, spinner: false });
+        const source = this.Utils.getEmotionIcon(data.emotionName);
+      
+        this.setState({ events: data.suggestions, spinner: false, source });
       }
     });
   }
@@ -37,7 +42,8 @@ class Events extends React.Component {
   }
 
   render() {
-    const {events} = this.state;
+    const {events, source} = this.state;
+    console.log(source)
     const eventsDiv = events.map(
       this.mapEvents.bind(this),
     );
@@ -54,12 +60,12 @@ class Events extends React.Component {
           </View>
           <View style={styles.rowItem}>
             <Image
-              source={require("../assets/happy.png")}
+              source={source}
               style={styles.emotion}
             ></Image>
           </View>
         </View>
-        {eventsDiv}
+        {!this.state.spinner && eventsDiv}
       </Content>
     );
   }

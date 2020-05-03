@@ -6,6 +6,8 @@ const Genre = require("../models/genre");
 const Category = require("../models/category");
 const Record = require("../models/record");
 const RecordEmotion = require("../models/recordEmotion");
+const Emotion = require("../models/emotion");
+
 
 async function getSuggestions(req, res) {
   const { payload } = req;
@@ -13,14 +15,20 @@ async function getSuggestions(req, res) {
   const userId = _id;
   let query = { userId };
   let emotionId;
+  let emotionName = "neutral";
 
   await Record.find(query)
     .sort({ date: -1 })
     .then(async (records) => {
       let id = records[0].id;
       let query = { recordId: id };
-      await RecordEmotion.find(query).then(async (emotion) => {
+      await RecordEmotion.find(query)
+      .sort({percentage: -1})
+      .then(async (emotion) => {
         emotionId = emotion[0].emotionId;
+        await Emotion.find({_id: emotionId}).then(async(e) => {
+          emotionName = e[0].name;
+        })
       });
     });
 
@@ -29,7 +37,6 @@ async function getSuggestions(req, res) {
 
   await UEG.find(query2)
     .then(async (uegs) => {
-      //console.log("UEGS " + uegs);
       for (const ueg of uegs) {
         await Genre.findById(ueg.genreId).then(async (genre) => {
           await Category.findById(genre.categoryId).then(async (category) => {
@@ -45,7 +52,7 @@ async function getSuggestions(req, res) {
         });
         //.catch()
       }
-      res.json({ suggestions });
+      res.json({ suggestions, emotionName });
     })
     .catch((error) => res.status(400).json({ error }));
 }
