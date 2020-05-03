@@ -3,6 +3,7 @@ import { Image, StyleSheet } from "react-native";
 import { Content, Card, CardItem, Text, List, ListItem } from "native-base";
 import { withNavigation } from "react-navigation";
 import EventService from "../services/EventService";
+import Spinner from "react-native-loading-spinner-overlay";
 import Utils from "../Utils";
 
 class Event extends Component {
@@ -15,6 +16,7 @@ class Event extends Component {
     this.EventService = new EventService();
     this.Utils = new Utils();
     this.state = {
+      spinner: true,
       event: {
         title: "",
         date: "",
@@ -23,11 +25,9 @@ class Event extends Component {
         style: "",
         category: "",
         categoryApiId: "",
-        info: "No additional information available...",
-        tickets:
-          "https://www.ticketexchangebyticketmaster.com/coachella-music-festival-tickets-indio-ca/tickets/2709497?PID=2709497",
-        path:
-          "https://s1.ticketm.net/dam/a/c63/98b72144-ea0b-4727-a4b1-4da7329b0c63_1252111_EVENT_DETAIL_PAGE_16_9.jpg",
+        info: "",
+        tickets: "",
+        path: "",
       },
     };
   }
@@ -62,6 +62,7 @@ class Event extends Component {
           ", " +
           venue.country.countryCode;
         this.setState({
+          spinner: false,
           event: {
             title: name,
             date,
@@ -79,82 +80,85 @@ class Event extends Component {
     });
   }
 
-  typeStyles = function() {
-    const {categoryApiId} = this.state.event;
+  typeStyles = function () {
+    const { categoryApiId } = this.state.event;
     const color = this.Utils.getColor(categoryApiId);
     return {
       paddingRight: 10,
       color,
-    }
-  }
+    };
+  };
 
   render() {
-    const info =
-      this.state.event.date +
-      "\n" +
-      this.state.event.location +
-      "\n" +
-      this.state.event.info;
+    const { spinner, event } = this.state;
+    const info = event.date + "\n" + event.location + "\n\n" + event.info;
     return (
       <Content>
-        <Card transparent>
-          <CardItem cardBody>
-            <Image
-              source={{
-                uri: this.state.event.path,
-              }}
-              style={{ height: 150, width: null, flex: 1 }}
-            />
-          </CardItem>
-          <CardItem>
-            <List>
-              <ListItem style={styles.listItem}>
-                <Text style={styles.title}>
-                  {this.state.event.title.toUpperCase()}
-                </Text>
-              </ListItem>
-              <ListItem style={styles.listItem}>
-                <Text style={styles.statusText}>STATUS</Text>
-                <Text style={styles.statusDesc}>
-                  {this.state.event.status.toUpperCase()}
-                </Text>
-              </ListItem>
-              <ListItem style={styles.listItem}>
-                <Text style={this.typeStyles()}>
-                  {this.state.event.style.toUpperCase()}
-                </Text>
-                <Text style={styles.category}>
-                  {this.state.event.category.toUpperCase()}
-                </Text>
-              </ListItem>
-            </List>
-          </CardItem>
-          <CardItem>
-            <Card style={styles.card}>
-              <CardItem style={styles.paddingTitle}>
-                <Text style={styles.cardTitle}>INFO</Text>
-              </CardItem>
-              <CardItem style={styles.paddingTitle}>
-                <Text style={styles.cardText}>{info}</Text>
-              </CardItem>
-            </Card>
-          </CardItem>
-          <CardItem>
-            <Card style={styles.card}>
-              <CardItem style={styles.paddingTitle}>
-                <Text style={styles.cardTitle}>TICKETS</Text>
-              </CardItem>
-              <CardItem style={styles.paddingTitle}>
-                <Text
-                  style={styles.cardText}
-                  onPress={() => Linking.openURL(this.state.event.tickets)}
-                >
-                  To get a ticket for this event, click here!
-                </Text>
-              </CardItem>
-            </Card>
-          </CardItem>
-        </Card>
+        <Spinner
+          visible={this.state.spinner}
+          textContent={"Loading..."}
+          textStyle={styles.spinnerTextStyle}
+        />
+        {!spinner && (
+          <Card transparent>
+            <CardItem cardBody>
+              <Image
+                source={{
+                  uri: this.state.event.path,
+                }}
+                style={{ height: 150, width: null, flex: 1 }}
+              />
+            </CardItem>
+            <CardItem>
+              <List>
+                <ListItem style={styles.listItem}>
+                  <Text style={styles.title}>
+                    {this.state.event.title.toUpperCase()}
+                  </Text>
+                </ListItem>
+                <ListItem style={styles.listItem}>
+                  <Text style={styles.statusText}>STATUS</Text>
+                  <Text style={styles.statusDesc}>
+                    {this.state.event.status.toUpperCase()}
+                  </Text>
+                </ListItem>
+                <ListItem style={styles.listItem}>
+                  <Text style={this.typeStyles()}>
+                    {this.state.event.style.toUpperCase()}
+                  </Text>
+                  <Text style={styles.category}>
+                    {this.state.event.category.toUpperCase()}
+                  </Text>
+                </ListItem>
+              </List>
+            </CardItem>
+            <CardItem>
+              <Card style={styles.card}>
+                <CardItem style={styles.paddingTitle}>
+                  <Text style={styles.cardTitle}>INFO</Text>
+                </CardItem>
+                <CardItem style={styles.paddingTitle}>
+                  <Text style={styles.cardText}>{info}</Text>
+                </CardItem>
+              </Card>
+            </CardItem>
+            <CardItem>
+              <Card style={styles.card}>
+                <CardItem style={styles.paddingTitle}>
+                  <Text style={styles.cardTitle}>TICKETS</Text>
+                </CardItem>
+                <CardItem style={styles.paddingTitle}>
+                  <Text
+                    style={styles.cardText}
+                    onPress={() => Linking.openURL(this.state.event.tickets)}
+                  >
+                    To get a ticket for this event, click here!
+                  </Text>
+                </CardItem>
+              </Card>
+            </CardItem>
+          </Card>
+        )}
       </Content>
     );
   }
@@ -198,6 +202,9 @@ const styles = StyleSheet.create({
   },
   cardText: {
     color: "#807878",
+  },
+  spinnerTextStyle: {
+    color: "#FFF",
   },
 });
 export default withNavigation(Event);
