@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { Image, StyleSheet, AsyncStorage } from "react-native";
+import { Image, StyleSheet } from "react-native";
 import {
   Container,
-  Content,
   Form,
   Item,
   Input,
@@ -12,8 +11,8 @@ import {
   Button,
 } from "native-base";
 import { withNavigation } from "react-navigation";
-import UserService from '../services/UserService';
-
+import Spinner from "react-native-loading-spinner-overlay";
+import UserService from "../services/UserService";
 
 class Login extends Component {
   static navigationOptions = {
@@ -24,23 +23,30 @@ class Login extends Component {
     this.state = {
       username: "",
       password: "",
+      spinner: false,
     };
     this.UserService = new UserService();
   }
 
   onSubmit(event) {
     event.preventDefault();
+    this.setState({ spinner: true });
     this.UserService.login(this.state, async (res) => {
       if (res.status === 200) {
-          this.props.navigation.navigate("Profile")
-      } else 
-        console.log(res.response.data)
+        this.props.navigation.navigate("Profile");
+      } else console.log(res.response.data);
+      this.setState({ spinner: false });
     });
   }
 
   render() {
     return (
       <Container>
+        <Spinner
+          visible={this.state.spinner}
+          textContent={"Loading..."}
+          textStyle={styles.spinnerTextStyle}
+        />
         <Card transparent style={styles.item}>
           <Image style={styles.image} source={require("../assets/logo.png")} />
           <Form>
@@ -117,6 +123,9 @@ const styles = StyleSheet.create({
   grayText: {
     color: "gray",
     fontWeight: "bold",
+  },
+  spinnerTextStyle: {
+    color: "#FFF",
   },
 });
 
