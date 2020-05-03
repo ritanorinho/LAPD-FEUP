@@ -1,9 +1,11 @@
 import axios from "axios";
 import { AsyncStorage } from "react-native";
+import Utils from "../Utils"
 
 export default class EventService {
   constructor() {
-    this.baseURL = `http://192.168.1.8:4000/api/event`;
+    this.Utils = new Utils();
+    this.baseURL = this.Utils.getIp() + "/api/event";
   }
 
   async getDetails(data, callback) {

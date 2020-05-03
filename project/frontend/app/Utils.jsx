@@ -1,6 +1,12 @@
 export default class Utils {
   constructor() {}
 
+  //CHANGE THIS TO RETURN CORRECT IP
+  //TODO RETRIEVE CORRECT IP FROM .ENV FILE OR SOMETHING LIKE THAT
+  getIp() {
+    return `http://192.168.1.8:4000`;
+  }
+
   getColor(categoryApiId) {
     switch (categoryApiId) {
       case "KZFzniwnSyZfZ7v7nJ": //music
