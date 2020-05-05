@@ -81,11 +81,35 @@ function get(req, res) {
     });
 }
 
-function getPreferences(req, res) {
+async function getPreferences(req, res) {
   const { payload } = req;
+  const { _id } = payload;
   let events = [];
   let preferences = [];
-  res.json({ events, preferences });
+  await Category.find()
+    .then(async (categories) => {
+      for (const category of categories) {
+        await Genre.find({ categoryId: category._id })
+          .then((genres) => {
+            events.push({ category, genres });
+          })
+          .catch();
+      }
+      await Emotion.find()
+        .then(async (emotions) => {
+          for (const emotion of emotions) {
+
+            await UEG.find({ emotionId: emotion._id, userId: _id })
+              .then((uegs) => {
+                preferences.push({ emotion, uegs });
+              })
+              .catch();
+          }
+        })
+        .catch();
+      res.json({ events, preferences });
+    })
+    .catch();
 }
 
 function hashPassword(password) {
