@@ -3,9 +3,8 @@ import { List, ListItem, Radio, Text, Card, CardItem } from "native-base";
 import { StyleSheet } from "react-native";
 import { withNavigation } from "react-navigation";
 import Utils from "../Utils";
- 
-class PrefencesCard extends Component {
 
+class PrefencesCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,40 +16,49 @@ class PrefencesCard extends Component {
   }
 
   componentDidMount() {
-    const {event, preference} = this.props;
-    console.log(event);
-    console.log(preference);
-    this.setState({event, preference, display: true});
+    const { event, preference } = this.props;
+    this.setState({ event, preference, display: true });
   }
 
   render() {
-    const {event, display} = this.state;
-    if(display)
-    return (
-      <Card style={styles.card}>
-        <CardItem style={styles.textCard}>
-          <Text style={styles.title}>{event.category.name}</Text>
-        </CardItem>
-        <CardItem style={styles.card}>
-          <List>
-            <ListItem style={styles.option}>
-              <Radio selected={true} color="#CBCBCB" selectedColor="#CBCBCB" />
-              <Text style={styles.textOption}>Country</Text>
-            </ListItem>
-            <ListItem style={styles.option}>
-              <Radio selected={false} color="#CBCBCB" selectedColor="#CBCBCB" />
-              <Text style={styles.textOption}>Rock</Text>
-            </ListItem>
-            <ListItem style={styles.option}>
-              <Radio selected={false} color="#CBCBCB" selectedColor="#CBCBCB" />
-              <Text style={styles.textOption}>Classic</Text>
-            </ListItem>
-          </List>
-        </CardItem>
-      </Card>
-    );
-    else
-      return null
+    const { event, display } = this.state;
+    if (display)
+      return (
+        <Card style={styles.card}>
+          <CardItem style={styles.textCard}>
+            <Text style={styles.title}>{event.category.name}</Text>
+          </CardItem>
+          <CardItem style={styles.card}>
+            <List>
+              <ListItem style={styles.option}>
+                <Radio
+                  selected={true}
+                  color="#CBCBCB"
+                  selectedColor="#CBCBCB"
+                />
+                <Text style={styles.textOption}>Country</Text>
+              </ListItem>
+              <ListItem style={styles.option}>
+                <Radio
+                  selected={false}
+                  color="#CBCBCB"
+                  selectedColor="#CBCBCB"
+                />
+                <Text style={styles.textOption}>Rock</Text>
+              </ListItem>
+              <ListItem style={styles.option}>
+                <Radio
+                  selected={false}
+                  color="#CBCBCB"
+                  selectedColor="#CBCBCB"
+                />
+                <Text style={styles.textOption}>Classic</Text>
+              </ListItem>
+            </List>
+          </CardItem>
+        </Card>
+      );
+    else return null;
   }
 }
 
