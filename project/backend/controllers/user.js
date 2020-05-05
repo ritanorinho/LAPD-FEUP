@@ -1,47 +1,51 @@
-'use strict'
+"use strict";
 
-const passport = require('passport')
-const bcrypt = require('bcryptjs')
-const User = require('../models/user')
+const passport = require("passport");
+const bcrypt = require("bcryptjs");
+const User = require("../models/user");
+const Emotion = require("../models/emotion");
+const UEG = require("../models/userEmotionGenre");
+const Genre = require("../models/genre");
+const Category = require("../models/category");
 
-function getAll (req, res) {
+function getAll(req, res) {
   User.find()
-    .then(users => res.json({ users }))
-    .catch(error => res.status(400).json({ error }))
+    .then((users) => res.json({ users }))
+    .catch((error) => res.status(400).json({ error }));
 }
 
-function add (req, res) {
-  const saltRounds = 10
+function add(req, res) {
+  const saltRounds = 10;
 
   bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
-    User.find({ email: req.body.email }).then(user => {
-      if (user.length !== 0) res.status(406).json({ error: 'Invalid email' })
+    User.find({ email: req.body.email }).then((user) => {
+      if (user.length !== 0) res.status(406).json({ error: "Invalid email" });
       else {
         const newUser = new User({
           name: req.body.name,
           email: req.body.email,
           password: hash,
-          settings: "Camera"
-        })
+          settings: "Camera",
+        });
         newUser
           .save()
-          .then(item => res.json({ item }))
-          .catch(error => res.status(400).json({ error }))
+          .then((item) => res.json({ item }))
+          .catch((error) => res.status(400).json({ error }));
       }
-    })
-  })
+    });
+  });
 }
 
 function login(req, res, next) {
-  console.log(req.body)
+  console.log(req.body);
   return passport.authenticate(
-    'login-user',
+    "login-user",
     { session: false },
     (err, passportUser, info) => {
       if (err) {
         return next(err);
       }
-      console.log(info)
+      console.log(info);
       if (passportUser) {
         const reqUser = {
           _id: passportUser._id,
@@ -52,7 +56,7 @@ function login(req, res, next) {
           photo: passportUser.photo,
         };
 
-        req.login(reqUser, error => {
+        req.login(reqUser, (error) => {
           if (error) {
             return res.send({ error });
           }
@@ -63,41 +67,48 @@ function login(req, res, next) {
       } else {
         return res.status(400).json(info);
       }
-    },
+    }
   )(req, res, next);
 }
 
-
-function get (req, res) {
+function get(req, res) {
   User.find({ _id: req.params.id })
-    .then(user => {
-      res.json({ user })
+    .then((user) => {
+      res.json({ user });
     })
-    .catch(error => {
-      res.status(400).json({ error })
-    })
+    .catch((error) => {
+      res.status(400).json({ error });
+    });
 }
 
-function hashPassword (password) {
-  return bcrypt.hashSync(password, 10)
+function getPreferences(req, res) {
+  const { payload } = req;
+  let events = [];
+  let preferences = [];
+  res.json({ events, preferences });
 }
 
-function logout (req, res) {
-  req.logout()
-  return res.status(200).json('Logged out')
+function hashPassword(password) {
+  return bcrypt.hashSync(password, 10);
 }
 
-function getCurrent (req, res) {
-  const { payload } = req
-  return res.status(200).json({ payload })
+function logout(req, res) {
+  req.logout();
+  return res.status(200).json("Logged out");
+}
+
+function getCurrent(req, res) {
+  const { payload } = req;
+  return res.status(200).json({ payload });
 }
 
 module.exports = {
   getAll,
   add,
+  getPreferences,
   login,
   logout,
   getCurrent,
   hashPassword,
-  get
-}
+  get,
+};

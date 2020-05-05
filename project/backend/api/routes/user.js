@@ -11,6 +11,8 @@ router.get('/', controller.getAll);
 
 router.get('/current', auth.check.required, controller.getCurrent);
 
+router.get('/preferences', auth.check.required, controller.getPreferences);
+
 router.get('/:id', controller.get);
 
 router.post('/', controller.add);

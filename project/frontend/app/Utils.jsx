@@ -7,6 +7,7 @@ export default class Utils {
     return `http://192.168.1.8:4000`;
   }
 
+  //TODO, GET MORE COLORS
   getColor(categoryApiId) {
     switch (categoryApiId) {
       case "KZFzniwnSyZfZ7v7nJ": //music
@@ -24,20 +25,22 @@ export default class Utils {
     }
   }
 
-  getEmotionIcon(emotionName) {
+  getEmotionColor(emotionName) {
     switch (emotionName) {
       case "anger": 
-        return require("../app/assets/angry.png");
+        return "#CC4748";
       case "fear": 
-        return require("../app/assets/scare.png");
+        return "#CD82AD";
       case "happiness": 
-        return require("../app/assets/happy.png");
+        return " #84B761";
       case "neutral":
-        return require("../app/assets/confused.png");
+        return "#FDD400";
       case "sadness": 
-        return require("../app/assets/crying.png");
+        return "#67B7DC";
       default:
-        return require("../app/assets/confused.png");
+        return "#FDD400";
     }
   }
+
+
 }
