@@ -8,6 +8,6 @@ const router = require('express').Router()
 
 const controller = require('../../controllers/detect.js')
 
-router.post('/', upload.any(),auth.check.required, controller.postImageRecognition)
+router.post('/', upload.any(), auth.check.required, controller.postImageRecognition)
 
 module.exports = router

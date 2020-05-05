@@ -3,6 +3,8 @@
 const service = require('../services/facepp/constants')
 const request = require('request')
 const Emotion = require('../models/emotion')
+const Record = require('../models/record')
+const RecordEmotion = require('../models/recordEmotion')
 
 async function postImageRecognition (req, res) {
   let base64 = req.body.photo.base64
@@ -22,26 +24,39 @@ async function postImageRecognition (req, res) {
     formData: formData,
     method: 'POST'
   }
+  const allEmotions = await Emotion.find().then(emotions => {
+    return emotions
+  })
   request(options, (err, response, body) => {
     console.log('Request complete')
     if (err) console.log('Request err: ', err)
+
     let json_body = JSON.parse(body)
     console.log(json_body)
-    let emotions = json_body.faces[0].attributes.emotion
-    var result = []
-    var keys = Object.keys(emotions)
+    if (json_body.faces.length == 0)
+      res.status(404).json('error when try to find faces ')
+    else {
+      let emotions = json_body.faces[0].attributes.emotion
+      var result = []
+      var keys = Object.keys(emotions)
 
-    keys.forEach(function (key) {
-      console.log(key + ' : ' + emotions[key])
+      const { payload } = req
+      const { _id } = payload
+      const date = new Date()
+      const record = new Record({ userId: _id, date: date })
+      record.save()
 
-      result.push(emotions[key])
-    })
+      allEmotions.forEach(function (key){
+        const recordEmotion = new RecordEmotion({recordId: record._id, emotionId: key._id, percentage: emotions[key.name]});
+        recordEmotion.save();
+        console.log("RECORD EMOTION "+ JSON.stringify(recordEmotion));
 
-    res.json({ body })
+      })
+      res.json({ body })
+    }
   })
-  const { payload } = req;
-  console.log("PAY "+payload);
-  request.shouldKeepAlive = false;
+
+  request.shouldKeepAlive = false
 }
 
 module.exports = {
