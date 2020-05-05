@@ -6,10 +6,17 @@ export default class DetectService {
     this.baseURL = `http://192.168.1.104:4000/api/detect/`
   }
 
-  sendPhoto (data, callback) {
+  async sendPhoto (data, callback) {
+    let token = "";
+    try {
+      token = (await AsyncStorage.getItem("token")) || "";
+    } catch (error) {
+      console.log(error.message);
+    }
    
     axios
       .post(this.baseURL , {
+        headers: { Authorization: `Token ${token}` },
         photo: data
       })
       .then(response => {
