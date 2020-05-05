@@ -3,9 +3,35 @@ import { StyleSheet, View } from 'react-native'
 import { Content, Text, Button, Icon } from 'native-base'
 import PreferencesCard from './PreferencesCard'
 import { withNavigation } from 'react-navigation'
-
+import Utils from "../Utils";
 class PreferencesForm extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      events: [],
+      preference: {}
+    };
+    this.Utils = new Utils();
+  }
+
+  componentDidMount() {
+    const {events, preference} = this.props;
+    this.setState({events, preference});
+  }
+
+  mapCategory(event) {
+    const {_id} = event.category;
+    return (
+      <PreferencesCard key={_id} preference={this.state.preference} event={event}/>
+    )
+  }
+
   render () {
+    const {events} = this.state;
+    const eventsForm = events.map(
+      this.mapCategory.bind(this),
+    );
     return (
       <Content>
      <View style={styles.rowContainer}>
@@ -18,8 +44,7 @@ class PreferencesForm extends Component {
           </Button>
          </View>
         </View>
-        <PreferencesCard />
-        <PreferencesCard />
+        {eventsForm}
       </Content>
     )
   }

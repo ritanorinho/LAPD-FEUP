@@ -4,7 +4,6 @@ import { Content } from "native-base";
 import PreferencesForm from "./PreferencesForm";
 import { withNavigation } from "react-navigation";
 import Spinner from 'react-native-loading-spinner-overlay';
-import Utils from "../Utils";
 import UserService from "../services/UserService";
 
 
@@ -18,7 +17,6 @@ class Preferences extends Component {
       preferences : []
     };
     this.UserService = new UserService();
-    this.Utils = new Utils();
   }
 
   async componentDidMount() {
@@ -26,14 +24,25 @@ class Preferences extends Component {
       if (res.status == 200) {
         const {data} = res;    
         const {events, preferences} = data;  
-        console.log(data)
         this.setState({ events, preferences });
       }
       this.setState({spinner: false})
     });
   }
 
+  mapPreferences(preference) {
+    const {events} = this.state;
+    const {_id} = preference.emotion;
+    return (
+      <PreferencesForm key={_id} preference={preference} events={events}/>
+    )
+  }
+
   render() {
+    const {preferences, spinner} = this.state;
+    const preferencesForm = preferences.map(
+      this.mapPreferences.bind(this),
+    );
     return (
       <Content>
          <Spinner
@@ -41,8 +50,7 @@ class Preferences extends Component {
           textContent={'Loading...'}
           textStyle={styles.spinnerTextStyle}
         />
-        <PreferencesForm />
-        <PreferencesForm />
+        {!spinner && preferencesForm}
       </Content>
     );
   }

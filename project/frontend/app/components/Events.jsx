@@ -43,7 +43,6 @@ class Events extends React.Component {
 
   render() {
     const {events, source} = this.state;
-    console.log(source)
     const eventsDiv = events.map(
       this.mapEvents.bind(this),
     );
