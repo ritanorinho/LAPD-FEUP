@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
 
 const userRouter = require("./api/routes/user");
 const categoryRouter = require("./api/routes/category");
@@ -29,7 +30,8 @@ db.once('open', () => {
     console.log('connected to database')
     //seed.seedDB();
 })
-app.use(express.json());
+app.use(bodyParser.json({ limit: "2mb" }))
+app.use(bodyParser.urlencoded({ limit: "2mb", extended: true, parameterLimit: 2000 }))
 
 app.use(cookieParser());
 
@@ -45,6 +47,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+
 init(passport);
 
 app.use("/api/user", userRouter);
@@ -54,6 +57,8 @@ app.use("/api/genre", genreRouter);
 app.use("/api/userEmotionGenre", uegRouter);
 app.use("/api/event", eventRouter);
 app.use("/api/detect", detectRouter);
+
+
 
 
 app.listen(4000, () => console.log("server started"));

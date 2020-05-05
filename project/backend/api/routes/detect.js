@@ -1,14 +1,13 @@
-'use strict';
-
-const router = require('express').Router();
-
-const controller = require('../../controllers/detect.js');
-
-router.post('/url', controller.postUrlRecognition);
-
-router.post('/file', controller.postImageFileRecognition);
-
-router.post('/base64', controller.postImageBase64Recognition);
+'use strict'
+const multer = require('multer')
+const upload = multer()
+const auth = require('../middleware/validator/auth');
 
 
-module.exports = router;
+const router = require('express').Router()
+
+const controller = require('../../controllers/detect.js')
+
+router.post('/', upload.any(), auth.check.required, controller.postImageRecognition)
+
+module.exports = router

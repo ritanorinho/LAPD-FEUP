@@ -15,7 +15,7 @@ class FooterBar extends Component {
             <Text style={{ color: '#8b4da9' }}>Back</Text>
           </Button>
           <Button
-            onPress={() => this.props.navigation.navigate('Result')}
+            onPress={() => this.props.navigation.navigate('EmotionEvaluate')}
             style={{
               alignSelf: 'center',
               elevation: 4,
