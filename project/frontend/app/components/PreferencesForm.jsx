@@ -31,6 +31,17 @@ class PreferencesForm extends Component {
     );
   }
 
+
+  emotionTextStyles = function () {
+    const { preference } = this.state;
+    const color = this.Utils.getEmotionColor(preference.emotion.name);
+    return {
+      color,
+      fontWeight: "bold",
+    };
+  };
+
+
   render() {
     const { events, preference, display } = this.state;
     const eventsForm = events.map(this.mapCategory.bind(this));
@@ -39,12 +50,11 @@ class PreferencesForm extends Component {
         <Content>
           <View style={styles.rowContainer}>
             <View style={styles.rowItem}>
-              <Text style={styles.text}>{`When I feel ${preference.emotion.name} I like...`}</Text>
-            </View>
-            <View style={styles.rowItem}>
-              <Button style={styles.button} transparent>
-                <Icon name="arrow-forward" style={{ color: "#8b4da9" }} />
-              </Button>
+              <Text style={styles.text}>
+                When I feel
+                <Text style={this.emotionTextStyles()}> {preference.emotion.name} </Text>
+                I like...
+              </Text>
             </View>
           </View>
           {eventsForm}
@@ -65,6 +75,7 @@ const styles = StyleSheet.create({
   rowContainer: {
     flex: 1,
     flexDirection: "row",
+    marginTop: 25,
   },
   rowItem: {
     flex: 1,

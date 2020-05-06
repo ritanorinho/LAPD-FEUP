@@ -20,54 +20,58 @@ class PrefencesCard extends Component {
     this.setState({ event, preference, display: true });
   }
 
+  mapGenres(genre) {
+    const { _id, name } = genre;
+    return (
+      <ListItem style={styles.option} key={_id}>
+        <Radio selected={false} color="#803EA1" selectedColor="#CBCBCB" />
+        <Text style={styles.textOption}>{name}</Text>
+      </ListItem>
+    );
+  }
+
+  cardStyles = function () {
+    const { category } = this.state.event;
+    const backgroundColor = this.Utils.getColor(category.apiId);
+    return {
+      backgroundColor,
+      paddingTop: 0,
+    };
+  };
+
+  cardTextStyles = function () {
+    const { category } = this.state.event;
+    const backgroundColor = this.Utils.getColor(category.apiId);
+    return {
+      alignSelf: "flex-end",
+      backgroundColor,
+      paddingBottom: 0,
+    };
+  };
+
   render() {
     const { event, display } = this.state;
-    if (display)
+    if (display) {
+      const { category, genres } = event;
+      const listItems = genres.map(this.mapGenres.bind(this));
       return (
-        <Card style={styles.card}>
-          <CardItem style={styles.textCard}>
-            <Text style={styles.title}>{event.category.name}</Text>
+        <Card style={this.cardStyles()}>
+          <CardItem style={this.cardTextStyles()}>
+            <Text style={styles.title}>{category.name.toUpperCase()}</Text>
           </CardItem>
-          <CardItem style={styles.card}>
+          <CardItem style={this.cardStyles()}>
             <List>
-              <ListItem style={styles.option}>
-                <Radio
-                  selected={true}
-                  color="#CBCBCB"
-                  selectedColor="#CBCBCB"
-                />
-                <Text style={styles.textOption}>Country</Text>
-              </ListItem>
-              <ListItem style={styles.option}>
-                <Radio
-                  selected={false}
-                  color="#CBCBCB"
-                  selectedColor="#CBCBCB"
-                />
-                <Text style={styles.textOption}>Rock</Text>
-              </ListItem>
-              <ListItem style={styles.option}>
-                <Radio
-                  selected={false}
-                  color="#CBCBCB"
-                  selectedColor="#CBCBCB"
-                />
-                <Text style={styles.textOption}>Classic</Text>
-              </ListItem>
+              {listItems}
             </List>
           </CardItem>
         </Card>
       );
-    else return null;
+    } else return null;
   }
 }
 
 const styles = StyleSheet.create({
-  textCard: {
-    alignSelf: "flex-end",
-    backgroundColor: "#73B4FC",
-    paddingBottom: 0,
-  },
+
   title: {
     color: "#803EA1",
     fontWeight: "bold",
@@ -81,10 +85,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
     paddingBottom: 2,
     paddingTop: 5,
-  },
-  card: {
-    backgroundColor: "#73B4FC",
-    paddingTop: 0,
+    marginBottom: 10,
   },
   radio: {
     borderColor: "white",
