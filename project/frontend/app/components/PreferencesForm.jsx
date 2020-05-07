@@ -4,6 +4,7 @@ import { Content, Text, Button, Icon } from "native-base";
 import PreferencesCard from "./PreferencesCard";
 import { withNavigation } from "react-navigation";
 import Utils from "../Utils";
+
 class PreferencesForm extends Component {
   constructor(props) {
     super(props);

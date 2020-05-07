@@ -3,6 +3,8 @@ import { List, ListItem, Radio, Text, Card, CardItem } from "native-base";
 import { StyleSheet } from "react-native";
 import { withNavigation } from "react-navigation";
 import Utils from "../Utils";
+import UegService from "../services/UegService";
+
 
 class PrefencesCard extends Component {
   constructor(props) {
@@ -13,6 +15,7 @@ class PrefencesCard extends Component {
       preference: {},
     };
     this.Utils = new Utils();
+    this.UegService = new UegService();
   }
 
   componentDidMount() {
@@ -20,11 +23,20 @@ class PrefencesCard extends Component {
     this.setState({ event, preference, display: true });
   }
 
+  handleChange(genre) {
+    console.log("handling change");
+    console.log(genre);
+  }
+
   mapGenres(genre) {
+    const onChange = () => {
+      this.handleChange(genre);
+    };
+    const { preference } = this.state;
     const { _id, name } = genre;
     return (
       <ListItem style={styles.option} key={_id}>
-        <Radio selected={false} color="#803EA1" selectedColor="#CBCBCB" />
+        <Radio selected={false} color="#803EA1" selectedColor="#803EA1" onPress={onChange} />
         <Text style={styles.textOption}>{name}</Text>
       </ListItem>
     );
@@ -60,9 +72,7 @@ class PrefencesCard extends Component {
             <Text style={styles.title}>{category.name.toUpperCase()}</Text>
           </CardItem>
           <CardItem style={this.cardStyles()}>
-            <List>
-              {listItems}
-            </List>
+            <List>{listItems}</List>
           </CardItem>
         </Card>
       );
@@ -71,7 +81,6 @@ class PrefencesCard extends Component {
 }
 
 const styles = StyleSheet.create({
-
   title: {
     color: "#803EA1",
     fontWeight: "bold",
