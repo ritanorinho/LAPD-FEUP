@@ -42,5 +42,22 @@ export default class Utils {
     }
   }
 
+  getEmotionIcon(emotionName) {
+    switch (emotionName) {
+      case "anger": 
+        return require("../app/assets/angry.png");
+      case "fear": 
+        return require("../app/assets/scare.png");
+      case "happiness": 
+        return require("../app/assets/happy.png");
+      case "neutral":
+        return require("../app/assets/confused.png");
+      case "sadness": 
+        return require("../app/assets/crying.png");
+      default:
+        return require("../app/assets/confused.png");
+    }
+  }
+
 
 }
