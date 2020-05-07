@@ -30,6 +30,10 @@ function addUeg(req, res) {
   const { emotionId, genreId} = body;
   const { _id } = payload;
   const userId = _id;
+  console.log("addUeg");
+  console.log("emotionId " + emotionId);
+  console.log("genreId " + genreId);
+  console.log("userId " + userId);
   const newUeg = new UEG({
     emotionId,
     genreId,
@@ -37,16 +41,19 @@ function addUeg(req, res) {
   });
   newUeg
     .save()
-    .then((item) => res.json({ item }))
+    .then((ueg) => res.json({ ueg }))
     .catch((error) => res.status(400).json({ error }));
 }
 
 
 function deleteUeg(req, res) {
-  Ueg.deleteOne({ _id: req.params.id }, error => {
+  console.log("id " + req.params.id)
+  UEG.deleteOne({ _id: req.params.id }, error => {
     if (error) {
+      console.log("error deleting uegs")
       res.status(404).json({ error });
     } else {
+      console.log("ueg deleted!")
       res.status(200).json();
     }
   });

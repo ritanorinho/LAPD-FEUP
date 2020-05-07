@@ -23,20 +23,63 @@ class PrefencesCard extends Component {
     this.setState({ event, preference, display: true });
   }
 
+  isPreference(genre) {
+    const { preference } = this.state;
+    const {uegs} = preference
+    let elems = uegs.filter( ueg => ueg.genreId == genre._id );
+    let selected = false;
+    if(elems.length > 0)
+      selected = true;
+    return selected;
+  }
+
+  getPreference(genre){
+    const { preference } = this.state;
+    const {uegs} = preference
+    let elems = uegs.filter( ueg => ueg.genreId == genre._id );
+    if(elems.length > 0)
+      return elems[0]
+    return null;
+  }
+
   handleChange(genre) {
-    console.log("handling change");
-    console.log(genre);
+    const { preference } = this.state;
+
+    const selected = this.isPreference(genre);
+
+    console.log(genre)
+
+    if(selected) {
+      const preUeg = this.getPreference(genre);
+      this.UegService.delete({_id: preUeg._id}, async () => {
+        let elems = preference.uegs.filter( ueg => ueg.genreId != genre._id );
+        const newPreference = {emotion: preference.emotion, uegs: elems};
+        this.setState({preference: newPreference});
+      });
+    } else {
+        this.UegService.add({genreId: genre._id, emotionId: preference.emotion._id}, async (res) => {
+          console.log(res.status)
+          if(res.status == 200) {
+            console.log("here");
+            const elems = [res.data.ueg, ...preference.uegs];
+            const newPreference = {emotion: preference.emotion, uegs: elems};
+            this.setState({preference: newPreference});
+          }
+        });
+    }
   }
 
   mapGenres(genre) {
     const onChange = () => {
       this.handleChange(genre);
     };
-    const { preference } = this.state;
     const { _id, name } = genre;
+
+    const selected = this.isPreference(genre)
+
     return (
       <ListItem style={styles.option} key={_id}>
-        <Radio selected={false} color="#803EA1" selectedColor="#803EA1" onPress={onChange} />
+        <Radio selected={selected} color="#803EA1" selectedColor="#803EA1" onPress={onChange} />
         <Text style={styles.textOption}>{name}</Text>
       </ListItem>
     );
