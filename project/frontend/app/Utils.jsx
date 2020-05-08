@@ -4,7 +4,7 @@ export default class Utils {
   //CHANGE THIS TO RETURN CORRECT IP
   //TODO RETRIEVE CORRECT IP FROM .ENV FILE OR SOMETHING LIKE THAT
   getIp() {
-    return `http://192.168.1.8:4000`;
+    return `http://192.168.1.104:4000`;
   }
 
   getColor(categoryApiId) {

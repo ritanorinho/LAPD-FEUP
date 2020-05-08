@@ -9,6 +9,7 @@ import RegisterScreen from './app/screens/RegisterScreen'
 import LoginScreen from './app/screens/LoginScreen'
 import EventsScreen from './app/screens/EventsScreen'
 import ResultScreen from './app/screens/ResultScreen'
+import EmotionEvaluateScreen from './app/screens/EmotionEvaluateScreen'
 import { createStackNavigator } from 'react-navigation-stack'
 import { createAppContainer } from 'react-navigation'
 
@@ -57,10 +58,16 @@ const RootStack = createAppContainer(
         navigationOptions: {
           headerShown: false
         }
-      }
+      },
+      EmotionEvaluate: {
+        screen: EmotionEvaluateScreen,
+        navigationOptions: {
+          headerShown: false
+        }
+      },
     },
     {
-      initialRouteName: 'Register'
+      initialRouteName: 'Login'
     }
   )
 )
