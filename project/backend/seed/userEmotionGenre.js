@@ -41,7 +41,7 @@ function mockData(users, emotions, genres) {
     }),
     new UEG({
       userId: users[0].get("_id"), //jane doe
-      emotionId: emotions[3].get("_id"), //neutral
+      emotionId: emotions[4].get("_id"), //sadness
       genreId: genres[4].get("_id"), //Music
     }),
 
