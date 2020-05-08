@@ -13,7 +13,7 @@ import ProfileTabs from "./ProfileTabs";
 import { withNavigation } from "react-navigation";
 import { URL } from "../../utils/config";
 import UserService from "../services/UserService";
-
+import Utils from "../Utils";
 
 class ProfileCard extends Component {
   static navigationOptions = {
@@ -21,37 +21,42 @@ class ProfileCard extends Component {
   };
   constructor(props) {
     super(props);
+    this.Utils = new Utils();
     this.state = {
       user: {
         name: "",
         photo: "",
       },
+      emotionIcon: require("../assets/confused.png"),
     };
     this.UserService = new UserService();
   }
 
   async componentDidMount() {
     await this.UserService.getUser((res) => {
-      if (res.status === 200){
-        const {payload} = res.data;
+      if (res.status === 200) {
+        const { payload, emotionName } = res.data;
+        const emotionIcon = this.Utils.getEmotionIcon(emotionName);
         this.setState({
           user: {
             name: payload.name,
             photo: payload.photo,
             email: payload.email,
           },
+          emotionIcon,
         });
       }
     });
   }
 
   render() {
+    const { emotionIcon} = this.state;
     return (
       <Content>
         <Card style={{ flex: 0 }} transparent>
           <CardItem style={styles.cardItem}>
             <Thumbnail
-              source={require("../assets/profile-picture.jpg")}
+              source={emotionIcon}
               large
             ></Thumbnail>
           </CardItem>

@@ -7,7 +7,6 @@ export default class Utils {
     return `http://192.168.1.8:4000`;
   }
 
-  //TODO, GET MORE COLORS
   getColor(categoryApiId) {
     switch (categoryApiId) {
       case "KZFzniwnSyZfZ7v7nJ": //music

@@ -7,6 +7,8 @@ const Emotion = require("../models/emotion");
 const UEG = require("../models/userEmotionGenre");
 const Genre = require("../models/genre");
 const Category = require("../models/category");
+const Record = require("../models/record");
+const RecordEmotion = require("../models/recordEmotion");
 
 function getAll(req, res) {
   User.find()
@@ -121,9 +123,30 @@ function logout(req, res) {
   return res.status(200).json("Logged out");
 }
 
-function getCurrent(req, res) {
+async function getCurrent(req, res) {
+
   const { payload } = req;
-  return res.status(200).json({ payload });
+  const { _id } = payload;
+  const userId = _id;
+  let query = { userId };
+  let emotionId;
+  let emotionName = "neutral";
+
+  await Record.find(query)
+    .sort({ date: -1 })
+    .then(async (records) => {
+      let id = records[0].id;
+      let query = { recordId: id };
+      await RecordEmotion.find(query)
+      .sort({percentage: -1})
+      .then(async (emotion) => {
+        emotionId = emotion[0].emotionId;
+        await Emotion.find({_id: emotionId}).then(async(e) => {
+          emotionName = e[0].name;
+        })
+      });
+    });  
+    return res.status(200).json({ payload, emotionName });
 }
 
 module.exports = {
