@@ -2,100 +2,121 @@ import React, { Component } from 'react'
 import { Image, StyleSheet } from 'react-native'
 import {
   Container,
-  Form,
-  Item,
-  Input,
-  Label,
+  Header,
+  Content,
   Card,
+  CardItem,
+  Thumbnail,
   Text,
-  Button
+  Button,
+  Icon,
+  Left,
+  Body,
+  Right,
+  ListItem,
+  Radio
 } from 'native-base'
 import { withNavigation } from 'react-navigation'
-
+import UserService from '../services/UserService'
 class Settings extends Component {
-
-  constructor(props){
-    super(props);
+  constructor (props) {
+    super(props)
+    this.state = {
+      user: {
+        name: '',
+        photo: ''
+      }
+    }
+    this.UserService = new UserService()
   }
-  static navigationOptions={
+
+  async componentDidMount () {
+    await this.UserService.getUser(res => {
+      if (res.status === 200) {
+        const { payload } = res.data
+        this.setState({
+          user: {
+            name: payload.name,
+            photo: payload.photo,
+            email: payload.email
+          }
+        })
+      }
+    })
+  }
+  static navigationOptions = {
     title: 'Settings'
   }
   render () {
     return (
-      <Container>
-        <Card transparent style={styles.item}>
-          <Image style={styles.image} source={require('../assets/logo.png')} />
-          <Form>
-          <Label style={styles.label}> NAME </Label>
-            <Item rounded>
-              <Input />
-            </Item>
-            <Label style={styles.label}> EMAIL </Label>
-            <Item rounded>
-              <Input />
-            </Item>
-            <Label style={styles.label}>PASSWORD</Label>
-            <Item rounded>
-              <Input style={styles.input}/>
-            </Item>
-            <Label style={styles.label}>CONFIRM PASSWORD</Label>
-            <Item rounded>
-              <Input style={styles.input}/>
-            </Item>
-            <Item style={styles.textItem}>
-              <Text style={styles.grayText}>Already have an account? </Text>
-            </Item>
-            <Item style={styles.textItem}>
-              <Text style={styles.purpleText}>Login</Text>
-            </Item>
-            <Button style={styles.button} rounded>
-              <Text>CREATE ACCOUNT</Text>
-            </Button>
-          </Form>
-        </Card>
-      </Container>
+        <Content padder>
+          <Card style={{ flex: 0 }} transparent>
+            <CardItem>
+            <Left>
+            <Thumbnail
+                source={require('../assets/profile-picture.jpg')}
+                large
+              ></Thumbnail>
+            <Body>
+            <Text style={styles.cardText}>{this.state.user.name}</Text>
+            </Body>
+            </Left>
+            </CardItem>
+          </Card>
+          <Text style={styles.optionTitle}>ACCOUNT</Text>
+          <Card>
+            <CardItem bordered>
+              <Body>
+               <Button transparent><Text style={styles.buttonText}>Sign out</Text></Button>
+              </Body>
+            </CardItem>
+          </Card>
+          <Text style={styles.optionTitle}>EMOTION RECOGNITION</Text>
+          <Card>
+            <ListItem>
+            <Left>
+              <Text style={styles.buttonText}>CAMERA OR IMAGE UPLOAD</Text>
+            </Left>
+            <Right>
+              <Radio color="#CBCBCB" selectedColor="#8b4da9" selected={false} />
+            </Right>
+          </ListItem>
+          <ListItem>
+            <Left>
+              <Text style={styles.buttonText}>QUIZ</Text>
+            </Left>
+            <Right>
+              <Radio color="#CBCBCB" selectedColor="#8b4da9"  selected={true} />
+            </Right>
+          </ListItem>
+          </Card>
+        </Content>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  item: {
-    paddingLeft: 20,
-    paddingRight: 20,
+  cardItem: {
     justifyContent: 'center',
-    flex: 1
+    paddingBottom: 0
   },
-  image: {
-    marginBottom: 20,
-    alignSelf: 'center'
-  },
-  textItem: {
-    alignSelf: 'center',
-    justifyContent: 'center',
-    borderColor: 'transparent',
-    marginTop: 5,
-  },
-  button: {
-    backgroundColor: '#8b4da9',
-    marginTop: 10,
-    justifyContent: 'center'
-  },
-  purpleText: {
-    color: '#8b4da9',
+  cardText: {
     fontWeight: 'bold',
-  },
-  label: {
-    color: '#8b4da9',
-    fontWeight: 'bold',
-    marginBottom: 5,
-    marginTop: 5,
+    color: '#464646',
+    fontSize: 20,
 
   },
-  grayText: {
-    color: 'gray',
-    fontWeight: 'bold'
+  buttonText: {
+    color: '#8b4da9',
+    paddingLeft: 0, 
+    fontSize: 15,
   },
-  
+  optionTitle: {
+    color: '#8b4da9',
+    paddingLeft: 5,
+    paddingTop: 30, 
+    fontWeight: 'bold',
+  },
 })
 
-export default withNavigation(Settings);
+export default withNavigation(Settings)
