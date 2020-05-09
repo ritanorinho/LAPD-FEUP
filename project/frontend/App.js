@@ -10,6 +10,7 @@ import LoginScreen from './app/screens/LoginScreen'
 import EventsScreen from './app/screens/EventsScreen'
 import ResultScreen from './app/screens/ResultScreen'
 import EmotionEvaluateScreen from './app/screens/EmotionEvaluateScreen'
+import QuizzScreen from './app/screens/QuizzScreen'
 import { createStackNavigator } from 'react-navigation-stack'
 import { createAppContainer } from 'react-navigation'
 
@@ -65,9 +66,15 @@ const RootStack = createAppContainer(
           headerShown: false
         }
       },
+      Quizz: {
+        screen: QuizzScreen,
+        navigationOptions: {
+          headerShown: false
+        }
+      },
     },
     {
-      initialRouteName: 'Login'
+      initialRouteName: 'Quizz'
     }
   )
 )
