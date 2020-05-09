@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, ScrollView, Dimensions } from "react-native";
-import { View } from "native-base";
+import { Image, StyleSheet, Text, ScrollView, Dimensions } from "react-native";
+import { View, Container, Header } from "native-base";
+import Swiper from "react-native-swiper";
 
 class Quizz extends Component {
   constructor(props) {
@@ -9,30 +10,35 @@ class Quizz extends Component {
 
   render() {
     return (
-      <ScrollView
-        horizontal={true}
-        pagingEnabled={true}
-        showsHorizontalScrollIndicator={false}
-        style={styles.container}
+      <Container
       >
-          <View style={[styles.outer, { backgroundColor: "#00acee" }]}>
-            <Text style={styles.innerText}>Welcome !</Text>
-            <Text style={{ fontSize: 12, color: "#eee" }}>
-              Made  by Madhav
-            </Text>
+        <Header transparent>
+          <Text style={styles.header}>JANE DOE, HOW YOU ARE FEELING...</Text>
+        </Header>
+        <Swiper
+          horizontal={true}
+          pagingEnabled={true}
+          showsHorizontalScrollIndicator={false}
+          style={styles.container}
+        >
+          <View style={[styles.outer]}>
+            <Image
+              source={require("../assets/happy.png")}
+              style={styles.image}
+            />
+            <Text style={styles.emotion}>HAPPY</Text>
           </View>
           <View style={[styles.outer, { backgroundColor: "#3b5998" }]}>
             <Text style={styles.innerText}>The End!</Text>
           </View>
-      </ScrollView>
+        </Swiper>
+      </Container>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-
-  },
+  container: {},
   scrollView: {
     backgroundColor: "pink",
     marginHorizontal: 20,
@@ -44,13 +50,27 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    width: Dimensions.get ('window').width,
-    height: Dimensions.get ('window').height,
   },
   innerText: {
     color: "#fff",
     fontSize: 32,
     fontWeight: "bold",
+  },
+  image: {
+    height: 225,
+    flex: 0,
+    resizeMode: "contain",
+  },
+  emotion: {
+    marginTop: 22,
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#84B761",
+  },
+  header: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#9C67B6'
   },
 });
 
