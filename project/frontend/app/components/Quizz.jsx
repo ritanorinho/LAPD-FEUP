@@ -44,11 +44,12 @@ class Quizz extends Component {
     };
     const { _id, name } = emotion;
     const source = this.Utils.getEmotionIcon(name);
+    const color = this.Utils.getEmotionColor(name)
     return (
       <View key={_id} style={[styles.outer]}>
         <Image source={source} style={styles.image} />
-        <Text style={styles.emotion}>{name.toUpperCase()}</Text>
-        <Button rounded style={styles.button} onPress={onChange}>
+        <Text style={[styles.emotion, {color}]}>{name.toUpperCase()}</Text>
+        <Button rounded style={[styles.button]} onPress={onChange}>
           <Text style={styles.textButton}>CHECK EVENTS</Text>
         </Button>
       </View>
@@ -107,7 +108,6 @@ const styles = StyleSheet.create({
     marginTop: 22,
     fontSize: 30,
     fontWeight: "bold",
-    color: "#84B761",
   },
   header: {
     fontSize: 20,
