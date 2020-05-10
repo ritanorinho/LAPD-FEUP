@@ -30,10 +30,6 @@ function addUeg(req, res) {
   const { emotionId, genreId} = body;
   const { _id } = payload;
   const userId = _id;
-  console.log("addUeg");
-  console.log("emotionId " + emotionId);
-  console.log("genreId " + genreId);
-  console.log("userId " + userId);
   const newUeg = new UEG({
     emotionId,
     genreId,
