@@ -16,7 +16,7 @@ const userSchema = new Schema(
     photo: { type: String, required: false, default: '' },
     settings: {
         type: String,
-        enum: ['Camera', 'Image', 'Quiz'],
+        enum: ['Camera', 'Quiz'],
         required: true 
       },
   },

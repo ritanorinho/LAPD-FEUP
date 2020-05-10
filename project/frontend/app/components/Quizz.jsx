@@ -127,6 +127,7 @@ const styles = StyleSheet.create({
   textButton: {
     fontSize: 18,
     fontWeight: "bold",
+    color:"white"
   },
 });
 

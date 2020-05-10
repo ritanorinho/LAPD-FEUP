@@ -59,4 +59,16 @@ export default class Utils {
   }
 
 
+  getNavigation(settings) {
+    switch(settings) {
+      case "Quiz":
+        return "Quizz"
+      case "Camera":
+        return "EmotionEvaluate"
+      default:
+        return "EmotionEvaluate"
+    }
+  }
+
+
 }
