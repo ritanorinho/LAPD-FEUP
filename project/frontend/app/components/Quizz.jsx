@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { Image, StyleSheet, Text, ScrollView, Dimensions } from "react-native";
 import { View, Container, Header, Button } from "native-base";
-import Swiper from "react-native-swiper";
 import EmotionService from "../services/EmotionService";
+import RecordEmotionService from "../services/RecordEmotionService";
+import { withNavigation } from 'react-navigation'
+
 import Utils from "../Utils";
 
 class Quizz extends Component {
@@ -10,44 +12,59 @@ class Quizz extends Component {
     super(props);
     this.Utils = new Utils();
     this.EmotionService = new EmotionService();
+    this.RecordEmotionService = new RecordEmotionService();
     this.state = {
       emotions: [],
+      payload: {
+        name: "",
+      },
     };
   }
 
   async componentDidMount() {
-    await this.EmotionService.getEmotions(async (res) => {
+    await this.EmotionService.getEmotions((res) => {
       if (res.status === 200) {
-        const { emotions } = res.data;
-        console.log("emotions");
-        console.log(emotions);
-        this.setState({ emotions});
+        const { emotions, payload } = res.data;
+        this.setState({ emotions, payload });
+      }
+    });
+  }
+
+  async handleChange(emotion) {
+    await this.RecordEmotionService.add({emotionId: emotion._id},(res) => {
+      if (res.status === 200) {
+        this.props.navigation.navigate('Events')
       }
     });
   }
 
   mapEmotions(emotion) {
+    const onChange = () => {
+      this.handleChange(emotion);
+    };
     const { _id, name } = emotion;
     const source = this.Utils.getEmotionIcon(name);
     return (
       <View key={_id} style={[styles.outer]}>
         <Image source={source} style={styles.image} />
         <Text style={styles.emotion}>{name.toUpperCase()}</Text>
-        <Button rounded style={styles.button} onPress={() =>this.props.navigation.navigate('Events')}>
-            <Text style={styles.textButton}>CHECK EVENTS</Text>
-          </Button>
+        <Button rounded style={styles.button} onPress={onChange}>
+          <Text style={styles.textButton}>CHECK EVENTS</Text>
+        </Button>
       </View>
     );
   }
 
-
   render() {
-    const { emotions } = this.state;
+    const { emotions, payload } = this.state;
+    const { name } = payload;
     const emotionsDiv = emotions.map(this.mapEmotions.bind(this));
     return (
       <Container>
         <Header transparent>
-          <Text style={styles.header}>JANE DOE, WHAT ARE YOU FEELING?</Text>
+          <Text
+            style={styles.header}
+          >{`${name.toUpperCase()}, WHAT ARE YOU FEELING?`}</Text>
         </Header>
         <ScrollView
           horizontal={true}
@@ -85,7 +102,6 @@ const styles = StyleSheet.create({
     width: 360,
     flex: 0,
     resizeMode: "contain",
-
   },
   emotion: {
     marginTop: 22,
@@ -99,19 +115,19 @@ const styles = StyleSheet.create({
     color: "#9C67B6",
   },
   button: {
-    justifyContent: 'center',
-    backgroundColor: '#9C67B6',
+    justifyContent: "center",
+    backgroundColor: "#9C67B6",
     marginTop: 30,
     marginLeft: 30,
     marginRight: 30,
     padding: 15,
     paddingLeft: 30,
-    paddingRight: 30
+    paddingRight: 30,
   },
   textButton: {
     fontSize: 18,
-    fontWeight: 'bold'
-  }
+    fontWeight: "bold",
+  },
 });
 
-export default Quizz;
+export default withNavigation(Quizz);
