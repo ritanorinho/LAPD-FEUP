@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, AsyncStorage } from "react-native";
+import { StyleSheet } from "react-native";
 import {
   Content,
   Card,
@@ -11,7 +11,6 @@ import {
 } from "native-base";
 import ProfileTabs from "./ProfileTabs";
 import { withNavigation } from "react-navigation";
-import { URL } from "../../utils/config";
 import UserService from "../services/UserService";
 import Utils from "../Utils";
 
