@@ -21,7 +21,9 @@ async function getAllByUser (req, res) {
           let emotionId = emotion.emotionId
           percentage = emotion.percentage
           await Emotion.find({ _id: emotionId }).then(async e => {
+            
             emotionName = e[0].name
+            console.log(_id+" "+emotionName);
           })
           allEmotions.push({ name: emotionName, percentage: percentage })
         }

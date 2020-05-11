@@ -24,16 +24,16 @@ export default class Utils {
     }
   }
   getEmotionColor(emotion) {
-    switch (categoryApiId) {
-      case "fearfull": 
+    switch (emotion) {
+      case "fear": 
         return "#CD82AD";
-      case "angry":
+      case "anger":
         return "#CC4748";
-      case "happy": 
+      case "happiness": 
         return "#84B761";
       case "neutral": 
         return "#FDD400";
-      case "sad": //miscellaneous
+      case "sadness": //miscellaneous
         return "#67B7DC";
       default:
         return "#464646"
