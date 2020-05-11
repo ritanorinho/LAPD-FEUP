@@ -3,8 +3,8 @@ import { Image, StyleSheet, Text, ScrollView, Dimensions } from "react-native";
 import { View, Container, Header, Button } from "native-base";
 import EmotionService from "../services/EmotionService";
 import RecordEmotionService from "../services/RecordEmotionService";
-import { withNavigation } from 'react-navigation'
-
+import { withNavigation } from "react-navigation";
+import Spinner from "react-native-loading-spinner-overlay";
 import Utils from "../Utils";
 
 class Quizz extends Component {
@@ -14,6 +14,7 @@ class Quizz extends Component {
     this.EmotionService = new EmotionService();
     this.RecordEmotionService = new RecordEmotionService();
     this.state = {
+      spinner: true,
       emotions: [],
       payload: {
         name: "",
@@ -25,15 +26,15 @@ class Quizz extends Component {
     await this.EmotionService.getEmotions((res) => {
       if (res.status === 200) {
         const { emotions, payload } = res.data;
-        this.setState({ emotions, payload });
+        this.setState({ emotions, payload, spinner: false });
       }
     });
   }
 
   async handleChange(emotion) {
-    await this.RecordEmotionService.add({emotionId: emotion._id},(res) => {
+    await this.RecordEmotionService.add({ emotionId: emotion._id }, (res) => {
       if (res.status === 200) {
-        this.props.navigation.navigate('Events')
+        this.props.navigation.navigate("Events");
       }
     });
   }
@@ -44,11 +45,11 @@ class Quizz extends Component {
     };
     const { _id, name } = emotion;
     const source = this.Utils.getEmotionIcon(name);
-    const color = this.Utils.getEmotionColor(name)
+    const color = this.Utils.getEmotionColor(name);
     return (
       <View key={_id} style={[styles.outer]}>
         <Image source={source} style={styles.image} />
-        <Text style={[styles.emotion, {color}]}>{name.toUpperCase()}</Text>
+        <Text style={[styles.emotion, { color }]}>{name.toUpperCase()}</Text>
         <Button rounded style={[styles.button]} onPress={onChange}>
           <Text style={styles.textButton}>CHECK EVENTS</Text>
         </Button>
@@ -57,16 +58,23 @@ class Quizz extends Component {
   }
 
   render() {
-    const { emotions, payload } = this.state;
+    const { emotions, payload, spinner } = this.state;
     const { name } = payload;
     const emotionsDiv = emotions.map(this.mapEmotions.bind(this));
     return (
       <Container>
-        <Header transparent>
-          <Text
-            style={styles.header}
-          >{`${name.toUpperCase()}, WHAT ARE YOU FEELING?`}</Text>
-        </Header>
+        <Spinner
+          visible={spinner}
+          textContent={"Loading..."}
+          textStyle={styles.spinnerTextStyle}
+        />
+        {!spinner && (
+          <Header transparent>
+            <Text
+              style={styles.header}
+            >{`${name.toUpperCase()}, WHAT ARE YOU FEELING?`}</Text>
+          </Header>
+        )}
         <ScrollView
           horizontal={true}
           pagingEnabled={true}
@@ -127,7 +135,10 @@ const styles = StyleSheet.create({
   textButton: {
     fontSize: 18,
     fontWeight: "bold",
-    color:"white"
+    color: "white",
+  },
+  spinnerTextStyle: {
+    color: "#FFF",
   },
 });
 
