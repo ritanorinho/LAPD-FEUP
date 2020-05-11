@@ -23,6 +23,22 @@ export default class Utils {
         return "#464646"
     }
   }
+  getEmotionColor(emotion) {
+    switch (categoryApiId) {
+      case "fearfull": 
+        return "#CD82AD";
+      case "angry":
+        return "#CC4748";
+      case "happy": 
+        return "#84B761";
+      case "neutral": 
+        return "#FDD400";
+      case "sad": //miscellaneous
+        return "#67B7DC";
+      default:
+        return "#464646"
+    }
+  }
 
   getEmotionIcon(emotionName) {
     switch (emotionName) {

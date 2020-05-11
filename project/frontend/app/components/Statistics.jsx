@@ -1,38 +1,40 @@
 import React, { Component } from 'react'
 import {
   StyleSheet,
-  ScrollView,
-  StatusBar,
-  Text,
   View,
   Dimensions
 } from 'react-native'
 import {
-  LineChart,
-  BarChart,
+ 
   PieChart,
-  ProgressChart,
-  ContributionGraph,
-  StackedBarChart
 } from 'react-native-chart-kit'
-import SliderBar from './Slider'
+import {Text} from 'native-base'
 import { withNavigation } from 'react-navigation'
+import RecordEmotionService from '../services/RecordEmotionService'
+import Moment from 'moment';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center'
-  },
-  title: {
-    fontSize: 24,
-    margin: 10
-  }
-})
 class Statistics extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      date: '',
+      emotions:[],
+    }
+    this.RecordEmotionService = new RecordEmotionService()
+  }
+
+  async componentDidMount () {
+    await this.RecordEmotionService.getAllStatistics(res => {
+  
+      if (res.status === 200) {
+        const { payload } = res.data
+        Moment.locale('en');
+        let date = res.data.date;
+        this.setState({date: Moment(date).format('DD MMMM YYYY hh:mm'), emotions: res.data.emotions});
+      }
+    })
+  }
   render () {
-    const chart_wh = 250
-    const series = [123, 321, 123, 789, 537]
-    const sliceColor = ['#F44336', '#2196F3', '#FFEB3B', '#4CAF50', '#FF9800']
 
     const data = [
       {
@@ -41,7 +43,6 @@ class Statistics extends Component {
         color: '#CD82AD',
         legendFontColor: '#CD82AD',
         legendFontSize: 12
-      
       },
       {
         name: 'angry',
@@ -100,10 +101,25 @@ class Statistics extends Component {
           paddingLeft='15'
           absolute
         />
-        <SliderBar />
+        <Text style={styles.date}>{this.state.date}</Text>
       </View>
     )
   }
 }
-
-export default withNavigation(Statistics);
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center'
+  },
+  title: {
+    fontSize: 24,
+    margin: 10
+  },
+  date: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    color: '#8b4da9',
+    paddingTop: 15, 
+  }
+})
+export default withNavigation(Statistics)
