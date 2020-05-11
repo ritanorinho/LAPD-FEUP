@@ -1,82 +1,63 @@
 import React, { Component } from 'react'
 import {
   StyleSheet,
-  ScrollView,
-  StatusBar,
-  Text,
   View,
   Dimensions
 } from 'react-native'
 import {
-  LineChart,
-  BarChart,
+ 
   PieChart,
-  ProgressChart,
-  ContributionGraph,
-  StackedBarChart
 } from 'react-native-chart-kit'
-import SliderBar from './Slider'
+import {Text} from 'native-base'
 import { withNavigation } from 'react-navigation'
+import RecordEmotionService from '../services/RecordEmotionService'
+import Moment from 'moment';
+import Utils from '../Utils';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center'
-  },
-  title: {
-    fontSize: 24,
-    margin: 10
-  }
-})
 class Statistics extends Component {
-  render () {
-    const chart_wh = 250
-    const series = [123, 321, 123, 789, 537]
-    const sliceColor = ['#F44336', '#2196F3', '#FFEB3B', '#4CAF50', '#FF9800']
+  constructor (props) {
+    super(props)
+    this.state = {
+      date: '',
+      emotions:[],
+      data: []
+    }
+    this.RecordEmotionService = new RecordEmotionService();
+    this.Utils = new Utils();
+  }
 
-    const data = [
-      {
-        name: 'fearfull',
-        percentage: 4.55,
-        color: '#CD82AD',
-        legendFontColor: '#CD82AD',
-        legendFontSize: 12
-      
-      },
-      {
-        name: 'angry',
-        percentage: 9.09,
-        color: '#CC4748',
-        legendFontColor: '#CC4748',
-        legendFontSize: 12
-      },
-      {
-        name: 'happy',
-        percentage: 22.73,
-        color: '#84B761',
-        legendFontColor: '#84B761',
-        legendFontSize: 12
-      },
-      {
-        name: 'neutral',
-        percentage: 27.27,
-        color: '#FDD400',
-        legendFontColor: '#FDD400',
-        legendFontSize: 12
-      },
-      {
-        name: 'sad',
-        percentage: 36.36,
-        color: '#67B7DC',
-        legendFontColor: '#67B7DC',
-        legendFontSize: 12
+  async componentDidMount () {
+    await this.RecordEmotionService.getAllStatistics(res => {
+  
+      if (res.status === 200) {
+        const { payload } = res.data
+        console.log(res.data.emotions);
+        Moment.locale('en');
+        let date = res.data.date;
+        this.setState({date: Moment(date).format('DD MMMM YYYY hh:mm'), emotions: res.data.emotions});
+        this.setChartData();
       }
-    ]
+    })
+  }
+  async setChartData(){
+    let data = [];
+    for (let emotion of this.state.emotions){
+      let name = emotion.name;
+      let color = this.Utils.getEmotionColor(name);
+      let percentage = emotion.percentage
+      data.push({name: name, percentage:percentage, color: color, legendFontColor: color, legendFontSize: 12});
+
+    }
+
+    this.setState({data: data});
+  }
+  render () {
+
 
     return (
       <View>
         <PieChart
-          data={data}
+          data={this.state.data}
           width={Dimensions.get('window').width} // from react-native
           height={220}
           chartConfig={{
@@ -100,10 +81,25 @@ class Statistics extends Component {
           paddingLeft='15'
           absolute
         />
-        <SliderBar />
+        <Text style={styles.date}>{this.state.date}</Text>
       </View>
     )
   }
 }
-
-export default withNavigation(Statistics);
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center'
+  },
+  title: {
+    fontSize: 24,
+    margin: 10
+  },
+  date: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    color: '#8b4da9',
+    paddingTop: 15, 
+  }
+})
+export default withNavigation(Statistics)
