@@ -17,6 +17,7 @@ const uegRouter = require("./api/routes/userEmotionGenre");
 const eventRouter = require("./api/routes/event");
 const detectRouter = require("./api/routes/detect");
 const recordEmotionRouter = require("./api/routes/recordEmotion");
+const recordRouter = require("./api/routes/record");
 
 
 const init = require('./config/passport/init');
@@ -59,7 +60,7 @@ app.use("/api/userEmotionGenre", uegRouter);
 app.use("/api/event", eventRouter);
 app.use("/api/detect", detectRouter);
 app.use("/api/recordEmotion", recordEmotionRouter);
-
+app.use("/api/record", recordRouter);
 
 
 
