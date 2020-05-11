@@ -1,25 +1,26 @@
 import axios from "axios";
 import { AsyncStorage } from "react-native";
-import Utils from "../Utils"
+import Utils from "../Utils";
 
-export default class RecordEmotionService {
+export default class UegService {
   constructor() {
     this.Utils = new Utils();
-    this.baseURL = this.Utils.getIp() + "/api/recordEmotion";
+    this.baseURL = this.Utils.getIp() + "/api/userEmotionGenre";
   }
 
-async add(data, callback) {
+  async add(data, callback) {
     let token = "";
     try {
       token = (await AsyncStorage.getItem("token")) || "";
     } catch (error) {
       console.log(error.message);
     }
-    const { emotionId } = data;
+    const { emotionId, genreId } = data;
     axios
       .post(
         this.baseURL,
         {
+          genreId,
           emotionId,
         },
         {
@@ -33,24 +34,25 @@ async add(data, callback) {
         callback(error);
       });
   }
-  async getAllStatistics(callback) {
+
+  async delete(data, callback) {
     let token = "";
     try {
       token = (await AsyncStorage.getItem("token")) || "";
-     
     } catch (error) {
       console.log(error.message);
     }
+    const { _id } = data;
+    console.log("_id " + _id)
     axios
-      .get(`${this.baseURL}/current`, {
+      .delete(`${this.baseURL}/${_id}`, {
         headers: { Authorization: `Token ${token}` },
       })
       .then((response) => {
         callback(response);
       })
       .catch((error) => {
-        callback(error);
+        callback(error.response);
       });
   }
-}
 }

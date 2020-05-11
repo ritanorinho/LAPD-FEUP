@@ -1,67 +1,147 @@
-import React, { Component } from 'react'
-import { List, ListItem, Radio, Text, Card, CardItem } from 'native-base'
-import { StyleSheet } from 'react-native'
-import { withNavigation } from 'react-navigation'
+import React, { Component } from "react";
+import { List, ListItem, Radio, Text, Card, CardItem } from "native-base";
+import { StyleSheet } from "react-native";
+import { withNavigation } from "react-navigation";
+import Utils from "../Utils";
+import UegService from "../services/UegService";
+
 
 class PrefencesCard extends Component {
-  render () {
+  constructor(props) {
+    super(props);
+    this.state = {
+      display: false,
+      event: [],
+      preference: {},
+    };
+    this.Utils = new Utils();
+    this.UegService = new UegService();
+  }
+
+  componentDidMount() {
+    const { event, preference } = this.props;
+    this.setState({ event, preference, display: true });
+  }
+
+  isPreference(genre) {
+    const { preference } = this.state;
+    const {uegs} = preference
+    let elems = uegs.filter( ueg => ueg.genreId == genre._id );
+    let selected = false;
+    if(elems.length > 0)
+      selected = true;
+    return selected;
+  }
+
+  getPreference(genre){
+    const { preference } = this.state;
+    const {uegs} = preference
+    let elems = uegs.filter( ueg => ueg.genreId == genre._id );
+    if(elems.length > 0)
+      return elems[0]
+    return null;
+  }
+
+  handleChange(genre) {
+    const { preference } = this.state;
+
+    const selected = this.isPreference(genre);
+
+    console.log(genre)
+
+    if(selected) {
+      const preUeg = this.getPreference(genre);
+      this.UegService.delete({_id: preUeg._id}, async () => {
+        let elems = preference.uegs.filter( ueg => ueg.genreId != genre._id );
+        const newPreference = {emotion: preference.emotion, uegs: elems};
+        this.setState({preference: newPreference});
+      });
+    } else {
+        this.UegService.add({genreId: genre._id, emotionId: preference.emotion._id}, async (res) => {
+          console.log(res.status)
+          if(res.status == 200) {
+            console.log("here");
+            const elems = [res.data.ueg, ...preference.uegs];
+            const newPreference = {emotion: preference.emotion, uegs: elems};
+            this.setState({preference: newPreference});
+          }
+        });
+    }
+  }
+
+  mapGenres(genre) {
+    const onChange = () => {
+      this.handleChange(genre);
+    };
+    const { _id, name } = genre;
+
+    const selected = this.isPreference(genre)
+
     return (
-      <Card style={styles.card}>
-      <CardItem style={styles.textCard}>
-          <Text style={styles.title}>MUSIC</Text>
-      </CardItem>
-      <CardItem style= {styles.card}>
-        <List >
-          <ListItem style={styles.option}>
-            <Radio selected={true} color="#CBCBCB" selectedColor="#CBCBCB" />
-            <Text style={styles.textOption}>Country</Text>
-          </ListItem>
-          <ListItem style={styles.option}>
-            <Radio selected={false} color="#CBCBCB" selectedColor="#CBCBCB" />
-            <Text style={styles.textOption}>Rock</Text>
-          </ListItem>
-          <ListItem style={styles.option}>
-            <Radio selected={false} color="#CBCBCB" selectedColor="#CBCBCB" />
-            <Text style={styles.textOption}>Classic</Text>
-          </ListItem>
-        </List>
-        </CardItem>
-      </Card>
-    )
+      <ListItem style={styles.option} key={_id}>
+        <Radio selected={selected} color="#803EA1" selectedColor="#803EA1" onPress={onChange} />
+        <Text style={styles.textOption}>{name}</Text>
+      </ListItem>
+    );
+  }
+
+  cardStyles = function () {
+    const { category } = this.state.event;
+    const backgroundColor = this.Utils.getColor(category.apiId);
+    return {
+      backgroundColor,
+      paddingTop: 0,
+    };
+  };
+
+  cardTextStyles = function () {
+    const { category } = this.state.event;
+    const backgroundColor = this.Utils.getColor(category.apiId);
+    return {
+      alignSelf: "flex-end",
+      backgroundColor,
+      paddingBottom: 0,
+    };
+  };
+
+  render() {
+    const { event, display } = this.state;
+    if (display) {
+      const { category, genres } = event;
+      const listItems = genres.map(this.mapGenres.bind(this));
+      return (
+        <Card style={this.cardStyles()}>
+          <CardItem style={this.cardTextStyles()}>
+            <Text style={styles.title}>{category.name.toUpperCase()}</Text>
+          </CardItem>
+          <CardItem style={this.cardStyles()}>
+            <List>{listItems}</List>
+          </CardItem>
+        </Card>
+      );
+    } else return null;
   }
 }
 
 const styles = StyleSheet.create({
-
-    textCard:{
-        alignSelf: 'flex-end',
-        backgroundColor: '#73B4FC',
-        paddingBottom: 0, 
-    },
-    title:{
-        color:'#803EA1',
-        fontWeight:'bold',
-    },
-    textOption: {
-        color: '#464646',
-        paddingLeft: 5,
-        fontWeight: 'bold',
-
-    },
-    option:{
-        borderBottomWidth: 0,
-        paddingBottom: 2, 
-        paddingTop: 5, 
-    },
-    card:{
-        backgroundColor: '#73B4FC',
-        paddingTop: 0,
-    },
-    radio: {
-        borderColor: 'white',
-    }
-
-})
-
+  title: {
+    color: "#803EA1",
+    fontWeight: "bold",
+  },
+  textOption: {
+    color: "#464646",
+    paddingLeft: 5,
+    fontWeight: "bold",
+  },
+  option: {
+    borderBottomWidth: 0,
+    paddingBottom: 2,
+    paddingTop: 5,
+    marginBottom: 10,
+  },
+  radio: {
+    borderColor: "white",
+  },
+});
 
 export default withNavigation(PrefencesCard);

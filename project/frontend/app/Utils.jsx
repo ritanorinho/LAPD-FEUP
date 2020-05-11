@@ -4,7 +4,7 @@ export default class Utils {
   //CHANGE THIS TO RETURN CORRECT IP
   //TODO RETRIEVE CORRECT IP FROM .ENV FILE OR SOMETHING LIKE THAT
   getIp() {
-    return `http://192.168.1.104:4000`;
+    return `http://192.168.1.8:4000`;
   }
 
   getColor(categoryApiId) {
@@ -14,9 +14,9 @@ export default class Utils {
       case "KZFzniwnSyZfZ7v7nE": //sports
         return "#A1FEB4";
       case "KZFzniwnSyZfZ7v7na": //arts & theatre
-        return "#A1FEB4";
+        return "#D0AAFB";
       case "KZFzniwnSyZfZ7v7nn": //Film
-        return "#A1FEB4";
+        return "#FFCC87";
       case "KZFzniwnSyZfZ7v7n1": //miscellaneous
         return "#FF9C9C";
       default:
@@ -40,6 +40,23 @@ export default class Utils {
     }
   }
 
+  getEmotionColor(emotionName) {
+    switch (emotionName) {
+      case "anger": 
+        return "#CC4748";
+      case "fear": 
+        return "#CD82AD";
+      case "happiness": 
+        return "#84B761";
+      case "neutral":
+        return "#FDD400";
+      case "sadness": 
+        return "#67B7DC";
+      default:
+        return "#FDD400";
+    }
+  }
+
   getEmotionIcon(emotionName) {
     switch (emotionName) {
       case "anger": 
@@ -56,4 +73,18 @@ export default class Utils {
         return require("../app/assets/confused.png");
     }
   }
+
+
+  getNavigation(settings) {
+    switch(settings) {
+      case "Quiz":
+        return "Quizz"
+      case "Camera":
+        return "EmotionEvaluate"
+      default:
+        return "EmotionEvaluate"
+    }
+  }
+
+
 }

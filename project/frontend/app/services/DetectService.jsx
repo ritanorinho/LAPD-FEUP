@@ -1,8 +1,12 @@
 import axios from 'axios'
 import { AsyncStorage } from "react-native";
+import Utils from "../Utils"
+
+
 export default class DetectService {
   constructor () {
-    this.baseURL = `http://192.168.1.104:4000/api/detect/`
+    this.Utils = new Utils();
+    this.baseURL = this.Utils.getIp() + "/api/detect/"
   }
 
   async sendPhoto (data, callback) {

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { AsyncStorage } from "react-native";
-import Utils from "../Utils"
+import Utils from "../Utils";
 
 export default class UserService {
   constructor() {
@@ -17,6 +17,25 @@ export default class UserService {
     }
     axios
       .get(`${this.baseURL}/current`, {
+        headers: { Authorization: `Token ${token}` },
+      })
+      .then((response) => {
+        callback(response);
+      })
+      .catch((error) => {
+        callback(error);
+      });
+  }
+
+  async getPreferences(callback) {
+    let token = "";
+    try {
+      token = (await AsyncStorage.getItem("token")) || "";
+    } catch (error) {
+      console.log(error.message);
+    }
+    axios
+      .get(`${this.baseURL}/preferences`, {
         headers: { Authorization: `Token ${token}` },
       })
       .then((response) => {
@@ -50,8 +69,8 @@ export default class UserService {
       })
       .then(async (response) => {
         try {
-          if(response.status === 200)
-            await AsyncStorage.setItem('token', response.data.user.token);
+          if (response.status === 200)
+            await AsyncStorage.setItem("token", response.data.user.token);
         } catch (error) {
           console.log(error.message);
         }
@@ -79,7 +98,7 @@ export default class UserService {
       )
       .then(async (response) => {
         try {
-          await AsyncStorage.setItem('token', "");
+          await AsyncStorage.setItem("token", "");
         } catch (error) {
           console.log(error.message);
         }

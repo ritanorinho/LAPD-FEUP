@@ -4,6 +4,8 @@ const router = require('express').Router();
 
 const controller = require('../../controllers/emotion');
 
-router.get('/', controller.getAll);
+const auth = require('../middleware/validator/auth');
+
+router.get('/', auth.check.required, controller.getAll);
 
 module.exports = router;
