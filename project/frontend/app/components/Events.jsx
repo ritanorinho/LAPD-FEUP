@@ -42,14 +42,14 @@ class Events extends React.Component {
   }
 
   render() {
-    const {events, source} = this.state;
+    const {events, source, spinner} = this.state;
     const eventsDiv = events.map(
       this.mapEvents.bind(this),
     );
     return (
       <Content>
         <Spinner
-          visible={this.state.spinner}
+          visible={spinner}
           textContent={'Loading...'}
           textStyle={styles.spinnerTextStyle}
         />

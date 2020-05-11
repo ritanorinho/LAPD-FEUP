@@ -153,7 +153,8 @@ const styles = StyleSheet.create({
   },
   textButton: {
     fontSize: 18,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color:"white"
   }
 })
 

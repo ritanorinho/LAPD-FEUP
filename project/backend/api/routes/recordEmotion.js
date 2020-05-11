@@ -2,10 +2,10 @@
 
 const router = require('express').Router();
 
-const controller = require('../../controllers/emotion');
+const controller = require('../../controllers/recordEmotion');
 
 const auth = require('../middleware/validator/auth');
 
-router.get('/', auth.check.required, controller.getAll);
+router.post('/', auth.check.required, controller.add);
 
 module.exports = router;
