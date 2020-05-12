@@ -46,7 +46,7 @@ async function getAllByUser (req, res) {
           allEmotions.push({ name: emotionName, percentage: percentage })
         }
       })
-      res.json({ date: date, emotions: allEmotions })
+      res.json({ date, emotions: allEmotions, payload })
     })
     .catch(error => {
       res.status(400).json({ error })

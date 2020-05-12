@@ -19,6 +19,7 @@ import {
 import { withNavigation } from "react-navigation";
 import Utils from "../Utils";
 import RecordEmotionService from "../services/RecordEmotionService";
+import Spinner from "react-native-loading-spinner-overlay";
 
 class Result extends Component {
   static navigationOptions = {
@@ -32,79 +33,127 @@ class Result extends Component {
       mainRecord: {},
       records: [],
       spinner: true,
+      data: [],
+      payload: {
+        name: "",
+      },
     };
   }
 
   async componentDidMount() {
-    await this.RecordEmotionService.getResults((res) => {
+    await this.RecordEmotionService.getAllStatistics((res) => {
       if (res.status === 200) {
-        const { records } = res.data;
-        this.setState({ records, spinner: false });
+        this.setState({
+          records: res.data.emotions,
+          payload: res.data.payload,
+        });
+        this.setChartData();
       }
     });
   }
 
+  async setChartData() {
+    let data = [];
+    const { records } = this.state;
+    records.sort((a, b) => (b.percentage > a.percentage ? 1 : -1));
+    let mainRecord = {};
+    let i = 0;
+    for (let record of records) {
+      let name = record.name;
+      let color = this.Utils.getEmotionColor(name);
+      let percentage = record.percentage;
+      let path = this.Utils.getEmotionIcon(name);
+      i++;
+      if (i == 1) {
+        mainRecord = {
+          name,
+          percentage,
+          color,
+          path,
+        };
+        continue;
+      }
+      data.push({
+        name,
+        percentage,
+        color,
+        path,
+      });
+    }
+    this.setState({ data, spinner: false, mainRecord });
+  }
+
   mapRecords(record) {
-    return  (<ListItem style={styles.listItem}>
-    <Left style={{ paddingLeft: 0 }}>
-      <Image source={record.path} style={styles.icon} />
-      <Content contentContainerStyle={styles.container}>
-        <Text
-          style={{ color: emotion.color, fontWeight: "bold", fontSize: 16 }}
-        >
-          {record.name.toUpperCase()}
-        </Text>
-      </Content>
-    </Left>
-    <Body>
-      <Text style={styles.percentage}> {record.percentage} </Text>
-    </Body>
-    <Right></Right>
-  </ListItem>
-)
+    return (
+      <ListItem style={styles.listItem} key={record.name}>
+        <Image source={record.path} style={styles.icon} />
+        <Content contentContainerStyle={styles.container}>
+          <Text
+            style={{ color: record.color, fontWeight: "bold", fontSize: 15 }}
+          >
+            {record.name.toUpperCase()}
+          </Text>
+        </Content>
+        <Body>
+          <Text style={styles.percentage}> {record.percentage} </Text>
+        </Body>
+        <Right></Right>
+      </ListItem>
+    );
   }
 
   render() {
-    const {records} = this.state;
-    const recordsDiv = records.map(this.mapRecords.bind(this));
+    const { data, mainRecord, payload, spinner } = this.state;
+    const recordsDiv = data.map(this.mapRecords.bind(this));
     return (
       <Content>
-        <Header transparent>
-          <Text style={styles.header}>JANE DOE, HOW YOU ARE FEELING...</Text>
-        </Header>
-        <Card transparent>
-          <CardItem cardBody>
-            <Image
-              source={require("../assets/happy.png")}
-              style={styles.image}
-            />
-          </CardItem>
-          <CardItem>
-            <Left style={{ paddingLeft: 50 }}>
-              <Text style={styles.emotion}>HAPPY</Text>
-            </Left>
-            <Body></Body>
-            <Right style={{ paddingRight: 50 }}>
-              <Text style={styles.percentage}>75.48%</Text>
-            </Right>
-          </CardItem>
-        </Card>
+        <Spinner
+          visible={spinner}
+          textContent={"Loading..."}
+          textStyle={styles.spinnerTextStyle}
+        />
+        {!spinner && (
+          <Header transparent>
+            <Text
+              style={styles.header}
+            >{`${payload.name}, YOU ARE FEELING...`}</Text>
+          </Header>
+        )}
+        {!spinner && (
+          <Card transparent>
+            <CardItem cardBody>
+              <Image source={mainRecord.path} style={styles.image} />
+            </CardItem>
+            <CardItem style={styles.mainRecord}>
+                <Text style={[styles.emotion, {paddingRight:40}]}>
+                  {mainRecord.name.toUpperCase()}
+                </Text>
+                <Text style={styles.percentage}>{mainRecord.percentage}</Text>
+            </CardItem>
+          </Card>
+        )}
         <List>{recordsDiv}</List>
-        <Content>
-          <Button
-            rounded
-            style={styles.button}
-            onPress={() => this.props.navigation.navigate("Events")}
-          >
-            <Text style={styles.textButton}>CHECK EVENTS</Text>
-          </Button>
-        </Content>
+        {!spinner && (
+          <Content>
+            <Button
+              rounded
+              style={styles.button}
+              onPress={() => this.props.navigation.navigate("Events")}
+            >
+              <Text style={styles.textButton}>CHECK EVENTS</Text>
+            </Button>
+          </Content>
+        )}
       </Content>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  mainRecord: {
+    flexGrow: 1,
+    justifyContent: "center",
+  },
   image: {
     height: 100,
     width: null,
@@ -112,7 +161,7 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   emotion: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#84B761",
   },
@@ -136,7 +185,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
     paddingBottom: 0,
     paddingTop: 5,
-    justifyContent: "flex-start",
   },
   container: {
     flexGrow: 1,
@@ -153,6 +201,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: "white",
+  },
+  spinnerTextStyle: {
+    color: "#FFF",
   },
 });
 
