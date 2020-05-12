@@ -40,23 +40,6 @@ export default class Utils {
     }
   }
 
-  getEmotionColor(emotionName) {
-    switch (emotionName) {
-      case "anger": 
-        return "#CC4748";
-      case "fear": 
-        return "#CD82AD";
-      case "happiness": 
-        return "#84B761";
-      case "neutral":
-        return "#FDD400";
-      case "sadness": 
-        return "#67B7DC";
-      default:
-        return "#FDD400";
-    }
-  }
-
   getEmotionIcon(emotionName) {
     switch (emotionName) {
       case "anger": 

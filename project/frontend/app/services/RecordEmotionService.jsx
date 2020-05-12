@@ -53,4 +53,3 @@ async add(data, callback) {
       });
   }
 }
-}
