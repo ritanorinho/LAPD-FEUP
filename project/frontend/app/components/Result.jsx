@@ -116,7 +116,7 @@ class Result extends Component {
           <Header transparent>
             <Text
               style={styles.header}
-            >{`${payload.name}, YOU ARE FEELING...`}</Text>
+            >{`${payload.name.toUpperCase()}, YOU ARE FEELING...`}</Text>
           </Header>
         )}
         {!spinner && (
@@ -128,7 +128,7 @@ class Result extends Component {
                 <Text style={[styles.emotion, {paddingRight:40}]}>
                   {mainRecord.name.toUpperCase()}
                 </Text>
-                <Text style={styles.percentage}>{mainRecord.percentage}</Text>
+                <Text style={[styles.percentage, {paddingLeft:35}]}>{mainRecord.percentage}</Text>
             </CardItem>
           </Card>
         )}

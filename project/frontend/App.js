@@ -74,7 +74,7 @@ const RootStack = createAppContainer(
       },
     },
     {
-      initialRouteName: 'Result'
+      initialRouteName: 'Profile'
     }
   )
 )
