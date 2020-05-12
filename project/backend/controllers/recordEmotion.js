@@ -2,7 +2,7 @@
 
 const Record = require("../models/record");
 const RecordEmotion = require("../models/recordEmotion");
-const Emotion = require("../models/emotion");
+const Emotion = require('../models/emotion');
 
 function add(req, res) {
   const { body, payload } = req;
@@ -22,33 +22,40 @@ function add(req, res) {
     .catch((error) => res.status(400).json({ error }));
 }
 
-async function getResults(req, res) {
-  const { payload } = req;
-  const { _id } = payload;
-  const userId = _id;
-  let records = [];
-
-  await Record.find({ userId })
+async function getAllByUser (req, res) {
+  const { payload } = req
+  const { _id } = payload
+  const query = { userId: _id }
+  let allEmotions = []
+  let emotionName = 'neutral'
+  let percentage = 0
+  await Record.find(query)
     .sort({ date: -1 })
-    .then(async (records) => {
-      let id = records[0].id;
-      await RecordEmotion.find({ recordId: id }).then(async (recordEms) => {
-        for (const recordEm of recordEms) {
-          const { emotionId } = { recordEm };
-          await Emotion.find({ _id: emotionId }).then(async (e) => {
-            const rec = {
-              name: e.name,
-              percentage: recordEm.percentage
-            }
-            records.add(rec);
-          });
+    .then(async records => {
+      let id = records[0]._id
+      let date = records[0].date
+      await RecordEmotion.find({ recordId: id }).then(async emotions => {
+        for (const emotion of emotions) {
+          let emotionId = emotion.emotionId
+          percentage = emotion.percentage
+          await Emotion.find({ _id: emotionId }).then(async e => {
+            
+            emotionName = e[0].name
+            console.log(_id+" "+emotionName);
+          })
+          allEmotions.push({ name: emotionName, percentage: percentage })
         }
-      });
-    });
-  return res.status(200).json({ records });
+      })
+      res.json({ date: date, emotions: allEmotions })
+    })
+    .catch(error => {
+      res.status(400).json({ error })
+    })
 }
+
 
 module.exports = {
   add,
-  getResults,
-};
+  getAllByUser
+}
+

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { AsyncStorage } from "react-native";
-import Utils from "../Utils";
+import Utils from "../Utils"
 
 export default class RecordEmotionService {
   constructor() {
@@ -8,7 +8,7 @@ export default class RecordEmotionService {
     this.baseURL = this.Utils.getIp() + "/api/recordEmotion";
   }
 
-  async add(data, callback) {
+async add(data, callback) {
     let token = "";
     try {
       token = (await AsyncStorage.getItem("token")) || "";
@@ -33,16 +33,16 @@ export default class RecordEmotionService {
         callback(error);
       });
   }
-
-  async getResults(callback) {
+  async getAllStatistics(callback) {
     let token = "";
     try {
       token = (await AsyncStorage.getItem("token")) || "";
+     
     } catch (error) {
       console.log(error.message);
     }
     axios
-      .get(`${this.baseURL}/results`, {
+      .get(`${this.baseURL}/current`, {
         headers: { Authorization: `Token ${token}` },
       })
       .then((response) => {

@@ -5,29 +5,29 @@ const RecordEmotion = require('../models/recordEmotion')
 function mockData () {
   return [
     new RecordEmotion({
-        recordId: '5e9ec427cdef5dfe4b76a067',
+        recordId: '5eb985124ded9f17afac3e31',
         emotionId: '5e9c2f81611a7140e2d61f26',
-        percentage: 90,
+        percentage: 22,
     }),
     new RecordEmotion({
-        recordId: '5e9ec427cdef5dfe4b76a068',
+        recordId: '5eb985124ded9f17afac3e31',
         emotionId: '5e9c2f81611a7140e2d61f24',
-        percentage: 95,
+        percentage: 24,
     }),
     new RecordEmotion({
-        recordId: '5e9ec427cdef5dfe4b76a069',
+        recordId: '5eb985124ded9f17afac3e31',
         emotionId: '5e9c2f81611a7140e2d61f27',
-        percentage: 97,
+        percentage: 40,
     }),
     new RecordEmotion({
-        recordId: '5e9ec427cdef5dfe4b76a06a',
+        recordId: '5eb985124ded9f17afac3e31',
         emotionId: '5e9c2f81611a7140e2d61f28',
-        percentage: 92,
+        percentage: 10,
     }),
     new RecordEmotion({
-        recordId: '5e9ec427cdef5dfe4b76a06b',
-        emotionId: '5e9c2f81611a7140e2d61f24',
-        percentage: 85,
+        recordId: '5eb985124ded9f17afac3e31',
+        emotionId: '5e9c2f81611a7140e2d61f25',
+        percentage: 4,
     }),
   ]
 }

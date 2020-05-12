@@ -100,7 +100,6 @@ async function getPreferences(req, res) {
       await Emotion.find()
         .then(async (emotions) => {
           for (const emotion of emotions) {
-
             await UEG.find({ emotionId: emotion._id, userId: _id })
               .then((uegs) => {
                 preferences.push({ emotion, uegs });
@@ -124,7 +123,6 @@ function logout(req, res) {
 }
 
 async function getCurrent(req, res) {
-
   const { payload } = req;
   const { _id } = payload;
   const userId = _id;
@@ -135,18 +133,21 @@ async function getCurrent(req, res) {
   await Record.find(query)
     .sort({ date: -1 })
     .then(async (records) => {
-      let id = records[0].id;
-      let query = { recordId: id };
-      await RecordEmotion.find(query)
-      .sort({percentage: -1})
-      .then(async (emotion) => {
-        emotionId = emotion[0].emotionId;
-        await Emotion.find({_id: emotionId}).then(async(e) => {
-          emotionName = e[0].name;
-        })
-      });
-    });  
-    return res.status(200).json({ payload, emotionName });
+      if (records.length > 0) {
+        console.log(records)
+        let id = records[0].id;
+        let query = { recordId: id };
+        await RecordEmotion.find(query)
+          .sort({ percentage: -1 })
+          .then(async (emotion) => {
+            emotionId = emotion[0].emotionId;
+            await Emotion.find({ _id: emotionId }).then(async (e) => {
+              emotionName = e[0].name;
+            });
+          });
+      }
+    });
+  return res.status(200).json({ payload, emotionName });
 }
 
 module.exports = {

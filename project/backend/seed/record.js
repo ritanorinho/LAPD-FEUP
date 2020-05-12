@@ -5,23 +5,23 @@ const Record = require('../models/record')
 function mockData () {
   return [
     new Record({
-      userId: '5e9c2f80611a7140e2d61f22',
+      userId: '5eb16bab6f232e62204bf53e',
       date: '2020-04-21'
     }),
     new Record({
-        userId: '5e9c2f80611a7140e2d61f22',
+        userId: '5eb16bab6f232e62204bf53e',
         date: '2020-04-19'
       }),
       new Record({
-        userId: '5e9c2f80611a7140e2d61f22',
+        userId: '5eb16bab6f232e62204bf53e',
         date: '2020-04-18'
       }),
       new Record({
-        userId: '5e9c2f80611a7140e2d61f22',
+        userId: '5eb16bab6f232e62204bf53e',
         date: '2020-04-17'
       }),
       new Record({
-        userId: '5e9c2f80611a7140e2d61f22',
+        userId: '5eb16bab6f232e62204bf53e',
         date: '2020-04-16'
       }),
   ]
