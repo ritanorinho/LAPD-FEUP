@@ -12,6 +12,7 @@ import {
 } from "native-base";
 import { withNavigation } from "react-navigation";
 import Spinner from "react-native-loading-spinner-overlay";
+import DropdownAlert from "react-native-dropdownalert";
 import UserService from "../services/UserService";
 
 class Login extends Component {
@@ -34,7 +35,14 @@ class Login extends Component {
     this.UserService.login(this.state, async (res) => {
       if (res.status === 200) {
         this.props.navigation.navigate("Profile");
-      } else console.log(res.response.data);
+      } else {
+        console.log(res.response.data);
+        this.dropDownAlertRef.alertWithType(
+          "error",
+          "Error",
+          res.response.data.message
+        );
+      }
       this.setState({ spinner: false });
     });
   }
@@ -83,6 +91,7 @@ class Login extends Component {
             </Button>
           </Form>
         </Card>
+          <DropdownAlert ref={(ref) => (this.dropDownAlertRef = ref)} />
       </Container>
     );
   }

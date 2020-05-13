@@ -6,6 +6,8 @@ const controller = require('../../controllers/user');
 
 const auth = require('../middleware/validator/auth');
 
+const validators = require('../middleware/validator/user');
+
 
 router.get('/', controller.getAll);
 
@@ -15,7 +17,7 @@ router.get('/preferences', auth.check.required, controller.getPreferences);
 
 router.get('/:id', controller.get);
 
-router.post('/', controller.add);
+router.post('/', validators.userRegister, controller.add);
 
 router.post('/login', controller.login);
 
