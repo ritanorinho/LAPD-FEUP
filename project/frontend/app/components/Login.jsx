@@ -36,7 +36,6 @@ class Login extends Component {
       if (res.status === 200) {
         this.props.navigation.navigate("Profile");
       } else {
-        console.log(res.response.data);
         this.dropDownAlertRef.alertWithType(
           "error",
           "Error",
@@ -60,14 +59,14 @@ class Login extends Component {
           <Form>
             <Label style={styles.label}> EMAIL </Label>
             <Item rounded>
-              <Input onChangeText={(val) => this.setState({ username: val })} />
+              <Input onChangeText={(val) => this.setState({ username: val.trim() })} />
             </Item>
             <Label style={styles.label}>PASSWORD</Label>
             <Item rounded>
               <Input
                 secureTextEntry={true}
                 style={styles.input}
-                onChangeText={(val) => this.setState({ password: val })}
+                onChangeText={(val) => this.setState({ password: val.trim() })}
               />
             </Item>
             <Item style={styles.textItem}>
