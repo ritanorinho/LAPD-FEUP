@@ -47,7 +47,6 @@ class Register extends Component {
         );
       } else {
         if(res.response != undefined && res.response.status == 406) {
-          console.log("here")
           this.dropDownAlertRef.alertWithType(
             "error",
             "Error",

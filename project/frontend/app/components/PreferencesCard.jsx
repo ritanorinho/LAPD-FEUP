@@ -46,9 +46,6 @@ class PrefencesCard extends Component {
     const { preference } = this.state;
 
     const selected = this.isPreference(genre);
-
-    console.log(genre)
-
     if(selected) {
       const preUeg = this.getPreference(genre);
       this.UegService.delete({_id: preUeg._id}, async () => {
@@ -58,9 +55,7 @@ class PrefencesCard extends Component {
       });
     } else {
         this.UegService.add({genreId: genre._id, emotionId: preference.emotion._id}, async (res) => {
-          console.log(res.status)
           if(res.status == 200) {
-            console.log("here");
             const elems = [res.data.ueg, ...preference.uegs];
             const newPreference = {emotion: preference.emotion, uegs: elems};
             this.setState({preference: newPreference});

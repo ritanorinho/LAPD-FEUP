@@ -17,7 +17,7 @@ import { withNavigation } from 'react-navigation';
           </Body>
           <Right style={{flex:1}}>
               <Button transparent >
-            <Icon name='help' style={{ color: "#8b4da9" }}/>
+            <Icon name='help' style={{ color: "#8b4da9" }}  onPress={() =>this.props.navigation.navigate('Help')}/>
             </Button>
         </Right>
         </Header>

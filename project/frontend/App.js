@@ -11,6 +11,7 @@ import EventsScreen from "./app/screens/EventsScreen";
 import ResultScreen from "./app/screens/ResultScreen";
 import EmotionEvaluateScreen from "./app/screens/EmotionEvaluateScreen";
 import QuizzScreen from "./app/screens/QuizzScreen";
+import HelpScreen from "./app/screens/HelpScreen";
 import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
 import { AsyncStorage } from "react-native";
@@ -73,13 +74,18 @@ const RootStackLogin = createAppContainer(
           headerShown: false,
         },
       },
+      Help: {
+        screen: HelpScreen,
+        navigationOptions: {
+          headerShown: false,
+        },
+      },
     },
     {
       initialRouteName: "Login",
     }
   )
 );
-
 
 const RootStackProfile = createAppContainer(
   createStackNavigator(
@@ -135,6 +141,12 @@ const RootStackProfile = createAppContainer(
       },
       Quizz: {
         screen: QuizzScreen,
+        navigationOptions: {
+          headerShown: false,
+        },
+      },
+      Help: {
+        screen: HelpScreen,
         navigationOptions: {
           headerShown: false,
         },
