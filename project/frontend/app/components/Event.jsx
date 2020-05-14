@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image, StyleSheet } from "react-native";
+import { Image, StyleSheet, Linking } from "react-native";
 import { Content, Card, CardItem, Text, List, ListItem } from "native-base";
 import { withNavigation } from "react-navigation";
 import EventService from "../services/EventService";
