@@ -1,10 +1,9 @@
+import { IP_ADR } from "react-native-dotenv";
 export default class Utils {
   constructor() {}
 
-  //CHANGE THIS TO RETURN CORRECT IP
-  //TODO RETRIEVE CORRECT IP FROM .ENV FILE OR SOMETHING LIKE THAT
   getIp() {
-    return `http://192.168.1.8:4000`;
+    return `http://${IP_ADR}:4000`;
   }
 
   getColor(categoryApiId) {
@@ -20,54 +19,51 @@ export default class Utils {
       case "KZFzniwnSyZfZ7v7n1": //miscellaneous
         return "#FF9C9C";
       default:
-        return "#464646"
+        return "#464646";
     }
   }
   getEmotionColor(emotion) {
     switch (emotion) {
-      case "fear": 
+      case "fear":
         return "#CD82AD";
       case "anger":
         return "#CC4748";
-      case "happiness": 
+      case "happiness":
         return "#84B761";
-      case "neutral": 
+      case "neutral":
         return "#FDD400";
       case "sadness": //miscellaneous
         return "#67B7DC";
       default:
-        return "#464646"
+        return "#464646";
     }
   }
 
   getEmotionIcon(emotionName) {
     switch (emotionName) {
-      case "anger": 
+      case "anger":
         return require("../app/assets/angry.png");
-      case "fear": 
+      case "fear":
         return require("../app/assets/scare.png");
-      case "happiness": 
+      case "happiness":
         return require("../app/assets/happy.png");
       case "neutral":
         return require("../app/assets/confused.png");
-      case "sadness": 
+      case "sadness":
         return require("../app/assets/crying.png");
       default:
         return require("../app/assets/confused.png");
     }
   }
 
-
   getNavigation(settings) {
-    switch(settings) {
+    switch (settings) {
       case "Quiz":
-        return "Quizz"
+        return "Quizz";
       case "Camera":
-        return "EmotionEvaluate"
+        return "EmotionEvaluate";
       default:
-        return "EmotionEvaluate"
+        return "EmotionEvaluate";
     }
   }
-
-
 }
