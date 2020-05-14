@@ -36,8 +36,10 @@ class Events extends React.Component {
   }
 
   mapEvents(event) {
+    const r = Math.floor(Math.random() * 100);
+    const key = event.id + r;
     return (
-      <EventCard event={event} key={event._id} />
+      <EventCard event={event} key={key} />
     )
   }
 

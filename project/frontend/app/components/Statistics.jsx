@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
 import { PieChart } from "react-native-chart-kit";
 import { Text } from "native-base";
-import { withNavigation } from "react-navigation";
+import { withNavigation, NavigationEvents } from "react-navigation";
+import Spinner from "react-native-loading-spinner-overlay";
 import RecordEmotionService from "../services/RecordEmotionService";
 import Moment from "moment";
 import Utils from "../Utils";
@@ -14,16 +15,21 @@ class Statistics extends Component {
       date: "",
       emotions: [],
       data: [],
+      spinner: true,
     };
     this.RecordEmotionService = new RecordEmotionService();
     this.Utils = new Utils();
   }
 
   async componentDidMount() {
+    await this.load();
+  }
+
+  async load() {
+    this.setState({ spinner: true });
     await this.RecordEmotionService.getAllStatistics((res) => {
       if (res.status === 200) {
         const { payload } = res.data;
-        console.log(res.data.emotions);
         Moment.locale("en");
         let date = res.data.date;
         this.setState({
@@ -49,12 +55,18 @@ class Statistics extends Component {
         legendFontSize: 12,
       });
     }
-    this.setState({ data: data });
+    this.setState({ data: data, spinner: false });
   }
 
   render() {
     return (
       <View>
+        <NavigationEvents onDidFocus={() => this.load()} />
+        <Spinner
+          visible={this.state.spinner}
+          textContent={"Loading..."}
+          textStyle={styles.spinnerTextStyle}
+        />
         <PieChart
           data={this.state.data}
           width={Dimensions.get("window").width} // from react-native
@@ -99,6 +111,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#8b4da9",
     paddingTop: 15,
+  },
+  spinnerTextStyle: {
+    color: "#FFF",
   },
 });
 export default withNavigation(Statistics);
