@@ -150,6 +150,12 @@ async function getCurrent(req, res) {
   return res.status(200).json({ payload, emotionName });
 }
 
+async function updateSettings(req, res){
+  
+  
+
+}
+
 module.exports = {
   getAll,
   add,
@@ -159,4 +165,5 @@ module.exports = {
   getCurrent,
   hashPassword,
   get,
+  updateSettings
 };

@@ -21,6 +21,8 @@ router.post('/login', controller.login);
 
 router.post('/logout', controller.logout);
 
+router.put('/update', auth.check.required, controller.updateSettings);
+
 
 
 module.exports = router;

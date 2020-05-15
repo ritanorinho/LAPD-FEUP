@@ -108,4 +108,33 @@ export default class UserService {
         callback(error);
       });
   }
+  async updateSettings(callback) {
+    let token = "";
+    try {
+      token = (await AsyncStorage.getItem("token")) || "";
+    } catch (error) {
+      console.log(error.message);
+    }
+    axios
+      .put(`${this.baseURL}/update`, {
+        emotion_recognition: data.emotion_recognition,
+      },
+      {
+        headers: { Authorization: `Token ${token}` },
+      }
+      )
+      .then(async (response) => {
+        try {
+          await AsyncStorage.setItem("token", "");
+        } catch (error) {
+          console.log(error.message);
+        }
+        callback(response);
+      })
+      .catch((error) => {
+        callback(error);
+      });
+
+
+  }
 }
