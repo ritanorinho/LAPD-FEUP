@@ -64,7 +64,7 @@ class EmotionEvaluate extends Component {
 
   takePicture = async () => {
     if (this.camera) {
-      let photo = await this.camera.takePictureAsync({ base64: true })
+      let photo = await this.camera.takePictureAsync({ base64: true,  quality: 0.1, })
       this.setState({photo: photo});
       this.DetectService.sendPhoto(this.state.photo, async (res) => {
         console.log("RES "+res);
@@ -78,7 +78,7 @@ class EmotionEvaluate extends Component {
     let photo = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       base64: true, 
-      quality: 0.01,
+      quality: 0.1,
     })
     this.setState({photo: photo});
     this.DetectService.sendPhoto(this.state.photo, async (res) => {
