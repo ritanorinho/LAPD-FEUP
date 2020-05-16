@@ -124,12 +124,16 @@ function logout (req, res) {
 }
 
 async function getCurrent (req, res) {
-  const { payload } = req
+  let { payload } = req
   const { _id } = payload
   const userId = _id
   let query = { userId }
   let emotionId
   let emotionName = 'neutral'
+
+  await User.findById(_id).then((user) => {
+    payload = user;
+  })
 
   await Record.find(query)
     .sort({ date: -1 })
