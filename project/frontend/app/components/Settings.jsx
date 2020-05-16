@@ -68,6 +68,15 @@ class Settings extends Component {
   };
   render() {
     console.log(this.state);
+
+  async signOut(event) {
+    event.preventDefault();
+    await this.UserService.logout(() => {
+      this.props.navigation.navigate("Login");
+    });
+  }
+
+  render() {
     return (
       <Content padder>
         <NavigationEvents onDidFocus={() => this.load()} />
@@ -89,7 +98,9 @@ class Settings extends Component {
           <CardItem bordered>
             <Body>
               <Button transparent>
-                <Text style={styles.buttonText}>Sign out</Text>
+                <Text style={styles.buttonText}
+                  onPress={(e) => this.signOut(e)}
+                >Sign out</Text>
               </Button>
             </Body>
           </CardItem>

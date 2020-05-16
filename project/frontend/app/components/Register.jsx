@@ -12,6 +12,7 @@ import {
 } from "native-base";
 import { withNavigation } from "react-navigation";
 import Spinner from "react-native-loading-spinner-overlay";
+import DropdownAlert from "react-native-dropdownalert";
 import UserService from "../services/UserService";
 
 class Register extends Component {
@@ -25,6 +26,7 @@ class Register extends Component {
       name: "",
       email: "",
       password: "",
+      confirmPassword: "",
     };
     this.UserService = new UserService();
   }
@@ -43,6 +45,22 @@ class Register extends Component {
             }
           }
         );
+      } else {
+        if(res.response != undefined && res.response.status == 406) {
+          this.dropDownAlertRef.alertWithType(
+            "error",
+            "Error",
+            res.response.data.error
+          );
+        } else {
+          if (res.response != undefined && res.response.status == 422) {
+            this.dropDownAlertRef.alertWithType(
+              "error",
+              "Error",
+              res.response.data.errors[0].msg
+            );
+          }
+        }
       }
       this.setState({ spinner: false });
     });
@@ -65,19 +83,19 @@ class Register extends Component {
             </Item>
             <Label style={styles.label}> EMAIL </Label>
             <Item rounded>
-              <Input onChangeText={(val) => this.setState({ email: val })} />
+              <Input onChangeText={(val) => this.setState({ email: val.trim() })} />
             </Item>
             <Label style={styles.label}>PASSWORD</Label>
             <Item rounded>
               <Input
                 secureTextEntry={true}
                 style={styles.input}
-                onChangeText={(val) => this.setState({ password: val })}
+                onChangeText={(val) => this.setState({ password: val.trim() })}
               />
             </Item>
             <Label style={styles.label}>CONFIRM PASSWORD</Label>
             <Item rounded>
-              <Input secureTextEntry={true} style={styles.input} />
+              <Input secureTextEntry={true} style={styles.input} onChangeText={(val) => this.setState({ confirmPassword: val.trim() })}/>
             </Item>
             <Item style={styles.textItem}>
               <Text style={styles.grayText}>Already have an account? </Text>
@@ -98,6 +116,7 @@ class Register extends Component {
             </Button>
           </Form>
         </Card>
+        <DropdownAlert ref={(ref) => (this.dropDownAlertRef = ref)} />
       </Container>
     );
   }

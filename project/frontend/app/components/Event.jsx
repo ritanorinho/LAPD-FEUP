@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image, StyleSheet } from "react-native";
+import { Image, StyleSheet, Linking } from "react-native";
 import { Content, Card, CardItem, Text, List, ListItem } from "native-base";
 import { withNavigation } from "react-navigation";
 import EventService from "../services/EventService";
@@ -45,7 +45,7 @@ class Event extends Component {
           dates,
           classifications,
           _embedded,
-          uri,
+          url,
           info,
         } = details;
         if (info == undefined) info = "No additional information available...";
@@ -72,7 +72,6 @@ class Event extends Component {
             categoryApiId: segment.id,
             category: genre.name,
             info,
-            tickets: uri,
             path: images[0].url,
           },
         });
@@ -139,21 +138,6 @@ class Event extends Component {
                 </CardItem>
                 <CardItem style={styles.paddingTitle}>
                   <Text style={styles.cardText}>{info}</Text>
-                </CardItem>
-              </Card>
-            </CardItem>
-            <CardItem>
-              <Card style={styles.card}>
-                <CardItem style={styles.paddingTitle}>
-                  <Text style={styles.cardTitle}>TICKETS</Text>
-                </CardItem>
-                <CardItem style={styles.paddingTitle}>
-                  <Text
-                    style={styles.cardText}
-                    onPress={() => Linking.openURL(this.state.event.tickets)}
-                  >
-                    To get a ticket for this event, click here!
-                  </Text>
                 </CardItem>
               </Card>
             </CardItem>
