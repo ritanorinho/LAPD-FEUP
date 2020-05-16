@@ -1,53 +1,54 @@
-"use strict";
+'use strict'
 
-const passport = require("passport");
-const bcrypt = require("bcryptjs");
-const User = require("../models/user");
-const Emotion = require("../models/emotion");
-const UEG = require("../models/userEmotionGenre");
-const Genre = require("../models/genre");
-const Category = require("../models/category");
-const Record = require("../models/record");
-const RecordEmotion = require("../models/recordEmotion");
+const passport = require('passport')
+const bcrypt = require('bcryptjs')
+const User = require('../models/user')
+const Emotion = require('../models/emotion')
+const UEG = require('../models/userEmotionGenre')
+const Genre = require('../models/genre')
+const Category = require('../models/category')
+const Record = require('../models/record')
+const RecordEmotion = require('../models/recordEmotion')
+const ObjectID = require('mongodb').ObjectID
 
-function getAll(req, res) {
+function getAll (req, res) {
   User.find()
-    .then((users) => res.json({ users }))
-    .catch((error) => res.status(400).json({ error }));
+    .then(users => res.json({ users }))
+    .catch(error => res.status(400).json({ error }))
 }
 
-function add(req, res) {
-  const saltRounds = 10;
+function add (req, res) {
+  const saltRounds = 10
 
   bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
-    User.find({ email: req.body.email }).then((user) => {
-      if (user.length !== 0) res.status(406).json({ error: "Invalid email" });
+    User.find({ email: req.body.email }).then(user => {
+      if (user.length !== 0) res.status(406).json({ error: 'Invalid email' })
       else {
         const newUser = new User({
           name: req.body.name,
           email: req.body.email,
           password: hash,
-          settings: "Camera",
-        });
+          settings: 'Camera'
+        })
         newUser
           .save()
-          .then((item) => res.json({ item }))
-          .catch((error) => res.status(400).json({ error }));
+          .then(item => res.json({ item }))
+          .catch(error => res.status(400).json({ error }))
       }
-    });
-  });
+    })
+  })
 }
 
-function login(req, res, next) {
-  console.log(req.body);
+function login (req, res, next) {
+  console.log(req.body)
   return passport.authenticate(
-    "login-user",
+    'login-user',
     { session: false },
     (err, passportUser, info) => {
       if (err) {
-        return next(err);
+        return next(err)
       }
-      console.log(info);
+      console.log(info)
       if (passportUser) {
         const reqUser = {
           _id: passportUser._id,
@@ -55,105 +56,114 @@ function login(req, res, next) {
           email: passportUser.email,
           username: passportUser.username,
           settings: passportUser.settings,
-          photo: passportUser.photo,
-        };
+          photo: passportUser.photo
+        }
 
-        req.login(reqUser, (error) => {
+        req.login(reqUser, error => {
           if (error) {
-            return res.send({ error });
+            return res.send({ error })
           }
           return res.json({
-            user: passportUser.toAuthJSON(),
-          });
-        });
+            user: passportUser.toAuthJSON()
+          })
+        })
       } else {
-        return res.status(400).json(info);
+        return res.status(400).json(info)
       }
     }
-  )(req, res, next);
+  )(req, res, next)
 }
 
-function get(req, res) {
+function get (req, res) {
   User.find({ _id: req.params.id })
-    .then((user) => {
-      res.json({ user });
+    .then(user => {
+      res.json({ user })
     })
-    .catch((error) => {
-      res.status(400).json({ error });
-    });
+    .catch(error => {
+      res.status(400).json({ error })
+    })
 }
 
-async function getPreferences(req, res) {
-  const { payload } = req;
-  const { _id } = payload;
-  let events = [];
-  let preferences = [];
+async function getPreferences (req, res) {
+  const { payload } = req
+  const { _id } = payload
+  let events = []
+  let preferences = []
   await Category.find()
-    .then(async (categories) => {
+    .then(async categories => {
       for (const category of categories) {
         await Genre.find({ categoryId: category._id })
-          .then((genres) => {
-            events.push({ category, genres });
+          .then(genres => {
+            events.push({ category, genres })
           })
-          .catch();
+          .catch()
       }
       await Emotion.find()
-        .then(async (emotions) => {
+        .then(async emotions => {
           for (const emotion of emotions) {
             await UEG.find({ emotionId: emotion._id, userId: _id })
-              .then((uegs) => {
-                preferences.push({ emotion, uegs });
+              .then(uegs => {
+                preferences.push({ emotion, uegs })
               })
-              .catch();
+              .catch()
           }
         })
-        .catch();
-      res.json({ events, preferences });
+        .catch()
+      res.json({ events, preferences })
     })
-    .catch();
+    .catch()
 }
 
-function hashPassword(password) {
-  return bcrypt.hashSync(password, 10);
+function hashPassword (password) {
+  return bcrypt.hashSync(password, 10)
 }
 
-function logout(req, res) {
-  req.logout();
-  return res.status(200).json("Logged out");
+function logout (req, res) {
+  req.logout()
+  return res.status(200).json('Logged out')
 }
 
-async function getCurrent(req, res) {
-  const { payload } = req;
-  const { _id } = payload;
-  const userId = _id;
-  let query = { userId };
-  let emotionId;
-  let emotionName = "neutral";
+async function getCurrent (req, res) {
+  const { payload } = req
+  const { _id } = payload
+  const userId = _id
+  let query = { userId }
+  let emotionId
+  let emotionName = 'neutral'
 
   await Record.find(query)
     .sort({ date: -1 })
-    .then(async (records) => {
+    .then(async records => {
       if (records.length > 0) {
         console.log(records)
-        let id = records[0].id;
-        let query = { recordId: id };
+        let id = records[0].id
+        let query = { recordId: id }
         await RecordEmotion.find(query)
           .sort({ percentage: -1 })
-          .then(async (emotion) => {
-            emotionId = emotion[0].emotionId;
-            await Emotion.find({ _id: emotionId }).then(async (e) => {
-              emotionName = e[0].name;
-            });
-          });
+          .then(async emotion => {
+            emotionId = emotion[0].emotionId
+            await Emotion.find({ _id: emotionId }).then(async e => {
+              emotionName = e[0].name
+            })
+          })
       }
-    });
-  return res.status(200).json({ payload, emotionName });
+    })
+  return res.status(200).json({ payload, emotionName })
 }
 
-async function updateSettings(req, res){
-  
-  
-
+async function updateSettings (req, res) {
+  const { payload } = req
+  const { _id } = payload
+  const query = { _id: _id }
+  const update = { settings: req.body.emotion_recognition }
+  await User.findByIdAndUpdate(query, update, {
+    returnOriginal: false,
+    useFindAndModify: false,
+    upsert: true
+  }).then(user => {
+    console.log('updated ' + user)
+    return res.status(200).json({ user: user })
+  })
 }
 
 module.exports = {
@@ -166,4 +176,4 @@ module.exports = {
   hashPassword,
   get,
   updateSettings
-};
+}

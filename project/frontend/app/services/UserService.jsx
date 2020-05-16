@@ -108,7 +108,7 @@ export default class UserService {
         callback(error);
       });
   }
-  async updateSettings(callback) {
+  async updateSettings(data, callback) {
     let token = "";
     try {
       token = (await AsyncStorage.getItem("token")) || "";
@@ -117,18 +117,13 @@ export default class UserService {
     }
     axios
       .put(`${this.baseURL}/update`, {
-        emotion_recognition: data.emotion_recognition,
+        emotion_recognition: data,
       },
       {
         headers: { Authorization: `Token ${token}` },
       }
       )
       .then(async (response) => {
-        try {
-          await AsyncStorage.setItem("token", "");
-        } catch (error) {
-          console.log(error.message);
-        }
         callback(response);
       })
       .catch((error) => {

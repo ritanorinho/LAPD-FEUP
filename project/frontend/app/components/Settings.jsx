@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
-import { Image, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import {
-  Container,
-  Header,
   Content,
   Card,
   CardItem,
@@ -16,40 +14,74 @@ import {
   ListItem,
   Radio
 } from 'native-base'
-import { withNavigation } from 'react-navigation'
+import { withNavigation, NavigationEvents } from 'react-navigation'
 import UserService from '../services/UserService'
 class Settings extends Component {
   constructor (props) {
     super(props)
     this.state = {
       user: {
-        name: '',
-        photo: ''
       }
     }
     this.UserService = new UserService()
+  
+  }
+  async componentDidMount () {
+    await this.load();
+   
   }
 
-  async componentDidMount () {
+  async load(){
+
     await this.UserService.getUser(res => {
+      console.log(res);
       if (res.status === 200) {
         const { payload } = res.data
+        console.log("SETTINGS "+res.data);
         this.setState({
           user: {
             name: payload.name,
             photo: payload.photo,
-            email: payload.email
+            email: payload.email,
+            settings: payload.settings,
           }
         })
       }
     })
+
   }
+  async handleChange(option){
+  if (this.state.user.settings === option){
+    console.log("same option");
+  } else {
+    await this.UserService.updateSettings(option,  async (res) => {
+      if(res.status === 200) {
+        
+          this.setState({user: {
+          name: this.state.user.name,
+          settings: option,
+        }});
+
+        console.log("settings "+this.state.user.settings);
+      }
+      
+      else {
+        console.log("Error");
+      }
+  })
+    
+  }
+}
+
   static navigationOptions = {
     title: 'Settings'
   }
   render () {
+  
+    
     return (
         <Content padder>
+        <NavigationEvents onDidFocus={() =>this.load.bind(this)} />
           <Card style={{ flex: 0 }} transparent>
             <CardItem>
             <Left>
@@ -78,15 +110,15 @@ class Settings extends Component {
               <Text style={styles.buttonText}>CAMERA OR IMAGE UPLOAD</Text>
             </Left>
             <Right>
-              <Radio color="#CBCBCB" selectedColor="#8b4da9" selected={false} />
+              <Radio color="#CBCBCB" selectedColor="#8b4da9" selected={this.state.user.settings === "Camera" ? true: false} onPress={this.handleChange.bind(this, "Camera" )} />
             </Right>
           </ListItem>
           <ListItem>
             <Left>
-              <Text style={styles.buttonText}>QUIZ</Text>
+              <Text style={styles.buttonText}>QUIZZ</Text>
             </Left>
             <Right>
-              <Radio color="#CBCBCB" selectedColor="#8b4da9"  selected={true} />
+              <Radio color="#CBCBCB" selectedColor="#8b4da9"  selected={this.state.user.settings === "Quizz" ? true: false} onPress={this.handleChange.bind(this, "Quizz" )} />
             </Right>
           </ListItem>
           </Card>
