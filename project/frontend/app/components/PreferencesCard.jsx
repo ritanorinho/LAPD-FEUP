@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { List, ListItem, Radio, Text, Card, CardItem } from "native-base";
 import { StyleSheet } from "react-native";
-import { withNavigation } from "react-navigation";
+import { withNavigation, NavigationEvents } from "react-navigation";
 import Utils from "../Utils";
 import UegService from "../services/UegService";
-
 
 class PrefencesCard extends Component {
   constructor(props) {
@@ -18,27 +17,30 @@ class PrefencesCard extends Component {
     this.UegService = new UegService();
   }
 
-  componentDidMount() {
+  async load() {
     const { event, preference } = this.props;
     this.setState({ event, preference, display: true });
   }
 
+  async componentDidMount() {
+    await this.load();
+  }
+
   isPreference(genre) {
     const { preference } = this.state;
-    const {uegs} = preference
-    let elems = uegs.filter( ueg => ueg.genreId == genre._id );
+    const { uegs } = preference;
+    if (uegs.length == 0) return false;
+    let elems = uegs.filter((ueg) => ueg.genreId == genre._id);
     let selected = false;
-    if(elems.length > 0)
-      selected = true;
+    if (elems.length > 0) selected = true;
     return selected;
   }
 
-  getPreference(genre){
+  getPreference(genre) {
     const { preference } = this.state;
-    const {uegs} = preference
-    let elems = uegs.filter( ueg => ueg.genreId == genre._id );
-    if(elems.length > 0)
-      return elems[0]
+    const { uegs } = preference;
+    let elems = uegs.filter((ueg) => ueg.genreId == genre._id);
+    if (elems.length > 0) return elems[0];
     return null;
   }
 
@@ -46,21 +48,24 @@ class PrefencesCard extends Component {
     const { preference } = this.state;
 
     const selected = this.isPreference(genre);
-    if(selected) {
+    if (selected) {
       const preUeg = this.getPreference(genre);
-      this.UegService.delete({_id: preUeg._id}, async () => {
-        let elems = preference.uegs.filter( ueg => ueg.genreId != genre._id );
-        const newPreference = {emotion: preference.emotion, uegs: elems};
-        this.setState({preference: newPreference});
+      this.UegService.delete({ _id: preUeg._id }, async () => {
+        let elems = preference.uegs.filter((ueg) => ueg.genreId != genre._id);
+        const newPreference = { emotion: preference.emotion, uegs: elems };
+        this.setState({ preference: newPreference });
       });
     } else {
-        this.UegService.add({genreId: genre._id, emotionId: preference.emotion._id}, async (res) => {
-          if(res.status == 200) {
+      this.UegService.add(
+        { genreId: genre._id, emotionId: preference.emotion._id },
+        async (res) => {
+          if (res.status == 200) {
             const elems = [res.data.ueg, ...preference.uegs];
-            const newPreference = {emotion: preference.emotion, uegs: elems};
-            this.setState({preference: newPreference});
+            const newPreference = { emotion: preference.emotion, uegs: elems };
+            this.setState({ preference: newPreference });
           }
-        });
+        }
+      );
     }
   }
 
@@ -70,11 +75,16 @@ class PrefencesCard extends Component {
     };
     const { _id, name } = genre;
 
-    const selected = this.isPreference(genre)
+    const selected = this.isPreference(genre);
 
     return (
       <ListItem style={styles.option} key={_id}>
-        <Radio selected={selected} color="#803EA1" selectedColor="#803EA1" onPress={onChange} />
+        <Radio
+          selected={selected}
+          color="#803EA1"
+          selectedColor="#803EA1"
+          onPress={onChange}
+        />
         <Text style={styles.textOption}>{name}</Text>
       </ListItem>
     );
@@ -103,14 +113,16 @@ class PrefencesCard extends Component {
     const { event, display } = this.state;
     if (display) {
       const { category, genres } = event;
-      const listItems = genres.map(this.mapGenres.bind(this));
+      //const listItems = genres.map(this.mapGenres.bind(this));
       return (
         <Card style={this.cardStyles()}>
+          <NavigationEvents onDidFocus={() => this.load()} />
+
           <CardItem style={this.cardTextStyles()}>
             <Text style={styles.title}>{category.name.toUpperCase()}</Text>
           </CardItem>
           <CardItem style={this.cardStyles()}>
-            <List>{listItems}</List>
+            <List>{genres.map(this.mapGenres.bind(this))}</List>
           </CardItem>
         </Card>
       );

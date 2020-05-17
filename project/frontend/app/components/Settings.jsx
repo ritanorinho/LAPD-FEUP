@@ -32,7 +32,7 @@ class Settings extends Component {
     await this.UserService.getUser((res) => {
       if (res.status === 200) {
         const { payload } = res.data;
-        const { name, photo, email, settings } =  payload ;
+        const { name, photo, email, settings } = payload;
         const user = { name, photo, email, settings };
         this.setState({
           user,
@@ -41,7 +41,7 @@ class Settings extends Component {
     });
   }
   async handleChange(option) {
-    console.log(option)
+    console.log(option);
     if (this.state.user.settings === option) {
       console.log("same option");
     } else {
@@ -72,32 +72,24 @@ class Settings extends Component {
     title: "Settings",
   };
 
-
   render() {
     return (
       <Content padder>
         <NavigationEvents onDidFocus={() => this.load()} />
         <Card style={{ flex: 0 }} transparent>
-          <CardItem>
-            <Left>
-              <Thumbnail
-                source={require("../assets/profile-picture.jpg")}
-                large
-              ></Thumbnail>
-              <Body>
-                <Text style={styles.cardText}>{this.state.user.name}</Text>
-              </Body>
-            </Left>
-          </CardItem>
+          <Text style={styles.cardText}>{this.state.user.name}</Text>
         </Card>
         <Text style={styles.optionTitle}>ACCOUNT</Text>
         <Card>
           <CardItem bordered>
             <Body>
               <Button transparent>
-                <Text style={styles.buttonText}
+                <Text
+                  style={styles.buttonText}
                   onPress={(e) => this.signOut(e)}
-                >Sign out</Text>
+                >
+                  Sign out
+                </Text>
               </Button>
             </Body>
           </CardItem>
