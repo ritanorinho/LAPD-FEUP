@@ -67,7 +67,9 @@ class EmotionEvaluate extends Component {
       let photo = await this.camera.takePictureAsync({ base64: true, quality: 0.1, })
       this.setState({photo: photo});
       this.DetectService.sendPhoto(this.state.photo, async (res) => {
-        console.log("RES "+res);
+        if(res.status === 200){
+        this.props.navigation.navigate('Result');
+        }
       })
     
     }
@@ -82,8 +84,10 @@ class EmotionEvaluate extends Component {
     })
     this.setState({photo: photo});
     this.DetectService.sendPhoto(this.state.photo, async (res) => {
-      console.log("RES "+res);
-    })
+      if(res.status === 200){
+        this.props.navigation.navigate('Result');
+        }
+      })
     
   }
 
@@ -157,5 +161,4 @@ class EmotionEvaluate extends Component {
     }
   }
 }
-
 export default withNavigation(EmotionEvaluate)

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { StyleSheet, Image, TouchableHighlight } from "react-native";
-import { Content, Footer, FooterTab, Button, Icon, Text } from "native-base";
+import { StyleSheet, Image } from "react-native";
+import {  Footer, FooterTab, Button, Icon, Text } from "native-base";
 import { withNavigation,NavigationEvents } from "react-navigation";
 import UserService from "../services/UserService";
 import Utils from "../Utils";
@@ -40,7 +40,7 @@ class FooterBar extends Component {
             <Text style={{ color: "#8b4da9" }}>Back</Text>
           </Button>
           <Button
-            onPress={() => {console.log("redirect "+redirect); this.props.navigation.navigate(redirect)}}
+            onPress={() => {this.props.navigation.navigate(redirect)}}
             style={{
               alignSelf: "center",
               elevation: 4,
