@@ -29,12 +29,11 @@ class Statistics extends Component {
     this.setState({ spinner: true });
     await this.RecordEmotionService.getAllStatistics((res) => {
       if (res.status === 200) {
-        const { payload } = res.data;
         Moment.locale("en");
-        let date = res.data.date;
+        const { date, emotions } = res.data;
         this.setState({
           date: Moment(date).format("DD MMMM YYYY hh:mm"),
-          emotions: res.data.emotions,
+          emotions: emotions,
         });
         this.setChartData();
       }
