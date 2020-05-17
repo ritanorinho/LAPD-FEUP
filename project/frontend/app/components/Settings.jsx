@@ -62,19 +62,17 @@ class Settings extends Component {
       });
     }
   }
-
-  static navigationOptions = {
-    title: "Settings",
-  };
-  render() {
-    console.log(this.state);
-
   async signOut(event) {
     event.preventDefault();
     await this.UserService.logout(() => {
       this.props.navigation.navigate("Login");
     });
   }
+
+  static navigationOptions = {
+    title: "Settings",
+  };
+
 
   render() {
     return (

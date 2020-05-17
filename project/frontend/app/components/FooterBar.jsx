@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, Image, TouchableHighlight } from "react-native";
 import { Content, Footer, FooterTab, Button, Icon, Text } from "native-base";
-import { withNavigation } from "react-navigation";
+import { withNavigation,NavigationEvents } from "react-navigation";
 import UserService from "../services/UserService";
 import Utils from "../Utils";
 
@@ -16,6 +16,9 @@ class FooterBar extends Component {
   }
 
   async componentDidMount() {
+   await this.load();
+  }
+  async load(){
     await this.UserService.getUser((res) => {
       if (res.status === 200) {
         const { payload } = res.data;
@@ -30,13 +33,14 @@ class FooterBar extends Component {
     const {redirect } = this.state;
     return (
       <Footer>
+       <NavigationEvents onDidFocus={() => this.load()} />
         <FooterTab style={{ backgroundColor: "#faecfa" }}>
           <Button vertical onPress={() => this.props.navigation.goBack()}>
             <Icon name="arrow-back" style={{ color: "#8b4da9" }} />
             <Text style={{ color: "#8b4da9" }}>Back</Text>
           </Button>
           <Button
-            onPress={() => this.props.navigation.navigate(redirect)}
+            onPress={() => {console.log("redirect "+redirect); this.props.navigation.navigate(redirect)}}
             style={{
               alignSelf: "center",
               elevation: 4,
