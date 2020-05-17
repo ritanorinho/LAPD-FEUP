@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
 import { PieChart } from "react-native-chart-kit";
-import { Text } from "native-base";
+import { Text, Card, CardItem, Body,Icon } from "native-base";
 import { withNavigation, NavigationEvents } from "react-navigation";
 import Spinner from "react-native-loading-spinner-overlay";
 import RecordEmotionService from "../services/RecordEmotionService";
@@ -16,6 +16,7 @@ class Statistics extends Component {
       emotions: [],
       data: [],
       spinner: true,
+      hasRecords: false,
     };
     this.RecordEmotionService = new RecordEmotionService();
     this.Utils = new Utils();
@@ -31,11 +32,16 @@ class Statistics extends Component {
       if (res.status === 200) {
         Moment.locale("en");
         const { date, emotions } = res.data;
+        console.log("emotions");
         this.setState({
           date: Moment(date).format("DD MMMM YYYY hh:mm"),
           emotions: emotions,
+          hasRecords: true, 
         });
         this.setChartData();
+      }
+      else {
+        this.setState({hasRecords: false, spinner: false});
       }
     });
   }
@@ -58,6 +64,7 @@ class Statistics extends Component {
   }
 
   render() {
+    const {hasRecords} = this.state;
     return (
       <View>
         <NavigationEvents onDidFocus={() => this.load()} />
@@ -66,7 +73,20 @@ class Statistics extends Component {
           textContent={"Loading..."}
           textStyle={styles.spinnerTextStyle}
         />
-        <PieChart
+        {!hasRecords &&(
+          <Card style = {styles.card}>
+            <CardItem>
+              <Body>
+                <Text style = {styles.textColor}>
+                There are any records to show.
+                After evaluating how you feel, you can see here the last record you made.
+                </Text>
+              </Body>
+            </CardItem>
+          </Card>
+        )}
+        {hasRecords &&(
+        <PieChart 
           data={this.state.data}
           width={Dimensions.get("window").width} // from react-native
           height={220}
@@ -91,7 +111,10 @@ class Statistics extends Component {
           paddingLeft="15"
           absolute
         />
+        )}
+        {hasRecords && (
         <Text style={styles.date}>{this.state.date}</Text>
+        )}
       </View>
     );
   }
@@ -114,5 +137,11 @@ const styles = StyleSheet.create({
   spinnerTextStyle: {
     color: "#FFF",
   },
+  textColor: {
+    color: "#8b4da9", 
+  },
+  card: {
+    marginTop: 100,
+  }
 });
 export default withNavigation(Statistics);
