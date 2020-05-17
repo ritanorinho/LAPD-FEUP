@@ -1,12 +1,11 @@
 import EventCard from "./EventCard";
 import { StyleSheet, View, Image } from "react-native";
 import React from "react";
-import { Content, Text} from "native-base";
+import { Content, Text, Card, CardItem, Body } from "native-base";
 import { withNavigation } from "react-navigation";
 import EventService from "../services/EventService";
-import Spinner from 'react-native-loading-spinner-overlay';
+import Spinner from "react-native-loading-spinner-overlay";
 import Utils from "../Utils";
-
 
 class Events extends React.Component {
   static navigationOptions = {
@@ -20,17 +19,25 @@ class Events extends React.Component {
     this.state = {
       spinner: true,
       events: [],
-      source: require("../assets/confused.png")
-    }
+      source: require("../assets/confused.png"),
+      hasPreferences: true,
+      hasSuggestions: true,
+    };
   }
 
   async componentDidMount() {
     await this.EventService.getSuggestions(async (res) => {
       if (res.status == 200) {
-        const {data} = res;
+        const { data } = res;
         const source = this.Utils.getEmotionIcon(data.emotionName);
-      
-        this.setState({ events: data.suggestions, spinner: false, source });
+        const { suggestions, hasPreferences, hasSuggestions } = data;
+        this.setState({
+          events: suggestions,
+          spinner: false,
+          source,
+          hasPreferences,
+          hasSuggestions,
+        });
       }
     });
   }
@@ -38,21 +45,23 @@ class Events extends React.Component {
   mapEvents(event) {
     const r = Math.floor(Math.random() * 100);
     const key = event.id + r;
-    return (
-      <EventCard event={event} key={key} />
-    )
+    return <EventCard event={event} key={key} />;
   }
 
   render() {
-    const {events, source, spinner} = this.state;
-    const eventsDiv = events.map(
-      this.mapEvents.bind(this),
-    );
+    const {
+      events,
+      source,
+      spinner,
+      hasPreferences,
+      hasSuggestions,
+    } = this.state;
+    const eventsDiv = events.map(this.mapEvents.bind(this));
     return (
       <Content>
         <Spinner
           visible={spinner}
-          textContent={'Loading...'}
+          textContent={"Loading..."}
           textStyle={styles.spinnerTextStyle}
         />
         <View style={styles.rowContainer}>
@@ -60,12 +69,33 @@ class Events extends React.Component {
             <Text style={styles.text}>EVENTS</Text>
           </View>
           <View style={styles.rowItem}>
-            <Image
-              source={source}
-              style={styles.emotion}
-            ></Image>
+            <Image source={source} style={styles.emotion}></Image>
           </View>
         </View>
+        {!hasPreferences && (
+          <Card style={styles.card}>
+            <CardItem>
+              <Body>
+                <Text style={styles.textColor}>
+                  There are no events to show. After setting your events
+                  preferences in your profile you will be able to receive
+                  suggestions of events here.
+                </Text>
+              </Body>
+            </CardItem>
+          </Card>
+        )}
+        {!hasSuggestions && hasPreferences && (
+          <Card style={styles.card}>
+            <CardItem>
+              <Body>
+                <Text style={styles.textColor}>
+                  There are no events to show.
+                </Text>
+              </Body>
+            </CardItem>
+          </Card>
+        )}
         {!this.state.spinner && eventsDiv}
       </Content>
     );
@@ -78,7 +108,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     paddingLeft: 15,
   },
-
   rowContainer: {
     flex: 1,
     flexDirection: "row",
@@ -95,7 +124,13 @@ const styles = StyleSheet.create({
     marginRight: 100,
   },
   spinnerTextStyle: {
-    color: '#FFF'
+    color: "#FFF",
+  },
+  textColor: {
+    color: "#8b4da9",
+  },
+  card: {
+    marginTop: 100,
   },
 });
 
