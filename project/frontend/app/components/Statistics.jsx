@@ -78,7 +78,7 @@ class Statistics extends Component {
             <CardItem>
               <Body>
                 <Text style = {styles.textColor}>
-                There are any records to show.
+                There are no records to show.
                 After evaluating how you feel, you can see here the last record you made.
                 </Text>
               </Body>

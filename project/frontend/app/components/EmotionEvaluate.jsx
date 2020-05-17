@@ -69,6 +69,9 @@ class EmotionEvaluate extends Component {
       this.DetectService.sendPhoto(this.state.photo, async (res) => {
         if(res.status === 200){
         this.props.navigation.navigate('Result');
+        } else {
+          alert("It was not possible to identify any face. You should try again.");
+
         }
       })
     
@@ -99,7 +102,9 @@ class EmotionEvaluate extends Component {
       return <Text>No access to camera</Text>
     } else {
       return (
+       
         <View style={{ flex: 1 }}>
+        
           <Camera
             style={{ flex: 1 }}
             type={this.state.cameraType}
@@ -157,6 +162,7 @@ class EmotionEvaluate extends Component {
             </View>
           </Camera>
         </View>
+        
       )
     }
   }

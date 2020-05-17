@@ -16,7 +16,7 @@ import {
   ListItem,
   List,
 } from "native-base";
-import { withNavigation } from "react-navigation";
+import { withNavigation, NavigationEvents } from "react-navigation";
 import Utils from "../Utils";
 import RecordEmotionService from "../services/RecordEmotionService";
 import Spinner from "react-native-loading-spinner-overlay";
@@ -37,10 +37,14 @@ class Result extends Component {
       payload: {
         name: "",
       },
+
     };
   }
 
   async componentDidMount() {
+  await this.load();
+  }
+  async load(){
     await this.RecordEmotionService.getAllStatistics((res) => {
       if (res.status === 200) {
         this.setState({
@@ -106,7 +110,8 @@ class Result extends Component {
     const { data, mainRecord, payload, spinner } = this.state;
     const recordsDiv = data.map(this.mapRecords.bind(this));
     return (
-      <Content>
+      <Content padder>
+         <NavigationEvents onDidFocus={() => this.load()} />
         <Spinner
           visible={spinner}
           textContent={"Loading..."}

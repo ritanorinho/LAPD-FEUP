@@ -32,7 +32,6 @@ class Settings extends Component {
     await this.UserService.getUser((res) => {
       if (res.status === 200) {
         const { payload } = res.data;
-        console.log("SETTINGS " + res.data);
         const { name, photo, email, settings } =  payload ;
         const user = { name, photo, email, settings };
         this.setState({
