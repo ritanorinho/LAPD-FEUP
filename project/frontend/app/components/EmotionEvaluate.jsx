@@ -16,6 +16,7 @@ import {
 import * as ImagePicker from 'expo-image-picker'
 import { withNavigation } from 'react-navigation'
 import DetectService from "../services/DetectService";
+import Spinner from 'react-native-loading-spinner-overlay';
 
 class EmotionEvaluate extends Component {
   
@@ -27,6 +28,7 @@ class EmotionEvaluate extends Component {
     hasPermission: null,
     cameraType: Camera.Constants.Type.back,
     photo: '',
+    spinner: true,
   }
   constructor(props){
     super(props);
@@ -48,7 +50,7 @@ class EmotionEvaluate extends Component {
     }
     // Camera Permission
     const { status } = await Permissions.askAsync(Permissions.CAMERA)
-    this.setState({ hasPermission: status === 'granted' })
+    this.setState({ hasPermission: status === 'granted', spinner: false })
   }
 
   handleCameraType = () => {
@@ -63,15 +65,17 @@ class EmotionEvaluate extends Component {
   }
 
   takePicture = async () => {
+    this.setState({spinner: true});
     if (this.camera) {
       let photo = await this.camera.takePictureAsync({ base64: true, quality: 0.1, })
       this.setState({photo: photo});
       this.DetectService.sendPhoto(this.state.photo, async (res) => {
         if(res.status === 200){
+        this.setState({spinner: false});
         this.props.navigation.navigate('Result');
         } else {
           alert("It was not possible to identify any face. You should try again.");
-
+          this.setState({spinner: false});
         }
       })
     
@@ -79,7 +83,7 @@ class EmotionEvaluate extends Component {
   }
 
   pickImage = async () => {
-    console.log("pick image");
+    this.setState({spinner: true});
     let photo = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       base64: true, 
@@ -88,14 +92,19 @@ class EmotionEvaluate extends Component {
     this.setState({photo: photo});
     this.DetectService.sendPhoto(this.state.photo, async (res) => {
       if(res.status === 200){
+        this.setState({spinner: false});
         this.props.navigation.navigate('Result');
-        }
+        
+      } else {
+        alert("It was not possible to identify any face. You should try again.");
+        this.setState({spinner: false});
+      }
       })
     
   }
 
   render () {
-    const { hasPermission } = this.state
+    const { hasPermission, spinner } = this.state
     if (hasPermission === null) {
       return <View />
     } else if (hasPermission === false) {
@@ -104,6 +113,11 @@ class EmotionEvaluate extends Component {
       return (
        
         <View style={{ flex: 1 }}>
+         <Spinner
+          visible={spinner}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+        />
         
           <Camera
             style={{ flex: 1 }}
@@ -167,4 +181,9 @@ class EmotionEvaluate extends Component {
     }
   }
 }
+const styles = StyleSheet.create({
+  spinnerTextStyle: {
+    color: '#FFF'
+  },
+})
 export default withNavigation(EmotionEvaluate)
