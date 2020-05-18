@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { StyleSheet } from "react-native";
+import React, { Component } from 'react'
+import { StyleSheet } from 'react-native'
 import {
   Content,
   Card,
@@ -12,82 +12,93 @@ import {
   Body,
   Right,
   ListItem,
-  Radio,
-} from "native-base";
-import { withNavigation, NavigationEvents } from "react-navigation";
-import UserService from "../services/UserService";
+  Radio
+} from 'native-base'
+import { withNavigation, NavigationEvents } from 'react-navigation'
+import UserService from '../services/UserService'
+import Utils from "../Utils";
 class Settings extends Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
       user: {},
-    };
-    this.UserService = new UserService();
+      emotionName: require('../assets/confused.png')
+    }
+    this.UserService = new UserService()
+    this.Utils = new Utils();
   }
-  async componentDidMount() {
-    await this.load();
+  async componentDidMount () {
+    await this.load()
   }
 
-  async load() {
-    await this.UserService.getUser((res) => {
+  async load () {
+    await this.UserService.getUser(res => {
       if (res.status === 200) {
-        const { payload } = res.data;
-        const { name, photo, email, settings } = payload;
-        const user = { name, photo, email, settings };
+        const { payload, emotionName } = res.data
+        const { name, photo, email, settings } = payload
+        const user = { name, photo, email, settings }
+        const emotionIcon = this.Utils.getEmotionIcon(emotionName)
         this.setState({
           user,
-        });
+          emotionIcon
+        })
       }
-    });
+    })
   }
-  async handleChange(option) {
-    console.log(option);
+  async handleChange (option) {
+    console.log(option)
     if (this.state.user.settings === option) {
-      console.log("same option");
+      console.log('same option')
     } else {
-      await this.UserService.updateSettings(option, async (res) => {
+      await this.UserService.updateSettings(option, async res => {
         if (res.status === 200) {
           this.setState({
             user: {
               name: this.state.user.name,
-              settings: option,
+              settings: option
             },
-          });
+            emotionIcon: this.state.emotionIcon,
+          })
 
-          console.log("settings " + this.state.user.settings);
+          console.log('settings ' + this.state.user.settings)
         } else {
-          console.log("Error");
+          console.log('Error')
         }
-      });
+      })
     }
   }
-  async signOut(event) {
-    event.preventDefault();
+  async signOut (event) {
+    event.preventDefault()
     await this.UserService.logout(() => {
-      this.props.navigation.navigate("Login");
-    });
+      this.props.navigation.navigate('Login')
+    })
   }
 
   static navigationOptions = {
-    title: "Settings",
-  };
+    title: 'Settings'
+  }
 
-  render() {
+  render () {
+    const {emotionIcon}= this.state;
     return (
       <Content padder>
         <NavigationEvents onDidFocus={() => this.load()} />
         <Card style={{ flex: 0 }} transparent>
-          <Text style={styles.cardText}>{this.state.user.name}</Text>
+          <CardItem>
+            <Left>
+              <Thumbnail source={emotionIcon} />
+              <Body>
+                <Text style={styles.cardText}>{this.state.user.name}</Text>
+              </Body>
+            </Left>
+          </CardItem>
         </Card>
         <Text style={styles.optionTitle}>ACCOUNT</Text>
         <Card>
           <CardItem bordered>
             <Body>
               <Button transparent>
-                <Text
-                  style={styles.buttonText}
-                  onPress={(e) => this.signOut(e)}
-                >
+                <Text style={styles.buttonText} onPress={e => this.signOut(e)}>
                   Sign out
                 </Text>
               </Button>
@@ -102,10 +113,10 @@ class Settings extends Component {
             </Left>
             <Right>
               <Radio
-                color="#CBCBCB"
-                selectedColor="#8b4da9"
-                selected={this.state.user.settings == "Camera" ? true : false}
-                onPress={this.handleChange.bind(this, "Camera")}
+                color='#CBCBCB'
+                selectedColor='#8b4da9'
+                selected={this.state.user.settings == 'Camera' ? true : false}
+                onPress={this.handleChange.bind(this, 'Camera')}
               />
             </Right>
           </ListItem>
@@ -115,40 +126,40 @@ class Settings extends Component {
             </Left>
             <Right>
               <Radio
-                color="#CBCBCB"
-                selectedColor="#8b4da9"
-                selected={this.state.user.settings == "Quiz" ? true : false}
-                onPress={this.handleChange.bind(this, "Quiz")}
+                color='#CBCBCB'
+                selectedColor='#8b4da9'
+                selected={this.state.user.settings == 'Quiz' ? true : false}
+                onPress={this.handleChange.bind(this, 'Quiz')}
               />
             </Right>
           </ListItem>
         </Card>
       </Content>
-    );
+    )
   }
 }
 
 const styles = StyleSheet.create({
   cardItem: {
-    justifyContent: "center",
-    paddingBottom: 0,
+    justifyContent: 'center',
+    paddingBottom: 0
   },
   cardText: {
-    fontWeight: "bold",
-    color: "#464646",
-    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#464646',
+    fontSize: 20
   },
   buttonText: {
-    color: "#8b4da9",
+    color: '#8b4da9',
     paddingLeft: 0,
-    fontSize: 15,
+    fontSize: 15
   },
   optionTitle: {
-    color: "#8b4da9",
+    color: '#8b4da9',
     paddingLeft: 5,
     paddingTop: 30,
-    fontWeight: "bold",
-  },
-});
+    fontWeight: 'bold'
+  }
+})
 
-export default withNavigation(Settings);
+export default withNavigation(Settings)
