@@ -14,20 +14,26 @@ import {
   ListItem,
   Radio
 } from 'native-base'
-import { withNavigation, NavigationEvents } from 'react-navigation'
+import {
+  withNavigation,
+  NavigationEvents,
+  NavigationActions,
+  StackActions
+} from 'react-navigation'
 import UserService from '../services/UserService'
-import Utils from "../Utils";
-import Spinner from "react-native-loading-spinner-overlay";
+import Utils from '../Utils'
+import Spinner from 'react-native-loading-spinner-overlay'
+import LoginScreen from '../screens/LoginScreen'
 class Settings extends Component {
   constructor (props) {
     super(props)
     this.state = {
       user: {},
       emotionName: require('../assets/confused.png'),
-      spinner: true, 
+      spinner: true
     }
     this.UserService = new UserService()
-    this.Utils = new Utils();
+    this.Utils = new Utils()
   }
   async componentDidMount () {
     await this.load()
@@ -43,7 +49,7 @@ class Settings extends Component {
         this.setState({
           user,
           emotionIcon,
-          spinner: false, 
+          spinner: false
         })
       }
     })
@@ -60,8 +66,7 @@ class Settings extends Component {
               name: this.state.user.name,
               settings: option
             },
-            emotionIcon: this.state.emotionIcon,
-
+            emotionIcon: this.state.emotionIcon
           })
 
           console.log('settings ' + this.state.user.settings)
@@ -74,7 +79,13 @@ class Settings extends Component {
   async signOut (event) {
     event.preventDefault()
     await this.UserService.logout(() => {
-      this.props.navigation.navigate('Login')
+      //this.props.navigation.navigate('Login')
+      const resetAction = StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: 'Login' })]
+      })
+
+      this.props.navigation.dispatch(resetAction)
     })
   }
 
@@ -83,12 +94,12 @@ class Settings extends Component {
   }
 
   render () {
-    const {emotionIcon, spinner}= this.state;
+    const { emotionIcon, spinner } = this.state
     return (
       <Content padder>
-      <Spinner
+        <Spinner
           visible={spinner}
-          textContent={"Loading..."}
+          textContent={'Loading...'}
           textStyle={styles.spinnerTextStyle}
         />
         <NavigationEvents onDidFocus={() => this.load()} />

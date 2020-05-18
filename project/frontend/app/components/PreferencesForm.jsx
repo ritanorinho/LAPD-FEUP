@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, View } from "react-native";
 import { Content, Text, Button, Icon } from "native-base";
 import PreferencesCard from "./PreferencesCard";
-import { withNavigation, NavigationEvents } from "react-navigation";
+import { withNavigation } from "react-navigation";
 import Utils from "../Utils";
 
 class PreferencesForm extends Component {
@@ -52,7 +52,6 @@ class PreferencesForm extends Component {
     if (display)
       return (
         <Content>
-          <NavigationEvents onDidFocus={() => this.load()} />
           <View style={styles.rowContainer}>
             <View style={styles.rowItem}>
               <Text style={styles.text}>
