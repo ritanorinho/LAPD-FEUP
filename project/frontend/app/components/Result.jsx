@@ -1,16 +1,11 @@
 import React, { Component } from "react";
 import { Image, StyleSheet } from "react-native";
 import {
-  Container,
-  Header,
   Content,
   Card,
   CardItem,
-  Thumbnail,
   Text,
   Button,
-  Icon,
-  Left,
   Body,
   Right,
   ListItem,
@@ -118,11 +113,9 @@ class Result extends Component {
           textStyle={styles.spinnerTextStyle}
         />
         {!spinner && (
-          <Header transparent>
             <Text
               style={styles.header}
             >{`${payload.name.toUpperCase()}, YOU ARE FEELING...`}</Text>
-          </Header>
         )}
         {!spinner && (
           <Card transparent>
@@ -179,6 +172,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#9C67B6",
+    alignSelf: "center",
+    paddingTop: 10, 
   },
   icon: {
     height: 50,

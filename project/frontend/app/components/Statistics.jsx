@@ -16,7 +16,7 @@ class Statistics extends Component {
       emotions: [],
       data: [],
       spinner: true,
-      hasRecords: false,
+      hasRecords: true,
     };
     this.RecordEmotionService = new RecordEmotionService();
     this.Utils = new Utils();
