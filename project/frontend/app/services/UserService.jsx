@@ -98,6 +98,7 @@ export default class UserService {
       )
       .then(async (response) => {
         try {
+          await AsyncStorage.setItem("token2", token);
           await AsyncStorage.setItem("token", "");
         } catch (error) {
           console.log(error.message);
@@ -129,7 +130,20 @@ export default class UserService {
       .catch((error) => {
         callback(error);
       });
+  }
 
+  async checkLoad(){
+    let token = "";
+    let token2 = "";
+    try {
+      token = (await AsyncStorage.getItem("token")) || "";
+      token2 = (await AsyncStorage.getItem("token2")) || "";
+    } catch (error) {
+      console.log(error.message);
+    }
 
+    if(token == token2 || token2 == "")
+      return false;
+    return true;
   }
 }

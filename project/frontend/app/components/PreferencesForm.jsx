@@ -17,7 +17,6 @@ class PreferencesForm extends Component {
   }
 
   async load() {
-
     const { events, preference } = this.props;
     this.setState({ events, preference, display: true });
   }
@@ -47,7 +46,7 @@ class PreferencesForm extends Component {
   };
 
   render() {
-    const { events, preference, display } = this.state;
+    const { preference, display } = this.state;
     //const eventsForm = events.map(this.mapCategory.bind(this));
     if (display)
       return (
@@ -64,7 +63,7 @@ class PreferencesForm extends Component {
               </Text>
             </View>
           </View>
-          {events.map(this.mapCategory.bind(this))}
+          {this.state.events.map(this.mapCategory.bind(this))}
         </Content>
       );
     else return null;

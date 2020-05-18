@@ -18,14 +18,17 @@ class Preferences extends Component {
   }
 
   async load() {
-    await this.UserService.getPreferences(async (res) => {
-      if (res.status == 200) {
-        const { data } = res;
-        const { events, preferences } = data;
-        this.setState({ events, preferences });
-      }
-      this.setState({ spinner: false });
-    });
+    const load = await this.UserService.checkLoad();
+    if (load) {
+      await this.UserService.getPreferences(async (res) => {
+        if (res.status == 200) {
+          const { data } = res;
+          const { events, preferences } = data;
+          this.setState({ events, preferences });
+        }
+        this.setState({ spinner: false });
+      });
+    }
   }
 
   async componentDidMount() {
@@ -41,8 +44,6 @@ class Preferences extends Component {
   }
 
   render() {
-    const { preferences, spinner } = this.state;
-    const preferencesForm = preferences.map(this.mapPreferences.bind(this));
     return (
       <Content>
         <NavigationEvents onDidFocus={() => this.load()} />
@@ -51,7 +52,8 @@ class Preferences extends Component {
           textContent={"Loading..."}
           textStyle={styles.spinnerTextStyle}
         />
-        {!spinner && preferences.map(this.mapPreferences.bind(this))}
+        {!this.state.spinner &&
+          this.state.preferences.map(this.mapPreferences.bind(this))}
       </Content>
     );
   }

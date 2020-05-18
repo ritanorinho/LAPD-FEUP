@@ -116,13 +116,12 @@ class PrefencesCard extends Component {
       //const listItems = genres.map(this.mapGenres.bind(this));
       return (
         <Card style={this.cardStyles()}>
-          <NavigationEvents onDidFocus={() => this.load()} />
 
           <CardItem style={this.cardTextStyles()}>
             <Text style={styles.title}>{category.name.toUpperCase()}</Text>
           </CardItem>
           <CardItem style={this.cardStyles()}>
-            <List>{genres.map(this.mapGenres.bind(this))}</List>
+            <List>{this.state.event.genres.map(this.mapGenres.bind(this))}</List>
           </CardItem>
         </Card>
       );
