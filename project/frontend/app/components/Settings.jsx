@@ -17,12 +17,14 @@ import {
 import { withNavigation, NavigationEvents } from 'react-navigation'
 import UserService from '../services/UserService'
 import Utils from "../Utils";
+import Spinner from "react-native-loading-spinner-overlay";
 class Settings extends Component {
   constructor (props) {
     super(props)
     this.state = {
       user: {},
-      emotionName: require('../assets/confused.png')
+      emotionName: require('../assets/confused.png'),
+      spinner: true, 
     }
     this.UserService = new UserService()
     this.Utils = new Utils();
@@ -40,7 +42,8 @@ class Settings extends Component {
         const emotionIcon = this.Utils.getEmotionIcon(emotionName)
         this.setState({
           user,
-          emotionIcon
+          emotionIcon,
+          spinner: false, 
         })
       }
     })
@@ -58,6 +61,7 @@ class Settings extends Component {
               settings: option
             },
             emotionIcon: this.state.emotionIcon,
+
           })
 
           console.log('settings ' + this.state.user.settings)
@@ -79,9 +83,14 @@ class Settings extends Component {
   }
 
   render () {
-    const {emotionIcon}= this.state;
+    const {emotionIcon, spinner}= this.state;
     return (
       <Content padder>
+      <Spinner
+          visible={spinner}
+          textContent={"Loading..."}
+          textStyle={styles.spinnerTextStyle}
+        />
         <NavigationEvents onDidFocus={() => this.load()} />
         <Card style={{ flex: 0 }} transparent>
           <CardItem>
