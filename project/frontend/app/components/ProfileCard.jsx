@@ -10,7 +10,7 @@ import {
   Thumbnail,
 } from "native-base";
 import ProfileTabs from "./ProfileTabs";
-import { withNavigation } from "react-navigation";
+import { withNavigation, NavigationEvents } from "react-navigation";
 import UserService from "../services/UserService";
 import Utils from "../Utils";
 
@@ -31,8 +31,8 @@ class ProfileCard extends Component {
     this.UserService = new UserService();
   }
 
-
   async load() {
+    console.log("loading");
     await this.UserService.getUser((res) => {
       if (res.status === 200) {
         const { payload, emotionName } = res.data;
@@ -57,6 +57,7 @@ class ProfileCard extends Component {
     const { emotionIcon } = this.state;
     return (
       <Content>
+        <NavigationEvents onDidFocus={() => this.load()} />
         <Card style={{ flex: 0 }} transparent>
           <CardItem style={styles.cardItem}>
             <Thumbnail source={emotionIcon} large></Thumbnail>
