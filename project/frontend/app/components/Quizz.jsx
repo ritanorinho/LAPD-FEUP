@@ -69,11 +69,10 @@ class Quizz extends Component {
           textStyle={styles.spinnerTextStyle}
         />
         {!spinner && (
-          <Header transparent>
+        
             <Text
               style={styles.header}
             >{`${name.toUpperCase()}, WHAT ARE YOU FEELING?`}</Text>
-          </Header>
         )}
         <ScrollView
           horizontal={true}
@@ -121,6 +120,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#9C67B6",
+    alignSelf: "center",
+    paddingTop: 10, 
+
   },
   button: {
     justifyContent: "center",
