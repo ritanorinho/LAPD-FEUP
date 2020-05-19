@@ -17,9 +17,9 @@ class Preferences extends Component {
     this.UserService = new UserService();
   }
 
-  async load() {
+  async load(check) {
     const load = await this.UserService.checkLoad();
-    if (load) {
+    if (load || !check) {
       await this.UserService.getPreferences(async (res) => {
         if (res.status == 200) {
           const { data } = res;
@@ -32,7 +32,7 @@ class Preferences extends Component {
   }
 
   async componentDidMount() {
-    await this.load();
+    await this.load(false);
   }
 
   mapPreferences(preference) {
@@ -46,7 +46,7 @@ class Preferences extends Component {
   render() {
     return (
       <Content>
-        <NavigationEvents onDidFocus={() => this.load()} />
+        <NavigationEvents onDidFocus={() => this.load(true)} />
         <Spinner
           visible={this.state.spinner}
           textContent={"Loading..."}
