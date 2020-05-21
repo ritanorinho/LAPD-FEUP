@@ -1,22 +1,17 @@
 import React, { Component } from "react";
 import { Image, StyleSheet } from "react-native";
 import {
-  Container,
-  Header,
   Content,
   Card,
   CardItem,
-  Thumbnail,
   Text,
   Button,
-  Icon,
-  Left,
   Body,
   Right,
   ListItem,
   List,
 } from "native-base";
-import { withNavigation } from "react-navigation";
+import { withNavigation, NavigationEvents } from "react-navigation";
 import Utils from "../Utils";
 import RecordEmotionService from "../services/RecordEmotionService";
 import Spinner from "react-native-loading-spinner-overlay";
@@ -37,10 +32,14 @@ class Result extends Component {
       payload: {
         name: "",
       },
+
     };
   }
 
   async componentDidMount() {
+  await this.load();
+  }
+  async load(){
     await this.RecordEmotionService.getAllStatistics((res) => {
       if (res.status === 200) {
         this.setState({
@@ -106,18 +105,17 @@ class Result extends Component {
     const { data, mainRecord, payload, spinner } = this.state;
     const recordsDiv = data.map(this.mapRecords.bind(this));
     return (
-      <Content>
+      <Content padder>
+         <NavigationEvents onDidFocus={() => this.load()} />
         <Spinner
           visible={spinner}
           textContent={"Loading..."}
           textStyle={styles.spinnerTextStyle}
         />
         {!spinner && (
-          <Header transparent>
             <Text
               style={styles.header}
             >{`${payload.name.toUpperCase()}, YOU ARE FEELING...`}</Text>
-          </Header>
         )}
         {!spinner && (
           <Card transparent>
@@ -174,6 +172,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#9C67B6",
+    alignSelf: "center",
+    paddingTop: 10, 
   },
   icon: {
     height: 50,

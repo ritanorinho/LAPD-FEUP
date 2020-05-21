@@ -31,8 +31,8 @@ class ProfileCard extends Component {
     this.UserService = new UserService();
   }
 
-
   async load() {
+    console.log("loading");
     await this.UserService.getUser((res) => {
       if (res.status === 200) {
         const { payload, emotionName } = res.data;

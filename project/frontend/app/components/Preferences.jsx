@@ -2,11 +2,9 @@ import React, { Component } from "react";
 import { StyleSheet } from "react-native";
 import { Content } from "native-base";
 import PreferencesForm from "./PreferencesForm";
-import { withNavigation } from "react-navigation";
-import Spinner from 'react-native-loading-spinner-overlay';
+import { withNavigation, NavigationEvents } from "react-navigation";
+import Spinner from "react-native-loading-spinner-overlay";
 import UserService from "../services/UserService";
-
-
 
 class Preferences extends Component {
   constructor(props) {
@@ -14,43 +12,48 @@ class Preferences extends Component {
     this.state = {
       spinner: true,
       events: [],
-      preferences : []
+      preferences: [],
     };
     this.UserService = new UserService();
   }
 
+  async load(check) {
+    const load = await this.UserService.checkLoad();
+    if (load || !check) {
+      await this.UserService.getPreferences(async (res) => {
+        if (res.status == 200) {
+          const { data } = res;
+          const { events, preferences } = data;
+          this.setState({ events, preferences });
+        }
+        this.setState({ spinner: false });
+      });
+    }
+  }
+
   async componentDidMount() {
-    await this.UserService.getPreferences(async (res) => {
-      if (res.status == 200) {
-        const {data} = res;    
-        const {events, preferences} = data;  
-        this.setState({ events, preferences });
-      }
-      this.setState({spinner: false})
-    });
+    await this.load(false);
   }
 
   mapPreferences(preference) {
-    const {events} = this.state;
-    const {_id} = preference.emotion;
+    const { events } = this.state;
+    const { _id } = preference.emotion;
     return (
-      <PreferencesForm key={_id} preference={preference} events={events}/>
-    )
+      <PreferencesForm key={_id} preference={preference} events={events} />
+    );
   }
 
   render() {
-    const {preferences, spinner} = this.state;
-    const preferencesForm = preferences.map(
-      this.mapPreferences.bind(this),
-    );
     return (
       <Content>
-         <Spinner
+        <NavigationEvents onDidFocus={() => this.load(true)} />
+        <Spinner
           visible={this.state.spinner}
-          textContent={'Loading...'}
+          textContent={"Loading..."}
           textStyle={styles.spinnerTextStyle}
         />
-        {!spinner && preferencesForm}
+        {!this.state.spinner &&
+          this.state.preferences.map(this.mapPreferences.bind(this))}
       </Content>
     );
   }
@@ -58,9 +61,8 @@ class Preferences extends Component {
 
 const styles = StyleSheet.create({
   spinnerTextStyle: {
-    color: '#FFF'
+    color: "#FFF",
   },
 });
-
 
 export default withNavigation(Preferences);

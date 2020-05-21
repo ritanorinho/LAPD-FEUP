@@ -16,9 +16,13 @@ class PreferencesForm extends Component {
     this.Utils = new Utils();
   }
 
-  componentDidMount() {
+  async load() {
     const { events, preference } = this.props;
     this.setState({ events, preference, display: true });
+  }
+
+  async componentDidMount() {
+    await this.load();
   }
 
   mapCategory(event) {
@@ -32,7 +36,6 @@ class PreferencesForm extends Component {
     );
   }
 
-
   emotionTextStyles = function () {
     const { preference } = this.state;
     const color = this.Utils.getEmotionColor(preference.emotion.name);
@@ -42,10 +45,9 @@ class PreferencesForm extends Component {
     };
   };
 
-
   render() {
-    const { events, preference, display } = this.state;
-    const eventsForm = events.map(this.mapCategory.bind(this));
+    const { preference, display } = this.state;
+    //const eventsForm = events.map(this.mapCategory.bind(this));
     if (display)
       return (
         <Content>
@@ -53,12 +55,15 @@ class PreferencesForm extends Component {
             <View style={styles.rowItem}>
               <Text style={styles.text}>
                 When I feel
-                <Text style={this.emotionTextStyles()}> {preference.emotion.name} </Text>
+                <Text style={this.emotionTextStyles()}>
+                  {" "}
+                  {preference.emotion.name}{" "}
+                </Text>
                 I like...
               </Text>
             </View>
           </View>
-          {eventsForm}
+          {this.state.events.map(this.mapCategory.bind(this))}
         </Content>
       );
     else return null;
