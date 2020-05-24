@@ -43,13 +43,10 @@ function addUeg(req, res) {
 
 
 function deleteUeg(req, res) {
-  console.log("id " + req.params.id)
   UEG.deleteOne({ _id: req.params.id }, error => {
     if (error) {
-      console.log("error deleting uegs")
       res.status(404).json({ error });
     } else {
-      console.log("ueg deleted!")
       res.status(200).json();
     }
   });

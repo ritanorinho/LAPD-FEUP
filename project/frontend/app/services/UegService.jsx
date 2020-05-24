@@ -43,7 +43,6 @@ export default class UegService {
       console.log(error.message);
     }
     const { _id } = data;
-    console.log("_id " + _id)
     axios
       .delete(`${this.baseURL}/${_id}`, {
         headers: { Authorization: `Token ${token}` },

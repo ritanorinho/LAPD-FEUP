@@ -13,7 +13,6 @@ export default class DetectService {
     let token = "";
     try {
       token = (await AsyncStorage.getItem("token")) || "";
-      console.log("token 5 "+token);
     } catch (error) {
       console.log(error.message);
     }

@@ -32,7 +32,6 @@ class Statistics extends Component {
       if (res.status === 200) {
         Moment.locale("en");
         const { date, emotions } = res.data;
-        console.log("emotions");
         this.setState({
           date: Moment(date).format("DD MMMM YYYY hh:mm"),
           emotions: emotions,
