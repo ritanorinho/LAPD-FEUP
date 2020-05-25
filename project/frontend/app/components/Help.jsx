@@ -23,7 +23,7 @@ class Help extends Component {
               </CardItem>
               <CardItem style={styles.paddingTitle}>
                 <Text style={styles.cardText}>
-                  Mendis is a simple and intuitive application that suggests
+                  Mentis is a simple and intuitive application that suggests
                   events according to the mood of the user, reconciling what he
                   likes to do with the way he feels.
                 </Text>
@@ -37,7 +37,7 @@ class Help extends Component {
               </CardItem>
               <CardItem style={styles.paddingTitle}>
                 <Text style={styles.cardText}>
-                  Mendis allows the match of types of events according to
+                  Mentis allows the match of types of events according to
                   different emotions in the profile's preferences section. These
                   preferences are then used when the app evaluates the user's
                   current mood in order to suggest appropriate events. The
@@ -56,7 +56,7 @@ class Help extends Component {
               </CardItem>
               <CardItem style={styles.paddingTitle}>
                 <Text style={styles.cardText}>
-                  Mendis uses{" "}
+                  Mentis uses{" "}
                   <Text
                     style={styles.link}
                     onPress={() =>
