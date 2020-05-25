@@ -55,7 +55,6 @@ class Settings extends Component {
     });
   }
   async handleChange(option) {
-    console.log(option);
     if (this.state.user.settings === option) {
       console.log("same option");
     } else {
@@ -68,8 +67,6 @@ class Settings extends Component {
             },
             emotionIcon: this.state.emotionIcon,
           });
-
-          console.log("settings " + this.state.user.settings);
         } else {
           console.log("Error");
         }

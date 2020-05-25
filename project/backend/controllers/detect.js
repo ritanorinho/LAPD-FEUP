@@ -10,7 +10,7 @@ async function postImageRecognition(req, res) {
   let base64 = req.body.photo.base64;
   let base64Data = base64.replace(/^data:image\/png;base64,/, "");
   let url = service.constants.url;
-  console.log("Image upload complete, creating request to: " + url);
+  //console.log("Image upload complete, creating request to: " + url);
 
   var formData = {
     api_key: service.constants.apikey,
@@ -28,11 +28,9 @@ async function postImageRecognition(req, res) {
     return emotions;
   });
   request(options, (err, response, body) => {
-    console.log("Request complete");
     if (err) console.log("Request err: ", err);
 
     let json_body = JSON.parse(body);
-    console.log(json_body);
     if (json_body.error_message != undefined)
       res.status(404).json("error when try to find faces ");
     else {
@@ -56,7 +54,6 @@ async function postImageRecognition(req, res) {
             percentage: emotions[key.name],
           });
           recordEmotion.save();
-          console.log("RECORD EMOTION " + JSON.stringify(recordEmotion));
         });
         res.json({ body });
       }

@@ -40,7 +40,6 @@ function add (req, res) {
 }
 
 function login (req, res, next) {
-  console.log(req.body)
   return passport.authenticate(
     'login-user',
     { session: false },
@@ -48,7 +47,6 @@ function login (req, res, next) {
       if (err) {
         return next(err)
       }
-      console.log(info)
       if (passportUser) {
         const reqUser = {
           _id: passportUser._id,
@@ -139,7 +137,6 @@ async function getCurrent (req, res) {
     .sort({ date: -1 })
     .then(async records => {
       if (records.length > 0) {
-        console.log(records)
         let id = records[0].id
         let query = { recordId: id }
         await RecordEmotion.find(query)
@@ -165,7 +162,6 @@ async function updateSettings (req, res) {
     useFindAndModify: false,
     upsert: true
   }).then(user => {
-    console.log('updated ' + user)
     return res.status(200).json({ user: user })
   })
 }

@@ -89,6 +89,10 @@ class EmotionEvaluate extends Component {
       base64: true, 
       quality: 0.1,
     })
+    if(photo.cancelled != undefined && photo.cancelled){
+      this.setState({spinner: false});
+      return;
+    }
     this.setState({photo: photo});
     this.DetectService.sendPhoto(this.state.photo, async (res) => {
       if(res.status === 200){
