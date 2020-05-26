@@ -33,7 +33,7 @@ class Statistics extends Component {
         Moment.locale("en");
         const { date, emotions } = res.data;
         this.setState({
-          date: Moment(date).format("DD MMMM YYYY hh:mm"),
+          date: Moment(date).format("DD MMMM YYYY HH:mm"),
           emotions: emotions,
           hasRecords: true, 
         });
